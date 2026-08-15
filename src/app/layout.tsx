@@ -10,6 +10,7 @@ import { Footer } from "@/components/layout/Footer";
 import { SoundControlWidget } from "@/components/layout/SoundControlWidget";
 
 export const metadata: Metadata = {
+  metadataBase: new URL("https://iam-kira.github.io"),
   title: "Vijay Biradar — Enterprise Data Engineer & AI Platform Builder",
   description:
     "Veni. Vidi. Vici. Building platforms, solving problems, living stories. Enterprise Data Engineer at Daimler Truck Innovation Center India.",
