@@ -17,10 +17,18 @@ export default function RidingLogsPage() {
     <div className="min-h-screen py-20 px-6">
       <div className="max-w-4xl mx-auto">
         <SectionHeading
-          title="Riding Logs"
-          subtitle="Some problems are solved at the desk. Some are solved on the road."
+          title="The Road"
+          subtitle="Some lessons are learned beyond the screen."
           accent="blue"
         />
+
+        <div className="mb-10 rounded-3xl border border-accent-blue/25 bg-gradient-to-br from-accent-blue/10 via-transparent to-accent-gold/10 p-8">
+          <p className="mb-3 text-[10px] uppercase tracking-[0.32em] text-accent-gold">Chapter 09 · The Road</p>
+          <p className="text-base leading-8 text-text-secondary">
+            Riding brings clarity. It strips the noise away and leaves only motion, attention, and the
+            discipline to remain present. For Vijay, the road is a place of reflection and reset.
+          </p>
+        </div>
 
         {rides.length === 0 ? (
           <div className="card-base border-dashed border-white/20 p-12 text-center">

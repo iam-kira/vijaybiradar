@@ -40,15 +40,21 @@ export default function ContactPage() {
   };
 
   return (
-    <div className="min-h-screen py-20 px-6">
-      <div className="max-w-2xl mx-auto">
+    <div className="min-h-screen px-6 py-20">
+      <div className="mx-auto max-w-2xl">
         <SectionHeading
-          title="Get In Touch"
-          subtitle="Have a project, idea, or just want to say hello? I'm always happy to connect."
+          title="The Call"
+          subtitle="Every great journey begins with a conversation."
           accent="blue"
         />
 
-        {/* Direct links */}
+        <div className="mb-10 rounded-3xl border border-accent-gold/25 bg-gradient-to-br from-accent-gold/10 via-transparent to-accent-purple/10 p-8 text-center">
+          <p className="mb-3 text-[10px] uppercase tracking-[0.32em] text-accent-gold">Chapter 12 · The Call</p>
+          <h3 className="font-display text-3xl text-white md:text-5xl">
+            If the mission matters, the next step should begin with a conversation.
+          </h3>
+        </div>
+
         <div className="flex flex-wrap justify-center gap-4 mb-10">
           <a
             href="mailto:vijaybiradar.work@gmail.com"

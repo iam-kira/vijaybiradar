@@ -30,8 +30,8 @@ export default function ViolinCornerPage() {
 
       <div className="max-w-3xl mx-auto relative z-10">
         <SectionHeading
-          title="Violin Corner"
-          subtitle="Data flows by day. Strings flow by evening."
+          title="The Soul"
+          subtitle="Creativity gives meaning to achievement."
           accent="purple"
         />
 

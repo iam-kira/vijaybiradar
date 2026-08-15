@@ -12,12 +12,22 @@ export default function ResumePage() {
     setExpandedBullets((prev) => prev.includes(i) ? prev.filter((b) => b !== i) : [...prev, i]);
 
   return (
-    <div className="min-h-screen py-20 px-6">
-      <div className="max-w-4xl mx-auto">
-        <SectionHeading title="Resume" subtitle="The full professional record." accent="blue" />
+    <div className="min-h-screen px-6 py-20">
+      <div className="mx-auto max-w-5xl">
+        <SectionHeading
+          title="The Record"
+          subtitle="Behind every achievement is a history of discipline, growth, and execution."
+          accent="blue"
+        />
 
-        {/* Download button */}
-        <div className="flex justify-center mb-12">
+        <div className="mb-12 rounded-3xl border border-accent-blue/25 bg-gradient-to-br from-accent-blue/10 via-transparent to-accent-gold/10 p-8">
+          <p className="mb-3 text-[10px] uppercase tracking-[0.32em] text-accent-gold">Chapter 11 · The Record</p>
+          <h3 className="mb-4 font-display text-3xl md:text-5xl text-white">
+            The proof sits in the systems built, the teams supported, and the problems solved.
+          </h3>
+        </div>
+
+        <div className="mb-12 flex justify-center">
           <a
             href="/vijaybiradar/resume/Vijay_Biradar_Resume.pdf"
             target="_blank"

@@ -9,10 +9,23 @@ export default function ReadingRoomPage() {
     <div className="min-h-screen py-20 px-6">
       <div className="max-w-4xl mx-auto">
         <SectionHeading
-          title="Reading Room"
-          subtitle="Words that shaped how I think about work, life, and what it means to act with purpose."
+          title="The Mind"
+          subtitle="Books teach lessons that technology alone cannot."
           accent="purple"
         />
+
+        <div className="mb-10 rounded-3xl border border-accent-purple/25 bg-gradient-to-br from-accent-purple/10 via-transparent to-accent-gold/10 p-8">
+          <p className="mb-3 text-[10px] uppercase tracking-[0.32em] text-accent-gold">Chapter 06 · The Mind</p>
+          <h3 className="mb-4 font-display text-3xl md:text-5xl text-white">
+            Discipline is not only built in systems. It is built in thought.
+          </h3>
+          <p className="max-w-3xl text-base leading-8 text-text-secondary">
+            Vijay reads to understand human nature, strategy, responsibility, and resilience. The books
+            he returns to are not just references; they are lenses. They sharpen how he works,
+            how he leads, and how he remains steady when complexity grows louder.
+          </p>
+        </div>
+
         <div className="grid gap-6">
           {quotes.map((q, i) => (
             <motion.div

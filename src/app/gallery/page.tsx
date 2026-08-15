@@ -20,10 +20,18 @@ export default function GalleryPage() {
     <div className="min-h-screen py-20 px-6">
       <div className="max-w-6xl mx-auto">
         <SectionHeading
-          title="Photo Gallery"
-          subtitle="Every photograph captures a chapter. Some are milestones. Some are memories. Some are roads worth remembering."
+          title="The Archive"
+          subtitle="Moments become memories. Memories become stories."
           accent="blue"
         />
+
+        <div className="mb-10 rounded-3xl border border-accent-blue/25 bg-gradient-to-br from-accent-blue/10 via-transparent to-accent-purple/10 p-8">
+          <p className="mb-3 text-[10px] uppercase tracking-[0.32em] text-accent-gold">Chapter 10 · The Archive</p>
+          <p className="text-base leading-8 text-text-secondary">
+            This is where the life behind the work becomes visible: personal memories, quiet moments,
+            routes traveled, and chapters that shaped the person behind the systems.
+          </p>
+        </div>
 
         {/* Filters */}
         <div className="flex flex-wrap gap-2 justify-center mb-4">

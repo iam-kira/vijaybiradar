@@ -23,19 +23,22 @@ export default function GamingArenaPage() {
     <div className="min-h-screen py-20 px-6">
       <div className="max-w-6xl mx-auto">
         <SectionHeading
-          title="Gaming Arena"
-          subtitle="Games taught me strategy. Production support taught me survival."
+          title="The Arena"
+          subtitle="Mastery comes from discipline, adaptation, and strategy."
           accent="purple"
         />
 
-        <motion.p
-          className="text-center text-text-muted text-sm font-mono italic mb-12"
+        <motion.div
+          className="mb-12 rounded-3xl border border-accent-purple/25 bg-gradient-to-br from-accent-purple/10 via-transparent to-accent-blue/10 p-8 text-center"
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
-          transition={{ delay: 0.3 }}
+          transition={{ delay: 0.2 }}
         >
-          &quot;Aim is muscle memory. Production incidents are reflex memory.&quot;
-        </motion.p>
+          <p className="mb-3 text-[10px] uppercase tracking-[0.32em] text-accent-gold">Chapter 07 · The Arena</p>
+          <p className="text-lg italic text-text-secondary md:text-xl">
+            “Every game is a lesson in strategy, patience, and execution.”
+          </p>
+        </motion.div>
 
         {/* Favorite games */}
         <FavoriteGamesPanel />

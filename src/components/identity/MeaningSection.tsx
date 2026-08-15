@@ -34,8 +34,9 @@ export function MeaningSection() {
           <em className="text-text-primary">conqueror</em>.
         </p>
         <p>
-          For me, victory is not only about winning. It is about learning continuously,
+          For Vijay, victory is not only about winning. It is about learning continuously,
           solving complex problems, building useful platforms, and growing with discipline.
+          It is about entering a difficult system and leaving it with clarity, trust, and force.
         </p>
         <p className="text-accent-blue font-mono text-sm tracking-widest border-l-2 border-accent-blue pl-4">
           Veni. Vidi. Vici. — I came. I saw. I conquered.

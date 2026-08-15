@@ -31,6 +31,21 @@
     overflow-x: hidden;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
+    background-image:
+      radial-gradient(circle at top, rgba(59, 130, 246, 0.18), transparent 28%),
+      radial-gradient(circle at bottom right, rgba(139, 92, 246, 0.12), transparent 32%),
+      linear-gradient(180deg, #070707 0%, #0a0a12 100%);
+  }
+
+  body::before {
+    content: "";
+    position: fixed;
+    inset: 0;
+    pointer-events: none;
+    background: linear-gradient(rgba(255, 255, 255, 0.02), rgba(255, 255, 255, 0.01));
+    mix-blend-mode: screen;
+    opacity: 0.6;
+    z-index: 0;
   }
 
   /* Custom scrollbar */
@@ -118,6 +133,47 @@
   .section-divider {
     height: 1px;
     background: linear-gradient(90deg, transparent, rgba(99, 102, 241, 0.4), transparent);
+  }
+
+  .cinematic-shell {
+    position: fixed;
+    inset: 0;
+    pointer-events: none;
+    background:
+      radial-gradient(circle at 20% 20%, rgba(59, 130, 246, 0.14), transparent 22%),
+      radial-gradient(circle at 80% 30%, rgba(139, 92, 246, 0.16), transparent 24%),
+      radial-gradient(circle at 50% 80%, rgba(245, 158, 11, 0.08), transparent 25%);
+    filter: blur(8px);
+    z-index: 0;
+  }
+
+  .cinematic-shell::before,
+  .cinematic-shell::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background-image: linear-gradient(rgba(255,255,255,0.02) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,0.02) 1px, transparent 1px);
+    background-size: 34px 34px;
+    mask-image: radial-gradient(circle at center, black 45%, transparent 100%);
+    opacity: 0.25;
+  }
+
+  .cinematic-shell::after {
+    background: radial-gradient(circle at center, transparent 45%, rgba(7, 7, 7, 0.8) 100%);
+    opacity: 1;
+  }
+
+  .scene-panel {
+    position: relative;
+    overflow: hidden;
+  }
+
+  .scene-panel::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(135deg, rgba(59, 130, 246, 0.12), transparent 25%, transparent 70%, rgba(245, 158, 11, 0.08));
+    pointer-events: none;
   }
 
   /* Perspective flip card */

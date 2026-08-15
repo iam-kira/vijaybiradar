@@ -36,27 +36,45 @@ export default function CybersecurityPage() {
     <div className="min-h-screen py-20 px-6">
       <div className="max-w-5xl mx-auto">
         <SectionHeading
-          title="Cybersecurity Mission"
-          subtitle="Simple security. Faster response. Stronger protection."
+          title="The Edge"
+          subtitle="Great systems perform. Exceptional systems endure."
           accent="purple"
         />
 
-        {/* Narrative */}
-        <div className="card-base p-6 mb-10 space-y-4 text-text-secondary leading-relaxed">
-          <p>
-            As the enterprise&apos;s trusted go-to on production security and debugging topics —
-            frequently the first point of contact for critical production issues outside
-            direct ownership — security became a natural extension of my platform engineering work.
-          </p>
-          <p>
-            I initiated an applied security engineering approach: bringing AI-assisted code review
-            into the data platform CI/CD flow to detect secrets, risky dependencies, vulnerabilities,
-            and compliance gaps — reducing the window between introduction and detection.
-          </p>
-          <p className="text-xs font-mono text-accent-red border-l-2 border-accent-red/40 pl-3">
-            ⚠️ This is framed as an applied initiative and design. Security engineering scope is
-            anchored to the SPOC and trusted advisor role per professional experience.
-          </p>
+        <div className="mb-10 grid gap-6 lg:grid-cols-[1.1fr_0.9fr]">
+          <div className="card-base p-8">
+            <p className="mb-3 text-[10px] uppercase tracking-[0.32em] text-accent-red">Chapter 05 · The Edge</p>
+            <h3 className="mb-4 font-display text-3xl md:text-5xl text-white">
+              The Guardian mindset is built into how Vijay works.
+            </h3>
+            <div className="space-y-4 text-base leading-8 text-text-secondary">
+              <p>
+                Vijay does not treat cybersecurity as a checklist. He treats it as a shared
+                responsibility to protect the people, systems, and platforms that others depend on.
+              </p>
+              <p>
+                From production support to secure engineering culture, his work is shaped by the idea
+                that strong systems are resilient systems. They are designed with visibility,
+                discipline, and trust from the beginning.
+              </p>
+            </div>
+          </div>
+
+          <div className="rounded-3xl border border-accent-red/30 bg-gradient-to-br from-accent-red/10 via-transparent to-accent-purple/10 p-8">
+            <p className="mb-4 text-[10px] uppercase tracking-[0.32em] text-accent-cyan">Core principles</p>
+            <div className="space-y-3">
+              {[
+                "Security awareness across engineering teams",
+                "Vulnerability detection before escalation",
+                "AI-assisted review for risky patterns",
+                "Operational resilience under pressure",
+              ].map((item) => (
+                <div key={item} className="rounded-2xl border border-white/10 bg-black/20 p-3 text-sm text-text-secondary">
+                  {item}
+                </div>
+              ))}
+            </div>
+          </div>
         </div>
 
         {/* Security agent diagram */}
