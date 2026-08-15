@@ -1,52 +1,86 @@
 "use client";
 
-import { useContext, useEffect, useState } from "react";
+import { useContext, useEffect, useRef, useState } from "react";
 import { useRouter } from "next/navigation";
 import { SoundContext } from "@/components/shared/SoundProvider";
+import gsap from "gsap";
 
 export function CinematicIntro({ onComplete }: { onComplete?: () => void }) {
   const router = useRouter();
   const [phase, setPhase] = useState(0);
   const sound = useContext(SoundContext);
 
+  const rootRef = useRef<HTMLDivElement | null>(null);
+  const lettersRef = useRef<HTMLDivElement | null>(null);
+  const titleRef = useRef<HTMLDivElement | null>(null);
+  const subtitleRef = useRef<HTMLParagraphElement | null>(null);
+  const ctaRef = useRef<HTMLButtonElement | null>(null);
+
   useEffect(() => {
-    const timers: number[] = [];
-    timers.push(window.setTimeout(() => setPhase(1), 900));
-    timers.push(window.setTimeout(() => setPhase(2), 2000));
-    timers.push(window.setTimeout(() => setPhase(3), 3200));
-    return () => timers.forEach((t) => clearTimeout(t));
-  }, []);
+    const tl = gsap.timeline();
+    // small fade-in of container
+    tl.to(rootRef.current, { autoAlpha: 1, duration: 0.6 });
+
+    // letters appear staggered
+    tl.fromTo(
+      lettersRef.current,
+      { y: 24, autoAlpha: 0 },
+      { y: 0, autoAlpha: 1, duration: 0.9, ease: "power3.out" }
+    );
+
+    // title reveal
+    tl.fromTo(
+      titleRef.current,
+      { scale: 0.96, autoAlpha: 0 },
+      { scale: 1, autoAlpha: 1, duration: 0.7, ease: "back.out(1.1)" },
+      ">-=0.2"
+    );
+
+    // subtitle
+    tl.fromTo(
+      subtitleRef.current,
+      { autoAlpha: 0 },
+      { autoAlpha: 1, duration: 0.6 },
+      ">-=0.1"
+    );
+
+    // CTA
+    tl.fromTo(ctaRef.current, { y: 12, autoAlpha: 0 }, { y: 0, autoAlpha: 1, duration: 0.4 });
+
+    // sound cues timed with TL
+    tl.call(() => sound?.playSfx("violinNote"), null, 0.4);
+    tl.call(() => sound?.playSfx("whoosh"), null, 1.1);
+
+    return () => tl.kill();
+  }, [sound]);
 
   const handleEnter = () => {
     sound?.unlock();
+    // fade-in ambient gently
     sound?.playAmbient();
     sound?.playSfx("whoosh");
-    setTimeout(() => {
-      // small fade-out before navigating
+    gsap.to(rootRef.current, { autoAlpha: 0, duration: 0.6, onComplete: () => {
       sound?.stopAmbient();
       onComplete?.();
       router.push("/");
-    }, 300);
+    }});
   };
 
   return (
-    <div className="fixed inset-0 z-[100] flex items-center justify-center bg-black/95 text-white">
+    <div ref={rootRef} style={{ visibility: 'hidden' }} className="fixed inset-0 z-[100] flex items-center justify-center bg-black/95 text-white">
       <div className="relative max-w-4xl px-6 text-center">
         <div className="mb-6">
-          <div className={`text-6xl md:text-8xl font-display tracking-widest transition-opacity duration-700 ${phase > 0 ? "opacity-100" : "opacity-0"}`}>
-            V I J A Y
-          </div>
-          <div className={`mt-6 text-4xl md:text-6xl font-bold transition-transform duration-700 ${phase > 1 ? "scale-100 opacity-100" : "scale-95 opacity-0"}`}>
-            CONQUEROR
-          </div>
+          <div ref={lettersRef} className={`text-6xl md:text-8xl font-display tracking-widest`}>V I J A Y</div>
+          <div ref={titleRef} className={`mt-6 text-4xl md:text-6xl font-bold`}>CONQUEROR</div>
         </div>
 
-        <p className={`text-text-muted max-w-2xl mx-auto transition-opacity duration-700 ${phase > 2 ? "opacity-100" : "opacity-0"}`}>
+        <p ref={subtitleRef} className={`text-text-muted max-w-2xl mx-auto`}>
           Conqueror by craft, curiosity, and code. Enter the Vijayverse.
         </p>
 
-        <div className={`mt-10 transition-opacity duration-500 ${phase > 2 ? "opacity-100" : "opacity-0"}`}>
+        <div className={`mt-10`}>
           <button
+            ref={ctaRef}
             onClick={handleEnter}
             className="px-6 py-3 rounded-md bg-gradient-to-r from-yellow-400 to-pink-500 text-black font-semibold hover:scale-105 transform-gpu"
           >
