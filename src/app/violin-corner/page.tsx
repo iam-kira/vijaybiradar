@@ -5,6 +5,7 @@ import { SectionHeading } from "@/components/shared/SectionHeading";
 import { StoryPageShell } from "@/components/shared/StoryPageShell";
 import { getStoryTheme } from "@/lib/storyThemes";
 import { useSound } from "@/hooks/useSound";
+import { ViolinIcon, MusicNoteIcon } from "@/components/icons";
 
 const NOTES = ["♩", "♪", "♫", "♬"];
 
@@ -33,7 +34,8 @@ export default function ViolinCornerPage() {
 
       <div className="max-w-3xl mx-auto relative z-10">
         <SectionHeading
-          title="The Soul"
+          numeral="XI"
+          title="Violin Corner"
           subtitle="Creativity gives meaning to achievement."
           accent="purple"
         />
@@ -44,7 +46,7 @@ export default function ViolinCornerPage() {
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.7 }}
         >
-          <div className="text-6xl mb-4">🎻</div>
+          <ViolinIcon className="mx-auto mb-4 text-6xl text-gold-text" aria-hidden="true" />
 
           <blockquote className="text-xl font-display text-text-primary leading-relaxed">
             &ldquo;I play violin sometimes, not as a performer, but as a learner. It reminds me
@@ -71,9 +73,9 @@ export default function ViolinCornerPage() {
           <div>
             <button
               onClick={() => playSfx("violinNote")}
-              className="mt-4 px-6 py-2.5 rounded-full border border-accent-purple/40 bg-accent-purple/10 text-accent-purple text-sm font-mono hover:bg-accent-purple/20 hover:shadow-glow-purple transition-all"
+              className="mt-4 inline-flex items-center gap-2 px-6 py-2.5 rounded-full border border-accent-purple/40 bg-accent-purple/10 text-accent-purple text-sm font-mono hover:bg-accent-purple/20 hover:shadow-glow-purple transition-all"
             >
-              🎵 Play a Note
+              <MusicNoteIcon aria-hidden="true" /> Play a Note
             </button>
             <p className="text-[10px] text-text-muted mt-2">
               [YOU FILL] — Replace <code className="text-accent-purple">violin-note.mp3</code> with a real practice recording

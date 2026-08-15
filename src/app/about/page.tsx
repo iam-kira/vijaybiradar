@@ -19,7 +19,8 @@ export default function AboutPage() {
     <StoryPageShell theme={theme} className="min-h-screen px-6 py-20">
       <div className="mx-auto max-w-6xl">
         <SectionHeading
-          title="The Mission"
+          numeral="II"
+          title="Meditations"
           subtitle="Understanding systems became a passion. Solving them became a profession."
           accent="purple"
         />

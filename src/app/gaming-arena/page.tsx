@@ -27,7 +27,8 @@ export default function GamingArenaPage() {
     <StoryPageShell theme={theme} className="min-h-screen py-20 px-6">
       <div className="max-w-6xl mx-auto">
         <SectionHeading
-          title="The Arena"
+          numeral="X"
+          title="Gaming Arena"
           subtitle="Mastery comes from discipline, adaptation, and strategy."
           accent="purple"
         />

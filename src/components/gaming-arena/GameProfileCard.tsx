@@ -3,6 +3,7 @@
 import { useState } from "react";
 import { motion } from "framer-motion";
 import type { GameEntry } from "@/data/games";
+import { StarIcon } from "@/components/icons";
 
 export function GameProfileCard({ game }: { game: GameEntry }) {
   const [flipped, setFlipped] = useState(false);
@@ -18,11 +19,11 @@ export function GameProfileCard({ game }: { game: GameEntry }) {
       {game.mostLoved && (
         <div className="absolute -top-3 left-1/2 -translate-x-1/2 z-10">
           <motion.div
-            className="bg-accent-gold text-black text-[10px] font-bold px-3 py-0.5 rounded-full shadow-glow-gold"
-            animate={{ boxShadow: ["0 0 8px rgba(245,158,11,0.4)", "0 0 20px rgba(245,158,11,0.8)", "0 0 8px rgba(245,158,11,0.4)"] }}
+            className="flex items-center gap-1 bg-accent-gold text-black text-[10px] font-bold px-3 py-0.5 rounded-full shadow-glow-gold"
+            animate={{ boxShadow: ["0 0 8px rgba(201,162,39,0.4)", "0 0 20px rgba(201,162,39,0.8)", "0 0 8px rgba(201,162,39,0.4)"] }}
             transition={{ duration: 2, repeat: Infinity }}
           >
-            ⭐ Most Loved Game
+            <StarIcon aria-hidden="true" /> Most Loved Game
           </motion.div>
         </div>
       )}

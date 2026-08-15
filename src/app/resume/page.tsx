@@ -6,6 +6,7 @@ import { SectionHeading } from "@/components/shared/SectionHeading";
 import { StoryPageShell } from "@/components/shared/StoryPageShell";
 import { getStoryTheme } from "@/lib/storyThemes";
 import { experience, skills, awards, education, languages, volunteering, additionalProjects } from "@/data/resume";
+import { TrophyIcon } from "@/components/icons";
 
 export default function ResumePage() {
   const [expandedBullets, setExpandedBullets] = useState<number[]>([]);
@@ -18,7 +19,8 @@ export default function ResumePage() {
     <StoryPageShell theme={theme} className="min-h-screen px-6 py-20">
       <div className="mx-auto max-w-5xl">
         <SectionHeading
-          title="The Record"
+          numeral="VII"
+          title="Cursus Honorum"
           subtitle="Behind every achievement is a history of discipline, growth, and execution."
           accent="blue"
         />
@@ -55,17 +57,19 @@ export default function ResumePage() {
               <p className="text-text-muted text-xs mb-4 font-mono">{exp.location}</p>
               <div className="space-y-2">
                 {exp.bullets.map((bullet, i) => (
-                  <motion.div
+                  <motion.button
                     key={i}
-                    className="flex gap-2 cursor-pointer group"
+                    type="button"
+                    className="flex w-full gap-2 text-left cursor-pointer group"
                     onClick={() => toggleBullet(i)}
+                    aria-expanded={expandedBullets.includes(i)}
                     whileHover={{ x: 3 }}
                   >
-                    <span className="text-accent-blue mt-0.5 flex-shrink-0 text-xs">▸</span>
+                    <span className="text-accent-blue mt-0.5 flex-shrink-0 text-xs" aria-hidden="true">▸</span>
                     <p className={`text-sm text-text-secondary leading-relaxed group-hover:text-text-primary transition-colors ${expandedBullets.includes(i) ? "" : "line-clamp-2"}`}>
                       {bullet}
                     </p>
-                  </motion.div>
+                  </motion.button>
                 ))}
               </div>
             </div>
@@ -97,7 +101,7 @@ export default function ResumePage() {
           <div className="space-y-4">
             {awards.map((award) => (
               <div key={award.title} className="card-base p-4 flex gap-4 items-start">
-                <span className="text-2xl">🏆</span>
+                <TrophyIcon className="text-2xl text-gold-text" aria-hidden="true" />
                 <div>
                   <div className="flex items-center gap-2 flex-wrap">
                     <p className="text-sm font-semibold text-text-primary">{award.title}</p>

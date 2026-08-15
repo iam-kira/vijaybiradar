@@ -9,32 +9,41 @@ const config: Config = {
   theme: {
     extend: {
       colors: {
-        // Cinematic dark palette
+        // Imperium palette — all values resolve through CSS custom properties
+        // (src/styles/globals.css :root / [data-theme="light"]) so no component
+        // ever hardcodes a hex outside the token system.
         bg: {
-          primary: "#0a0a0f",
-          secondary: "#0f0f1a",
-          card: "#12121f",
-          overlay: "#1a1a2e",
+          primary: "var(--bg-primary)",
+          secondary: "var(--bg-secondary)",
+          card: "var(--bg-card)",
+          overlay: "var(--bg-overlay)",
         },
+        gold: "var(--gold)",
+        "gold-text": "var(--gold-text)",
+        bronze: "var(--bronze)",
+        purple: "var(--purple)",
+        oxblood: "var(--oxblood)",
+        border: "var(--border)",
         accent: {
-          blue: "#3b82f6",
-          purple: "#8b5cf6",
-          glow: "#6366f1",
-          cyan: "#22d3ee",
-          gold: "#f59e0b",
-          red: "#ef4444",
-          green: "#22c55e",
+          blue: "var(--accent-blue)",
+          purple: "var(--accent-purple)",
+          glow: "var(--accent-glow)",
+          cyan: "var(--accent-cyan)",
+          gold: "var(--accent-gold)",
+          red: "var(--accent-red)",
+          green: "var(--accent-green)",
         },
         text: {
-          primary: "#f1f5f9",
-          secondary: "#94a3b8",
-          muted: "#475569",
+          primary: "var(--text-primary)",
+          secondary: "var(--text-secondary)",
+          muted: "var(--text-muted)",
         },
       },
       fontFamily: {
-        mono: ["'JetBrains Mono'", "'Fira Code'", "monospace"],
-        sans: ["'Inter'", "system-ui", "sans-serif"],
-        display: ["'Space Grotesk'", "'Inter'", "sans-serif"],
+        mono: ["var(--font-jetbrains-mono)", "'Fira Code'", "monospace"],
+        sans: ["var(--font-inter)", "system-ui", "sans-serif"],
+        display: ["var(--font-fraunces)", "'Inter'", "sans-serif"],
+        chapter: ["var(--font-cinzel)", "serif"],
       },
       boxShadow: {
         glow: "0 0 20px rgba(99, 102, 241, 0.4)",

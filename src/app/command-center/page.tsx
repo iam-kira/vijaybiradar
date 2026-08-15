@@ -23,7 +23,8 @@ export default function CommandCenterPage() {
     <StoryPageShell theme={theme} className="min-h-screen py-20 px-6">
       <div className="max-w-6xl mx-auto">
         <SectionHeading
-          title="Engineering Command Center"
+          numeral="III"
+          title="The Praetorium"
           subtitle="Manufacturing plants across Germany and India. One dashboard."
           accent="green"
         />
@@ -38,7 +39,7 @@ export default function CommandCenterPage() {
               {/* Pulse dot */}
               <div className="absolute top-4 right-4 w-2.5 h-2.5 rounded-full bg-accent-green status-pulse" />
 
-              <div className="text-4xl md:text-5xl font-display font-bold bg-gradient-to-r from-accent-green to-accent-cyan bg-clip-text text-transparent">
+              <div className="text-4xl md:text-5xl font-display font-bold text-gold-text">
                 <AnimatedCounter
                   target={value}
                   suffix={suffix}

@@ -3,6 +3,7 @@
 import { useEffect, useRef, useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { TERMINAL_COMMANDS, KONAMI_EASTER_EGG_MESSAGE } from "@/data/easterEggs";
+import { CloseIcon } from "@/components/icons";
 
 interface TerminalOverlayProps {
   command: string | null;
@@ -82,7 +83,7 @@ export function TerminalOverlay({ command, onClose, isKonami }: TerminalOverlayP
                 className="ml-auto text-text-muted hover:text-text-primary transition-colors"
                 aria-label="Close terminal"
               >
-                ✕
+                <CloseIcon aria-hidden="true" />
               </button>
             </div>
 

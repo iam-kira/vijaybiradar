@@ -4,8 +4,9 @@ import { useState } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { motion, AnimatePresence } from "framer-motion";
-import { NAV_LINKS } from "@/lib/constants";
+import { CAMPAIGN_LINKS, OFF_DUTY_LINKS } from "@/lib/constants";
 import { useNavbarVisibility } from "@/hooks/useNavbarVisibility";
+import { ThemeToggle } from "./ThemeToggle";
 
 export function Navbar() {
   const [menuOpen, setMenuOpen] = useState(false);
@@ -35,47 +36,54 @@ export function Navbar() {
           {/* Logo */}
           <Link
             href="/"
-            className="text-lg font-display font-bold bg-gradient-to-r from-accent-blue to-accent-purple bg-clip-text text-transparent transition-opacity hover:opacity-80"
+            className="text-lg font-display font-bold tracking-[0.15em] text-gold-text transition-opacity hover:opacity-80"
           >
             VB
           </Link>
 
           {/* Desktop nav */}
-          <div className="hidden lg:flex items-center gap-1">
-            {NAV_LINKS.slice(0, 8).map((link) => (
-              <Link
-                key={link.href}
-                href={link.href}
-                className={`px-3 py-1.5 rounded-lg text-xs font-medium transition-all ${
-                  isActive(link.href)
-                    ? "bg-accent-glow/20 text-accent-blue border border-accent-blue/30"
-                    : "text-text-secondary hover:text-text-primary hover:bg-white/5"
-                }`}
-              >
-                {link.label}
-              </Link>
-            ))}
+          <div className="hidden lg:flex items-center gap-2">
+            <div className="flex items-center gap-1">
+              <span className="mr-1 text-[9px] uppercase tracking-[0.3em] text-text-muted">Campaign</span>
+              {CAMPAIGN_LINKS.map((link) => (
+                <Link
+                  key={link.href}
+                  href={link.href}
+                  className={`px-3 py-1.5 rounded-lg text-xs font-medium transition-all ${
+                    isActive(link.href)
+                      ? "bg-accent-glow/20 text-accent-blue border border-accent-blue/30"
+                      : "text-text-secondary hover:text-text-primary hover:bg-white/5"
+                  }`}
+                >
+                  {link.label}
+                </Link>
+              ))}
+            </div>
             <div className="w-px h-4 bg-white/20 mx-1" />
-            {NAV_LINKS.slice(8).map((link) => (
-              <Link
-                key={link.href}
-                href={link.href}
-                className={`px-3 py-1.5 rounded-lg text-xs font-medium transition-all ${
-                  isActive(link.href)
-                    ? "bg-accent-glow/20 text-accent-blue border border-accent-blue/30"
-                    : "text-text-secondary hover:text-text-primary hover:bg-white/5"
-                }`}
-              >
-                {link.label}
-              </Link>
-            ))}
+            <div className="flex items-center gap-1">
+              <span className="mr-1 text-[9px] uppercase tracking-[0.3em] text-text-muted">Off Duty</span>
+              {OFF_DUTY_LINKS.map((link) => (
+                <Link
+                  key={link.href}
+                  href={link.href}
+                  className={`px-3 py-1.5 rounded-lg text-xs font-medium transition-all ${
+                    isActive(link.href)
+                      ? "bg-accent-glow/20 text-accent-blue border border-accent-blue/30"
+                      : "text-text-secondary hover:text-text-primary hover:bg-white/5"
+                  }`}
+                >
+                  {link.label}
+                </Link>
+              ))}
+            </div>
           </div>
 
-          {/* Command palette hint + mobile toggle */}
+          {/* Command palette hint + theme toggle + mobile toggle */}
           <div className="flex items-center gap-2">
             <kbd className="hidden md:flex items-center gap-1 rounded border border-white/20 px-2 py-1 text-xs text-text-muted">
               <span>⌘</span>K
             </kbd>
+            <ThemeToggle />
             <button
               className="rounded-full border border-white/10 bg-white/5 p-2 text-text-secondary transition-colors hover:text-text-primary lg:hidden"
               onClick={() => setMenuOpen((v) => !v)}
@@ -97,21 +105,41 @@ export function Navbar() {
               animate={{ opacity: 1, height: "auto" }}
               exit={{ opacity: 0, height: 0 }}
             >
-              <div className="grid grid-cols-2 gap-1 p-2">
-                {NAV_LINKS.map((link) => (
-                  <Link
-                    key={link.href}
-                    href={link.href}
-                    className={`rounded-lg px-3 py-2 text-sm transition-colors ${
-                      isActive(link.href)
-                        ? "bg-accent-glow/20 text-accent-blue"
-                        : "text-text-secondary hover:text-text-primary hover:bg-white/5"
-                    }`}
-                    onClick={() => setMenuOpen(false)}
-                  >
-                    {link.label}
-                  </Link>
-                ))}
+              <div className="p-2">
+                <p className="px-3 pt-1 text-[10px] uppercase tracking-[0.3em] text-text-muted">Campaign</p>
+                <div className="grid grid-cols-2 gap-1 pb-2 pt-1">
+                  {CAMPAIGN_LINKS.map((link) => (
+                    <Link
+                      key={link.href}
+                      href={link.href}
+                      className={`rounded-lg px-3 py-2 text-sm transition-colors ${
+                        isActive(link.href)
+                          ? "bg-accent-glow/20 text-accent-blue"
+                          : "text-text-secondary hover:text-text-primary hover:bg-white/5"
+                      }`}
+                      onClick={() => setMenuOpen(false)}
+                    >
+                      {link.label}
+                    </Link>
+                  ))}
+                </div>
+                <p className="px-3 pt-1 text-[10px] uppercase tracking-[0.3em] text-text-muted">Off Duty</p>
+                <div className="grid grid-cols-2 gap-1 pb-1 pt-1">
+                  {OFF_DUTY_LINKS.map((link) => (
+                    <Link
+                      key={link.href}
+                      href={link.href}
+                      className={`rounded-lg px-3 py-2 text-sm transition-colors ${
+                        isActive(link.href)
+                          ? "bg-accent-glow/20 text-accent-blue"
+                          : "text-text-secondary hover:text-text-primary hover:bg-white/5"
+                      }`}
+                      onClick={() => setMenuOpen(false)}
+                    >
+                      {link.label}
+                    </Link>
+                  ))}
+                </div>
               </div>
             </motion.div>
           )}

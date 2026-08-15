@@ -3,9 +3,9 @@
 import { motion } from "framer-motion";
 
 const LINES = [
-  "I design systems",
-  "that turn chaos into momentum.",
-  "I build the future behind the scenes.",
+  "Complexity yields",
+  "to discipline, not luck.",
+  "I build what holds.",
 ];
 
 export function HeroText() {
@@ -27,10 +27,10 @@ export function HeroText() {
             key={line}
             className={`font-display font-semibold leading-[0.9] tracking-[-0.05em] ${
               i === 2
-                ? "max-w-3xl text-[2.7rem] md:text-[4.5rem] lg:text-[6rem] bg-gradient-to-r from-accent-blue via-accent-purple to-accent-gold bg-clip-text text-transparent"
+                ? "max-w-3xl text-[2.7rem] md:text-[4.5rem] lg:text-[6rem] text-gold-text"
                 : i === 1
-                  ? "max-w-3xl text-[2.5rem] md:text-[4rem] lg:text-[5.2rem] text-white"
-                  : "max-w-2xl text-[2.2rem] md:text-[3.6rem] lg:text-[4.8rem] text-white/95"
+                  ? "max-w-3xl text-[2.5rem] md:text-[4rem] lg:text-[5.2rem] text-text-primary"
+                  : "max-w-2xl text-[2.2rem] md:text-[3.6rem] lg:text-[4.8rem] text-text-primary/95"
             }`}
             initial={{ opacity: 0, y: 32 }}
             animate={{ opacity: 1, y: 0 }}

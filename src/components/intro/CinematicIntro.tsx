@@ -2,9 +2,11 @@
 
 import { useEffect, useRef, useState } from "react";
 import { useSound } from "@/hooks/useSound";
+import { useReducedMotion } from "@/hooks/useReducedMotion";
 import { EnterButton } from "./EnterButton";
+import { BASE_PATH } from "@/lib/constants";
 
-const INTRO_WALLPAPER = "/images/wallpaper/Conqure.jpg";
+const INTRO_WALLPAPER = `${BASE_PATH}/images/wallpaper/Conqure.jpg`;
 
 const SEQUENCE = [
   { text: "VIJAY BIRADAR", class: "text-5xl md:text-7xl font-display font-bold text-glow-blue text-white tracking-widest", delay: 1200 },
@@ -25,6 +27,7 @@ export function CinematicIntro({ onComplete }: { onComplete: () => void }) {
   const [skipped, setSkipped] = useState(false);
   const { unlock, playAmbient, playSfx } = useSound();
   const timerRefs = useRef<NodeJS.Timeout[]>([]);
+  const reducedMotion = useReducedMotion();
 
   const clearTimers = () => timerRefs.current.forEach(clearTimeout);
 
@@ -34,6 +37,14 @@ export function CinematicIntro({ onComplete }: { onComplete: () => void }) {
   };
 
   useEffect(() => {
+    if (reducedMotion) {
+      // Skip the timed reveal sequence entirely — show the final state at once.
+      setPhase(0);
+      setShowRoles(true);
+      setShowButton(true);
+      return;
+    }
+
     // Phase sequence
     addTimer(() => setPhase(0), SEQUENCE[0].delay);         // VIJAY BIRADAR
     addTimer(() => setShowRoles(true), 4000);               // Role list (faster reveal)
@@ -48,7 +59,7 @@ export function CinematicIntro({ onComplete }: { onComplete: () => void }) {
     timerRefs.current.push(roleTimer as unknown as NodeJS.Timeout);
 
     return clearTimers;
-  }, []);
+  }, [reducedMotion]);
 
   const handleEnter = () => {
     unlock();
@@ -70,13 +81,14 @@ export function CinematicIntro({ onComplete }: { onComplete: () => void }) {
 
   return (
     <div
-      className="fixed inset-0 z-[9999] flex flex-col items-center justify-center overflow-hidden bg-black"
+      className="imperium-tint fixed inset-0 z-[9999] flex flex-col items-center justify-center overflow-hidden bg-black"
       style={{
         backgroundImage: `linear-gradient(rgba(0,0,0,0.5), rgba(0,0,0,0.7)), url("${INTRO_WALLPAPER}")`,
         backgroundSize: "cover",
         backgroundPosition: "center",
       }}
     >
+      <div className="imperium-tint-overlay" aria-hidden="true" />
       {/* Skip button */}
       <button
         onClick={handleSkip}
@@ -89,8 +101,8 @@ export function CinematicIntro({ onComplete }: { onComplete: () => void }) {
         {/* Name */}
         {phase >= 0 && (
           <div
-            className={`${SEQUENCE[0].class} transition-all duration-1000 animate-[fadeIn_1s_ease-in]`}
-            style={{ animation: "fadeIn 1s ease-in forwards" }}
+            className={reducedMotion ? SEQUENCE[0].class : `${SEQUENCE[0].class} transition-all duration-1000 animate-[fadeIn_1s_ease-in]`}
+            style={reducedMotion ? undefined : { animation: "fadeIn 1s ease-in forwards" }}
           >
             {SEQUENCE[0].text}
           </div>

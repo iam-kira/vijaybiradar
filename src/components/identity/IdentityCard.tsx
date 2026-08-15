@@ -1,15 +1,16 @@
 "use client";
 
-import { useState } from "react";
+import { useState, type ComponentType } from "react";
 import { motion } from "framer-motion";
+import type { IconProps } from "@/components/icons";
 
 interface IdentityCardProps {
-  icon: string;
+  icon: ComponentType<IconProps>;
   label: string;
   detail: string;
 }
 
-export function IdentityCard({ icon, label, detail }: IdentityCardProps) {
+export function IdentityCard({ icon: Icon, label, detail }: IdentityCardProps) {
   const [flipped, setFlipped] = useState(false);
 
   return (
@@ -30,7 +31,7 @@ export function IdentityCard({ icon, label, detail }: IdentityCardProps) {
           className="absolute inset-0 card-base card-glow flex flex-col items-center justify-center gap-2 backface-hidden"
           style={{ backfaceVisibility: "hidden" }}
         >
-          <span className="text-2xl">{icon}</span>
+          <Icon className="text-2xl text-gold-text" aria-hidden="true" />
           <span className="text-xs font-mono text-text-secondary text-center">{label}</span>
         </div>
 

@@ -4,11 +4,13 @@ import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { useSound } from "@/hooks/useSound";
 import type { SoundMode } from "@/lib/constants";
+import { ClapperIcon, TargetIcon, MuteIcon, type IconProps } from "@/components/icons";
+import type { ComponentType } from "react";
 
-const MODES: { value: SoundMode; label: string; icon: string }[] = [
-  { value: "cinematic", label: "Cinematic", icon: "🎬" },
-  { value: "focus", label: "Focus", icon: "🎯" },
-  { value: "silent", label: "Silent", icon: "🔇" },
+const MODES: { value: SoundMode; label: string; icon: ComponentType<IconProps> }[] = [
+  { value: "cinematic", label: "Cinematic", icon: ClapperIcon },
+  { value: "focus", label: "Focus", icon: TargetIcon },
+  { value: "silent", label: "Silent", icon: MuteIcon },
 ];
 
 export function SoundControlWidget() {
@@ -55,7 +57,7 @@ export function SoundControlWidget() {
                         : "text-text-muted hover:text-text-secondary hover:bg-white/5"
                     }`}
                   >
-                    <span>{m.icon}</span>
+                    <m.icon aria-hidden="true" />
                     <span>{m.label}</span>
                   </button>
                 ))}
@@ -79,7 +81,7 @@ export function SoundControlWidget() {
         title={muted ? "Unmute (dbl-click to toggle mute)" : "Sound settings"}
         aria-label="Sound settings"
       >
-        {muted || mode === "silent" ? "🔇" : mode === "focus" ? "🎯" : "🎬"}
+        {muted || mode === "silent" ? <MuteIcon aria-hidden="true" /> : mode === "focus" ? <TargetIcon aria-hidden="true" /> : <ClapperIcon aria-hidden="true" />}
       </button>
     </div>
   );

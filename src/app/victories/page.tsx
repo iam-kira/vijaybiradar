@@ -13,7 +13,8 @@ export default function VictoriesPage() {
     <StoryPageShell theme={theme} className="min-h-screen px-6 py-20">
       <div className="mx-auto max-w-6xl">
         <SectionHeading
-          title="Hall of Fame"
+          numeral="V"
+          title="Triumphs"
           subtitle="Where missions, impact, and proud moments are preserved."
           accent="gold"
         />
@@ -38,7 +39,7 @@ export default function VictoriesPage() {
               { value: "~75%", label: "Effort Reduced" },
             ].map((stat) => (
               <div key={stat.label} className="rounded-2xl border border-white/10 bg-white/5 p-5 text-center">
-                <div className="font-display text-3xl text-transparent bg-gradient-to-r from-accent-gold to-accent-blue bg-clip-text">
+                <div className="font-display text-3xl text-gold-text">
                   {stat.value}
                 </div>
                 <div className="mt-2 text-[10px] uppercase tracking-[0.24em] text-text-secondary">{stat.label}</div>

@@ -5,6 +5,7 @@ interface SectionHeadingProps {
   subtitle?: string;
   accent?: "blue" | "purple" | "gold" | "green";
   align?: "left" | "center";
+  numeral?: string;
 }
 
 export function SectionHeading({
@@ -12,12 +13,13 @@ export function SectionHeading({
   subtitle,
   accent = "blue",
   align = "center",
+  numeral,
 }: SectionHeadingProps) {
-  const glowClass = {
-    blue: "from-accent-blue to-accent-purple",
-    purple: "from-accent-purple to-accent-glow",
-    gold: "from-accent-gold to-yellow-300",
-    green: "from-accent-green to-cyan-400",
+  const colorClass = {
+    blue: "text-bronze",
+    purple: "text-purple",
+    gold: "text-gold-text",
+    green: "text-gold-text",
   }[accent];
 
   return (
@@ -28,18 +30,19 @@ export function SectionHeading({
       viewport={{ once: true }}
       transition={{ duration: 0.6 }}
     >
-      <h2
-        className={`text-3xl md:text-4xl font-display font-bold bg-gradient-to-r ${glowClass} bg-clip-text text-transparent`}
-      >
+      {numeral && (
+        <span className={`mb-2 block font-chapter text-sm tracking-[0.4em] ${colorClass}`}>{numeral}</span>
+      )}
+      <h2 className={`text-3xl md:text-4xl font-display font-bold ${colorClass}`}>
         {title}
       </h2>
       {subtitle && (
         <p className="mt-3 text-text-secondary max-w-2xl mx-auto">{subtitle}</p>
       )}
       <div
-        className={`mt-4 h-[2px] w-16 bg-gradient-to-r ${glowClass} ${
+        className={`mt-4 h-[2px] w-16 bg-current ${colorClass} ${
           align === "center" ? "mx-auto" : ""
-        } rounded-full`}
+        } rounded-full opacity-60`}
       />
     </motion.div>
   );

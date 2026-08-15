@@ -5,14 +5,26 @@ import { SectionHeading } from "@/components/shared/SectionHeading";
 import { StoryPageShell } from "@/components/shared/StoryPageShell";
 import { getStoryTheme } from "@/lib/storyThemes";
 import { animeList, animeThemes } from "@/data/anime";
+import {
+  FlameIcon,
+  ChessPawnIcon,
+  CrossedSwordsIcon,
+  HandshakeIcon,
+  ChartUpIcon,
+  FlexArmIcon,
+  StarIcon,
+  LaurelArchIcon,
+  type IconProps,
+} from "@/components/icons";
+import type { ComponentType } from "react";
 
-const THEME_ICONS: Record<string, string> = {
-  Persistence: "🔥",
-  Strategy: "♟️",
-  Discipline: "⚔️",
-  Friendship: "🤝",
-  Growth: "📈",
-  "Never Giving Up": "💪",
+const THEME_ICONS: Record<string, ComponentType<IconProps>> = {
+  Persistence: FlameIcon,
+  Strategy: ChessPawnIcon,
+  Discipline: CrossedSwordsIcon,
+  Friendship: HandshakeIcon,
+  Growth: ChartUpIcon,
+  "Never Giving Up": FlexArmIcon,
 };
 
 export default function AnimeZonePage() {
@@ -22,6 +34,7 @@ export default function AnimeZonePage() {
     <StoryPageShell theme={theme} className="min-h-screen py-20 px-6">
       <div className="max-w-6xl mx-auto">
         <SectionHeading
+          numeral="XIII"
           title="Anime Zone"
           subtitle="Anime is not just entertainment. It is storytelling about resilience, ambition, loyalty, and growth."
           accent="purple"
@@ -31,20 +44,23 @@ export default function AnimeZonePage() {
         <div className="mb-12">
           <h3 className="text-xs font-mono text-text-muted uppercase tracking-widest mb-4 text-center">Core Lessons</h3>
           <div className="flex flex-wrap gap-3 justify-center">
-            {animeThemes.map((theme, i) => (
-              <motion.div
-                key={theme}
-                className="card-base px-4 py-2 flex items-center gap-2 text-sm"
-                initial={{ opacity: 0, scale: 0.9 }}
-                whileInView={{ opacity: 1, scale: 1 }}
-                viewport={{ once: true }}
-                transition={{ delay: i * 0.05 }}
-                whileHover={{ scale: 1.05, borderColor: "rgba(139,92,246,0.5)" }}
-              >
-                <span>{THEME_ICONS[theme] ?? "⭐"}</span>
-                <span className="text-text-secondary">{theme}</span>
-              </motion.div>
-            ))}
+            {animeThemes.map((theme, i) => {
+              const ThemeIcon = THEME_ICONS[theme] ?? StarIcon;
+              return (
+                <motion.div
+                  key={theme}
+                  className="card-base px-4 py-2 flex items-center gap-2 text-sm"
+                  initial={{ opacity: 0, scale: 0.9 }}
+                  whileInView={{ opacity: 1, scale: 1 }}
+                  viewport={{ once: true }}
+                  transition={{ delay: i * 0.05 }}
+                  whileHover={{ scale: 1.05, borderColor: "rgba(91,58,110,0.5)" }}
+                >
+                  <ThemeIcon className="text-gold-text" aria-hidden="true" />
+                  <span className="text-text-secondary">{theme}</span>
+                </motion.div>
+              );
+            })}
           </div>
         </div>
 
@@ -72,7 +88,7 @@ export default function AnimeZonePage() {
                 />
               ) : (
                 <div className="w-full h-40 bg-gradient-to-br from-accent-purple/20 to-accent-blue/10 flex items-center justify-center">
-                  <span className="text-4xl">⛩️</span>
+                  <LaurelArchIcon className="text-4xl text-gold-text" aria-hidden="true" />
                 </div>
               )}
 

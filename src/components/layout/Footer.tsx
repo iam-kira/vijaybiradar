@@ -18,10 +18,10 @@ export function Footer() {
             viewport={{ once: true }}
             transition={{ duration: 0.6 }}
           >
-            <p className="font-display text-xl font-bold text-transparent bg-gradient-to-r from-accent-blue to-accent-purple bg-clip-text">Vijay Biradar</p>
+            <p className="font-display text-xl font-bold text-gold-text">Vijay Biradar</p>
             <p className="mt-1 text-sm text-text-secondary">Enterprise Data Engineer</p>
             <p className="mt-0.5 text-sm text-text-secondary">AI Platform Builder</p>
-            <p className="mt-2 font-mono text-xs tracking-widest text-accent-gold">Building the Future</p>
+            <p className="mt-2 font-mono text-xs tracking-widest text-accent-gold">Imperium in Progress</p>
           </motion.div>
 
           {/* Links */}
@@ -109,7 +109,7 @@ export function Footer() {
         {/* Footer note */}
         <div className="mt-8 border-t border-white/5 pt-6 text-center">
           <p className="font-mono text-[10px] text-text-muted uppercase tracking-widest">
-            © {new Date().getFullYear()} Vijay Biradar · Conqueror of Complexity
+            © {new Date().getFullYear()} Vijay Biradar · Master of Complexity
           </p>
         </div>
       </div>

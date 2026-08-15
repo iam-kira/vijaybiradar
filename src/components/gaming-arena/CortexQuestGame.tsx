@@ -2,13 +2,15 @@
 
 import { useEffect, useRef, useState } from "react";
 import { useSound } from "@/hooks/useSound";
+import { PALETTE } from "@/lib/constants";
+import { TrophyIcon } from "@/components/icons";
 
 const TOKENS = [
-  { label: "GitHub", color: "#3b82f6" },
-  { label: "Jira", color: "#8b5cf6" },
-  { label: "Confluence", color: "#22d3ee" },
-  { label: "SQL", color: "#f59e0b" },
-  { label: "Talend", color: "#22c55e" },
+  { label: "GitHub", color: PALETTE.bronze },
+  { label: "Jira", color: PALETTE.purple },
+  { label: "Confluence", color: PALETTE.gold },
+  { label: "SQL", color: PALETTE.gold },
+  { label: "Talend", color: PALETTE.oxblood },
 ];
 
 const W = 380;
@@ -98,8 +100,8 @@ export function CortexQuestGame() {
     ctx.fillStyle = "rgba(30,30,50,0.8)";
     ctx.fillRect(10, 10, W - 20, 8);
     const grad = ctx.createLinearGradient(10, 0, W - 10, 0);
-    grad.addColorStop(0, "#3b82f6");
-    grad.addColorStop(1, "#f59e0b");
+    grad.addColorStop(0, PALETTE.bronze);
+    grad.addColorStop(1, PALETTE.gold);
     ctx.fillStyle = grad;
     ctx.fillRect(10, 10, ((W - 20) * s.power) / 100, 8);
 
@@ -117,7 +119,7 @@ export function CortexQuestGame() {
     });
 
     // Player (Cortex)
-    ctx.fillStyle = "#6366f1";
+    ctx.fillStyle = PALETTE.gold;
     ctx.beginPath();
     ctx.roundRect(s.playerX - 35, s.playerY - 15, 70, 28, 8);
     ctx.fill();
@@ -170,7 +172,7 @@ export function CortexQuestGame() {
         </button>
       )}
       {display.gameOver && (
-        <p className="text-xs text-accent-green font-mono">🏆 Cortex Powered! Collected: {display.collected} tokens</p>
+        <p className="flex items-center gap-1 text-xs text-accent-green font-mono"><TrophyIcon aria-hidden="true" /> Cortex Powered! Collected: {display.collected} tokens</p>
       )}
       <p className="text-[10px] text-text-muted text-center">Catch GitHub/Jira/Confluence/SQL/Talend tokens to power DFL Cortex</p>
     </div>

@@ -2,18 +2,30 @@
 
 import { motion } from "framer-motion";
 import { IdentityCard } from "./IdentityCard";
+import {
+  GearIcon,
+  TowerIcon,
+  CircuitIcon,
+  LockIcon,
+  BookIcon,
+  DiceIcon,
+  MotorcycleIcon,
+  ViolinIcon,
+  LaurelArchIcon,
+  HandshakeIcon,
+} from "@/components/icons";
 
 const CARDS = [
-  { icon: "⚙️", label: "Engineer", detail: "Building robust systems that scale across manufacturing plants." },
-  { icon: "🏗️", label: "Platform Builder", detail: "DFL Cortex, observability platforms, self-healing pipelines." },
-  { icon: "🤖", label: "AI Explorer", detail: "LLMs, MCP, RAG patterns, AI adoption across the enterprise." },
-  { icon: "🔒", label: "Cybersecurity SPOC", detail: "Trusted advisor for production security topics across teams." },
-  { icon: "📚", label: "Reader", detail: "Stoics, strategy, fiction, philosophy — always reading." },
-  { icon: "🎮", label: "Gamer", detail: "Valorant, COD Ghosts. Aim is muscle memory. Incidents are reflex." },
-  { icon: "🏍️", label: "Rider", detail: "Some problems are solved at the desk. Some on the road." },
-  { icon: "🎻", label: "Violin Learner", detail: "Rhythm, precision, patience — the same in music and engineering." },
-  { icon: "⛩️", label: "Anime Fan", detail: "Strategy, discipline, resilience — told one arc at a time." },
-  { icon: "🤝", label: "Volunteer", detail: "Volunteer Lead, Women and Children Welfare Association, since 2017." },
+  { icon: GearIcon, label: "Engineer", detail: "Building robust systems that scale across manufacturing plants." },
+  { icon: TowerIcon, label: "Platform Builder", detail: "DFL Cortex, observability platforms, self-healing pipelines." },
+  { icon: CircuitIcon, label: "AI Explorer", detail: "LLMs, MCP, RAG patterns, AI adoption across the enterprise." },
+  { icon: LockIcon, label: "Cybersecurity SPOC", detail: "Trusted advisor for production security topics across teams." },
+  { icon: BookIcon, label: "Reader", detail: "Stoics, strategy, fiction, philosophy — always reading." },
+  { icon: DiceIcon, label: "Gamer", detail: "Valorant, COD Ghosts. Aim is muscle memory. Incidents are reflex." },
+  { icon: MotorcycleIcon, label: "Rider", detail: "Some problems are solved at the desk. Some on the road." },
+  { icon: ViolinIcon, label: "Violin Learner", detail: "Rhythm, precision, patience — the same in music and engineering." },
+  { icon: LaurelArchIcon, label: "Anime Fan", detail: "Strategy, discipline, resilience — told one arc at a time." },
+  { icon: HandshakeIcon, label: "Volunteer", detail: "Volunteer Lead, Women and Children Welfare Association, since 2017." },
 ];
 
 export function MeaningSection() {

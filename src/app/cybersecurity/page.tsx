@@ -7,6 +7,7 @@ import { StoryPageShell } from "@/components/shared/StoryPageShell";
 import { getStoryTheme } from "@/lib/storyThemes";
 import dynamic from "next/dynamic";
 import { useSound } from "@/hooks/useSound";
+import { AlertIcon, CheckShieldIcon } from "@/components/icons";
 
 const ArchitectureDiagram = dynamic(
   () => import("@/components/architecture/ArchitectureDiagram").then((m) => m.ArchitectureDiagram),
@@ -39,7 +40,8 @@ export default function CybersecurityPage() {
     <StoryPageShell theme={theme} className="min-h-screen py-20 px-6">
       <div className="max-w-5xl mx-auto">
         <SectionHeading
-          title="The Edge"
+          numeral="VI"
+          title="The Praetorian Guard"
           subtitle="Great systems perform. Exceptional systems endure."
           accent="purple"
         />
@@ -99,9 +101,9 @@ export default function CybersecurityPage() {
           </h3>
           <button
             onClick={triggerAlert}
-            className="px-5 py-2.5 rounded-lg bg-accent-red/10 border border-accent-red/30 text-accent-red text-sm font-mono hover:bg-accent-red/20 transition-all"
+            className="inline-flex items-center gap-2 px-5 py-2.5 rounded-lg bg-accent-red/10 border border-accent-red/30 text-accent-red text-sm font-mono hover:bg-accent-red/20 transition-all"
           >
-            🔴 Simulate Security Alert
+            <AlertIcon aria-hidden="true" /> Simulate Security Alert
           </button>
         </div>
 
@@ -118,7 +120,7 @@ export default function CybersecurityPage() {
               { issue: "Missing authentication on data endpoint", status: "resolved" },
             ].map(({ issue }) => (
               <div key={issue} className="flex items-center gap-3 text-sm">
-                <span className="text-accent-green">✓</span>
+                <CheckShieldIcon className="text-accent-green" aria-hidden="true" />
                 <span className="text-text-secondary line-through decoration-accent-green/50">{issue}</span>
                 <span className="ml-auto text-xs text-accent-green font-mono">resolved</span>
               </div>
@@ -136,7 +138,7 @@ export default function CybersecurityPage() {
               exit={{ x: 100, opacity: 0 }}
             >
               <div className="flex items-start gap-3">
-                <span className="text-2xl">🔴</span>
+                <AlertIcon className="text-2xl text-accent-red" aria-hidden="true" />
                 <div>
                   <p className="text-sm font-bold text-accent-red">Security Alert</p>
                   <p className="text-xs text-text-secondary mt-1">

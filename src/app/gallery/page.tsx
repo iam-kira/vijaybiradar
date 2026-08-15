@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { SectionHeading } from "@/components/shared/SectionHeading";
 import { galleryCategories, galleryYears, type GalleryCategory, type GalleryItem, getGalleryItems } from "@/data/gallery";
+import { CameraIcon, CloseIcon } from "@/components/icons";
 
 export default function GalleryPage() {
   const [selectedCategory, setSelectedCategory] = useState<GalleryCategory | "all">("all");
@@ -38,7 +39,8 @@ export default function GalleryPage() {
     <div className="min-h-screen px-6 py-20">
       <div className="mx-auto max-w-6xl">
         <SectionHeading
-          title="The Archive"
+          numeral="XIV"
+          title="Gallery"
           subtitle="Moments become memories. Memories become stories."
           accent="blue"
         />
@@ -89,12 +91,11 @@ export default function GalleryPage() {
 
         {loading ? (
           <div className="card-base border-dashed border-white/20 p-16 text-center">
-            <div className="mb-4 text-5xl">⏳</div>
             <p className="font-mono text-sm text-text-muted">Loading archive…</p>
           </div>
         ) : filtered.length === 0 ? (
           <div className="card-base border-dashed border-white/20 p-16 text-center">
-            <div className="mb-4 text-5xl">📷</div>
+            <CameraIcon className="mx-auto mb-4 text-5xl text-gold-text" aria-hidden="true" />
             <p className="font-mono text-sm text-text-muted">
               Drop images into <span className="text-accent-blue">public/images/gallery</span> and run the gallery generator to populate this archive.
             </p>
@@ -149,7 +150,7 @@ export default function GalleryPage() {
                   className="absolute right-3 top-3 flex h-8 w-8 items-center justify-center rounded-full bg-black/60 text-white transition-colors hover:bg-black/80"
                   aria-label="Close lightbox"
                 >
-                  ✕
+                  <CloseIcon aria-hidden="true" />
                 </button>
               </motion.div>
             </motion.div>

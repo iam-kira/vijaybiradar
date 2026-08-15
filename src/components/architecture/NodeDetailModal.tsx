@@ -2,6 +2,7 @@
 
 import { motion } from "framer-motion";
 import type { ArchitectureNode } from "@/data/projects";
+import { CloseIcon } from "@/components/icons";
 
 interface NodeDetailModalProps {
   node: ArchitectureNode;
@@ -29,7 +30,7 @@ export function NodeDetailModal({ node, onClose }: NodeDetailModalProps) {
           className="absolute top-4 right-4 text-text-muted hover:text-text-primary transition-colors text-lg"
           aria-label="Close"
         >
-          ✕
+          <CloseIcon aria-hidden="true" />
         </button>
         <div className="flex items-center gap-3 mb-3">
           <div className="w-2 h-2 rounded-full bg-accent-blue status-pulse" />

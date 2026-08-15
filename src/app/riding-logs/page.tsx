@@ -5,6 +5,7 @@ import { SectionHeading } from "@/components/shared/SectionHeading";
 import { rides } from "@/data/rides";
 import { useSound } from "@/hooks/useSound";
 import { useEffect } from "react";
+import { MotorcycleIcon, PinIcon, CalendarIcon, StarIcon } from "@/components/icons";
 
 export default function RidingLogsPage() {
   const { playSfx } = useSound();
@@ -17,7 +18,8 @@ export default function RidingLogsPage() {
     <div className="min-h-screen py-20 px-6">
       <div className="max-w-4xl mx-auto">
         <SectionHeading
-          title="The Road"
+          numeral="XII"
+          title="Riding Logs"
           subtitle="Some lessons are learned beyond the screen."
           accent="blue"
         />
@@ -32,7 +34,7 @@ export default function RidingLogsPage() {
 
         {rides.length === 0 ? (
           <div className="card-base border-dashed border-white/20 p-12 text-center">
-            <div className="text-5xl mb-4">🏍️</div>
+            <MotorcycleIcon className="mx-auto mb-4 text-5xl text-gold-text" aria-hidden="true" />
             <p className="text-text-muted font-mono text-sm mb-2">
               [YOU FILL] — Add your riding routes in{" "}
               <code className="text-accent-blue">src/data/rides.ts</code>
@@ -61,13 +63,13 @@ export default function RidingLogsPage() {
                 )}
                 <h3 className="text-lg font-display font-bold text-text-primary">{ride.routeName}</h3>
                 <div className="flex gap-4 mt-1 text-xs text-text-muted font-mono">
-                  {ride.distance && <span>📍 {ride.distance}</span>}
-                  {ride.date && <span>📅 {ride.date}</span>}
+                  {ride.distance && <span className="inline-flex items-center gap-1"><PinIcon aria-hidden="true" /> {ride.distance}</span>}
+                  {ride.date && <span className="inline-flex items-center gap-1"><CalendarIcon aria-hidden="true" /> {ride.date}</span>}
                 </div>
                 <p className="mt-3 text-text-secondary text-sm leading-relaxed">{ride.story}</p>
                 {ride.favoriteStop && (
-                  <p className="mt-2 text-xs text-accent-blue font-mono">
-                    ⭐ Favorite stop: {ride.favoriteStop}
+                  <p className="mt-2 flex items-center gap-1 text-xs text-accent-blue font-mono">
+                    <StarIcon aria-hidden="true" /> Favorite stop: {ride.favoriteStop}
                   </p>
                 )}
               </motion.div>

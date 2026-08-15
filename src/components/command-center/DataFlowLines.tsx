@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useRef } from "react";
+import { PALETTE } from "@/lib/constants";
 
 export function DataFlowLines() {
   const svgRef = useRef<SVGSVGElement>(null);
@@ -42,20 +43,20 @@ export function DataFlowLines() {
       >
         <defs>
           <linearGradient id="flowGrad1" x1="0" y1="0" x2="1" y2="0">
-            <stop offset="0%" stopColor="#3b82f6" />
-            <stop offset="100%" stopColor="#8b5cf6" />
+            <stop offset="0%" stopColor={PALETTE.bronze} />
+            <stop offset="100%" stopColor={PALETTE.purple} />
           </linearGradient>
           <linearGradient id="flowGrad2" x1="0" y1="0" x2="1" y2="0">
-            <stop offset="0%" stopColor="#22c55e" />
-            <stop offset="100%" stopColor="#22d3ee" />
+            <stop offset="0%" stopColor={PALETTE.gold} />
+            <stop offset="100%" stopColor={PALETTE.bronze} />
           </linearGradient>
         </defs>
 
         {/* Node labels */}
         {["Source", "Bronze", "Silver", "Gold", "Analytics"].map((label, i) => (
           <g key={label}>
-            <rect x={i * 180 + 20} y={40} width={80} height={30} rx={6} fill="rgba(99,102,241,0.15)" stroke="rgba(99,102,241,0.3)" strokeWidth="1" />
-            <text x={i * 180 + 60} y={60} textAnchor="middle" fill="#94a3b8" fontSize="11" fontFamily="monospace">{label}</text>
+            <rect x={i * 180 + 20} y={40} width={80} height={30} rx={6} fill="rgba(201,162,39,0.15)" stroke="rgba(201,162,39,0.3)" strokeWidth="1" />
+            <text x={i * 180 + 60} y={60} textAnchor="middle" fill={PALETTE.textSecondary} fontSize="11" fontFamily="monospace">{label}</text>
           </g>
         ))}
 

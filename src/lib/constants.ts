@@ -41,34 +41,42 @@ export const CINEMATIC_ONLY: SoundName[] = ["introAmbient", "violinNote", "keybo
 // Sounds available in Cinematic + Focus
 export const CINEMATIC_FOCUS: SoundName[] = ["whoosh", "achievementUnlock"];
 
-export const NAV_LINKS = [
-  { href: "/", label: "Home", scene: "Scene 1" },
-  { href: "/about", label: "About", scene: "Scene 2" },
-  { href: "/command-center", label: "Command Center", scene: "Scene 3" },
-  { href: "/architecture", label: "Architecture", scene: "Scene 4" },
-  { href: "/victories", label: "Victories", scene: "Scene 5" },
-  { href: "/cybersecurity", label: "Cybersecurity", scene: "Scene 6" },
-  { href: "/reading-room", label: "Reading Room", scene: "Scene 7" },
-  { href: "/gaming-arena", label: "Gaming Arena", scene: "Scene 8" },
-  { href: "/anime-zone", label: "Anime Zone", scene: "Scene 9" },
-  { href: "/violin-corner", label: "Violin Corner", scene: "Scene 10" },
-  { href: "/riding-logs", label: "Riding Logs", scene: "Scene 11" },
-  { href: "/gallery", label: "Gallery", scene: "Scene 12" },
-  { href: "/resume", label: "Resume", scene: "Scene 13" },
-  { href: "/contact", label: "Contact", scene: "Scene 14" },
+export const CAMPAIGN_LINKS = [
+  { href: "/", label: "The Rise", scene: "Campaign" },
+  { href: "/about", label: "Meditations", scene: "Campaign" },
+  { href: "/command-center", label: "The Praetorium", scene: "Campaign" },
+  { href: "/architecture", label: "The Aqueducts", scene: "Campaign" },
+  { href: "/victories", label: "Triumphs", scene: "Campaign" },
+  { href: "/cybersecurity", label: "The Praetorian Guard", scene: "Campaign" },
+  { href: "/resume", label: "Cursus Honorum", scene: "Campaign" },
+  { href: "/contact", label: "The Forum", scene: "Campaign" },
 ];
 
+export const OFF_DUTY_LINKS = [
+  { href: "/reading-room", label: "Reading Room", scene: "Off Duty" },
+  { href: "/gaming-arena", label: "Gaming Arena", scene: "Off Duty" },
+  { href: "/violin-corner", label: "Violin Corner", scene: "Off Duty" },
+  { href: "/riding-logs", label: "Riding Logs", scene: "Off Duty" },
+  { href: "/anime-zone", label: "Anime Zone", scene: "Off Duty" },
+  { href: "/gallery", label: "Gallery", scene: "Off Duty" },
+];
+
+export const NAV_LINKS = [...CAMPAIGN_LINKS, ...OFF_DUTY_LINKS];
+
+/**
+ * JS-side mirror of the dark-theme tokens for contexts that can't read CSS
+ * custom properties (canvas 2D, inline SVG stroke/fill computed in JS).
+ * The CSS custom properties in src/styles/globals.css are the source of
+ * truth — keep these in sync with the `:root` block there.
+ */
 export const PALETTE = {
-  bgPrimary: "#0a0a0f",
-  bgSecondary: "#0f0f1a",
-  bgCard: "#12121f",
-  blue: "#3b82f6",
-  purple: "#8b5cf6",
-  glow: "#6366f1",
-  cyan: "#22d3ee",
-  gold: "#f59e0b",
-  green: "#22c55e",
-  red: "#ef4444",
-  textPrimary: "#f1f5f9",
-  textSecondary: "#94a3b8",
+  bgPrimary: "#0b0906",
+  bgSecondary: "#14100a",
+  bgCard: "#1a140d",
+  gold: "#c9a227",
+  bronze: "#a8703f",
+  purple: "#5b3a6e",
+  oxblood: "#7a2e2e",
+  textPrimary: "#f2ead9",
+  textSecondary: "#cbbfa3",
 } as const;

@@ -13,7 +13,8 @@ export default function ArchitecturePage() {
     <StoryPageShell theme={theme} className="min-h-screen px-6 py-20">
       <div className="mx-auto max-w-7xl">
         <SectionHeading
-          title="The System"
+          numeral="IV"
+          title="The Aqueducts"
           subtitle="Modern engineering is not just about code. It is about designing clarity into complexity."
           accent="blue"
         />

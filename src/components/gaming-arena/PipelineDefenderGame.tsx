@@ -2,6 +2,8 @@
 
 import { useEffect, useRef, useState } from "react";
 import { useSound } from "@/hooks/useSound";
+import { HeartIcon } from "@/components/icons";
+import { PALETTE } from "@/lib/constants";
 
 const THREATS = ["SQL Deadlock", "Network Fail", "Bad Config", "Broken Schedule", "Timeout"];
 const W = 380;
@@ -92,18 +94,18 @@ export function PipelineDefenderGame() {
 
     // Threats
     s.threats.forEach((t) => {
-      ctx.fillStyle = "rgba(239,68,68,0.85)";
+      ctx.fillStyle = "rgba(122,46,46,0.85)";
       ctx.beginPath();
       ctx.roundRect(t.x, t.y, 90, 22, 4);
       ctx.fill();
-      ctx.fillStyle = "#f1f5f9";
+      ctx.fillStyle = PALETTE.textPrimary;
       ctx.font = "9px monospace";
       ctx.textAlign = "center";
       ctx.fillText(t.label, t.x + 45, t.y + 15);
     });
 
     // Defender
-    ctx.fillStyle = "#3b82f6";
+    ctx.fillStyle = PALETTE.gold;
     ctx.beginPath();
     ctx.roundRect(s.defenderX - 45, H - 22, 90, 18, 6);
     ctx.fill();
@@ -145,7 +147,12 @@ export function PipelineDefenderGame() {
       </div>
       <div className="flex gap-4 text-xs font-mono">
         <span className="text-accent-green">Score: {display.score}</span>
-        <span className="text-accent-red">Lives: {"❤️".repeat(Math.max(0, display.lives))}</span>
+        <span className="flex items-center gap-1 text-accent-red">
+          Lives:
+          {Array.from({ length: Math.max(0, display.lives) }).map((_, i) => (
+            <HeartIcon key={i} aria-hidden="true" />
+          ))}
+        </span>
       </div>
 
       <canvas ref={canvasRef} width={W} height={H} className="rounded-lg border border-white/10 cursor-crosshair" />

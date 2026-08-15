@@ -13,7 +13,8 @@ export default function ReadingRoomPage() {
     <StoryPageShell theme={theme} className="min-h-screen py-20 px-6">
       <div className="max-w-4xl mx-auto">
         <SectionHeading
-          title="The Mind"
+          numeral="IX"
+          title="Reading Room"
           subtitle="Books teach lessons that technology alone cannot."
           accent="purple"
         />
