@@ -1,5 +1,66 @@
 "use client";
 
+import { useContext, useEffect, useState } from "react";
+import { useRouter } from "next/navigation";
+import { SoundContext } from "@/components/shared/SoundProvider";
+
+export function CinematicIntro({ onComplete }: { onComplete?: () => void }) {
+  const router = useRouter();
+  const [phase, setPhase] = useState(0);
+  const sound = useContext(SoundContext);
+
+  useEffect(() => {
+    const timers: number[] = [];
+    timers.push(window.setTimeout(() => setPhase(1), 900));
+    timers.push(window.setTimeout(() => setPhase(2), 2000));
+    timers.push(window.setTimeout(() => setPhase(3), 3200));
+    return () => timers.forEach((t) => clearTimeout(t));
+  }, []);
+
+  const handleEnter = () => {
+    sound?.unlock();
+    sound?.playAmbient();
+    sound?.playSfx("whoosh");
+    setTimeout(() => {
+      // small fade-out before navigating
+      sound?.stopAmbient();
+      onComplete?.();
+      router.push("/");
+    }, 300);
+  };
+
+  return (
+    <div className="fixed inset-0 z-[100] flex items-center justify-center bg-black/95 text-white">
+      <div className="relative max-w-4xl px-6 text-center">
+        <div className="mb-6">
+          <div className={`text-6xl md:text-8xl font-display tracking-widest transition-opacity duration-700 ${phase > 0 ? "opacity-100" : "opacity-0"}`}>
+            V I J A Y
+          </div>
+          <div className={`mt-6 text-4xl md:text-6xl font-bold transition-transform duration-700 ${phase > 1 ? "scale-100 opacity-100" : "scale-95 opacity-0"}`}>
+            CONQUEROR
+          </div>
+        </div>
+
+        <p className={`text-text-muted max-w-2xl mx-auto transition-opacity duration-700 ${phase > 2 ? "opacity-100" : "opacity-0"}`}>
+          Conqueror by craft, curiosity, and code. Enter the Vijayverse.
+        </p>
+
+        <div className={`mt-10 transition-opacity duration-500 ${phase > 2 ? "opacity-100" : "opacity-0"}`}>
+          <button
+            onClick={handleEnter}
+            className="px-6 py-3 rounded-md bg-gradient-to-r from-yellow-400 to-pink-500 text-black font-semibold hover:scale-105 transform-gpu"
+          >
+            Enter the VijayVerse
+          </button>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+export default CinematicIntro;
+"use client";
+
 import { useEffect, useRef, useState } from "react";
 import { useSound } from "@/hooks/useSound";
 import { EnterButton } from "./EnterButton";
