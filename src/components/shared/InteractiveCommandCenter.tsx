@@ -1,7 +1,6 @@
 "use client";
 
 import { motion } from "framer-motion";
-import { AnimatedSkillCard } from "./AnimatedSkillCard";
 import { EnhancedButton } from "./EnhancedButton";
 import { AnimatedTooltip } from "./AnimatedTooltip";
 
