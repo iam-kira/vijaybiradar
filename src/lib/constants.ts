@@ -2,18 +2,18 @@ export const SITE_URL = "https://iam-kira.github.io/vijaybiradar";
 export const BASE_PATH = "/vijaybiradar";
 
 export const SOUND_FILES = {
-  introAmbient: `${BASE_PATH}/audio/intro-ambient.mp3`,
-  whoosh: `${BASE_PATH}/audio/whoosh.mp3`,
-  achievementUnlock: `${BASE_PATH}/audio/achievement-unlock.mp3`,
-  nodeClick: `${BASE_PATH}/audio/node-click.mp3`,
-  securityAlert: `${BASE_PATH}/audio/security-alert.mp3`,
-  violinNote: `${BASE_PATH}/audio/violin-note.mp3`,
-  engineStart: `${BASE_PATH}/audio/engine-start.mp3`,
-  keyboardType: `${BASE_PATH}/audio/keyboard-type.mp3`,
-  defenderHit: `${BASE_PATH}/audio/minigame/defender-hit.mp3`,
-  defenderFail: `${BASE_PATH}/audio/minigame/defender-fail.mp3`,
-  hunterFound: `${BASE_PATH}/audio/minigame/hunter-found.mp3`,
-  cortexCollect: `${BASE_PATH}/audio/minigame/cortex-collect.mp3`,
+  introAmbient: "https://samplelib.com/lib/preview/mp3/sample-9s.mp3",
+  whoosh: "https://samplelib.com/lib/preview/mp3/sample-6s.mp3",
+  achievementUnlock: "https://samplelib.com/lib/preview/mp3/sample-3s.mp3",
+  nodeClick: "https://samplelib.com/lib/preview/mp3/sample-3s.mp3",
+  securityAlert: "https://samplelib.com/lib/preview/mp3/sample-6s.mp3",
+  violinNote: "https://samplelib.com/lib/preview/mp3/sample-3s.mp3",
+  engineStart: "https://samplelib.com/lib/preview/mp3/sample-6s.mp3",
+  keyboardType: "https://samplelib.com/lib/preview/mp3/sample-3s.mp3",
+  defenderHit: "https://samplelib.com/lib/preview/mp3/sample-3s.mp3",
+  defenderFail: "https://samplelib.com/lib/preview/mp3/sample-6s.mp3",
+  hunterFound: "https://samplelib.com/lib/preview/mp3/sample-3s.mp3",
+  cortexCollect: "https://samplelib.com/lib/preview/mp3/sample-3s.mp3",
 } as const;
 
 export type SoundName = keyof typeof SOUND_FILES;

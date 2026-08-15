@@ -1,0 +1,13 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 600 900">
+  <defs>
+    <linearGradient id="g" x1="0" x2="1" y1="0" y2="1">
+      <stop offset="0%" stop-color="#09090f"/>
+      <stop offset="100%" stop-color="#18181b"/>
+    </linearGradient>
+  </defs>
+  <rect width="600" height="900" fill="url(#g)"/>
+  <rect x="40" y="56" width="520" height="788" rx="22" fill="#111827" stroke="#a78bfa" stroke-width="2"/>
+  <circle cx="300" cy="240" r="95" fill="#8b5cf6" opacity="0.7"/>
+  <text x="300" y="520" text-anchor="middle" font-family="Segoe UI, Arial" font-size="46" font-weight="700" fill="#f8fafc">Solo Leveling</text>
+  <text x="300" y="600" text-anchor="middle" font-family="Segoe UI, Arial" font-size="22" fill="#e9d5ff">Growth • Ambition</text>
+</svg>

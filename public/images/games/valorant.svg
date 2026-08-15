@@ -1,0 +1,14 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 500">
+  <defs>
+    <linearGradient id="g" x1="0" x2="1">
+      <stop offset="0%" stop-color="#0b1120"/>
+      <stop offset="100%" stop-color="#111827"/>
+    </linearGradient>
+  </defs>
+  <rect width="800" height="500" fill="url(#g)"/>
+  <rect x="50" y="50" width="700" height="400" rx="18" fill="#111827" stroke="#ef4444" stroke-width="3"/>
+  <circle cx="600" cy="170" r="120" fill="#f87171" opacity="0.2"/>
+  <text x="400" y="220" text-anchor="middle" font-family="Segoe UI, Arial" font-size="64" font-weight="700" fill="#f8fafc">VALORANT</text>
+  <text x="400" y="285" text-anchor="middle" font-family="Segoe UI, Arial" font-size="26" fill="#bfdbfe">Precision • Tactical • Fast</text>
+  <rect x="235" y="330" width="330" height="8" rx="4" fill="#ef4444"/>
+</svg>

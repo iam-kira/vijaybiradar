@@ -18,7 +18,7 @@ export const metadata: Metadata = {
     title: "Vijay Biradar",
     description: "Enterprise Data Engineer · AI Platform Builder · Cybersecurity SPOC",
     url: "https://iam-kira.github.io/vijaybiradar",
-    images: [{ url: "/vijaybiradar/images/og-image.png", width: 1200, height: 630 }],
+    images: [{ url: "https://images.unsplash.com/photo-1518770660439-4636190af475?auto=format&fit=crop&w=1200&q=80", width: 1200, height: 630 }],
     type: "website",
   },
 };
