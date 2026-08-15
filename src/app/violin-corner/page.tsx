@@ -2,15 +2,18 @@
 
 import { motion } from "framer-motion";
 import { SectionHeading } from "@/components/shared/SectionHeading";
+import { StoryPageShell } from "@/components/shared/StoryPageShell";
+import { getStoryTheme } from "@/lib/storyThemes";
 import { useSound } from "@/hooks/useSound";
 
 const NOTES = ["♩", "♪", "♫", "♬"];
 
 export default function ViolinCornerPage() {
+  const theme = getStoryTheme("violin");
   const { playSfx } = useSound();
 
   return (
-    <div className="min-h-screen py-20 px-6 relative overflow-hidden">
+    <StoryPageShell theme={theme} className="min-h-screen py-20 px-6 relative overflow-hidden">
       {/* Floating music notes background */}
       {NOTES.map((note, i) => (
         <motion.div
@@ -92,6 +95,6 @@ export default function ViolinCornerPage() {
           ))}
         </div>
       </div>
-    </div>
+    </StoryPageShell>
   );
 }

@@ -164,6 +164,29 @@
     transform: rotate(-0.8deg) translateX(-6px);
   }
 
+  .story-page-shell {
+    position: relative;
+    isolation: isolate;
+    background-attachment: fixed;
+  }
+
+  .story-page-shell::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background: radial-gradient(circle at 20% 20%, var(--story-glow) 0%, transparent 20%),
+      radial-gradient(circle at 80% 15%, var(--story-primary) 0%, transparent 22%),
+      radial-gradient(circle at 50% 80%, var(--story-accent) 0%, transparent 26%);
+    opacity: 0.22;
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  .story-page-shell > * {
+    position: relative;
+    z-index: 1;
+  }
+
   @media (max-width: 768px) {
     .story-stack {
       transform: none;

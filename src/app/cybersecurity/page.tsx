@@ -3,6 +3,8 @@
 import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { SectionHeading } from "@/components/shared/SectionHeading";
+import { StoryPageShell } from "@/components/shared/StoryPageShell";
+import { getStoryTheme } from "@/lib/storyThemes";
 import dynamic from "next/dynamic";
 import { useSound } from "@/hooks/useSound";
 
@@ -19,6 +21,7 @@ const cyberProject = projects.find((p) => p.slug === "cybersecurity-ai-agent")!;
 export default function CybersecurityPage() {
   const [selectedNode, setSelectedNode] = useState<ArchitectureNode | null>(null);
   const [showAlert, setShowAlert] = useState(false);
+  const theme = getStoryTheme("cyber");
   const { playSfx } = useSound();
 
   const handleNodeClick = (node: ArchitectureNode) => {
@@ -33,7 +36,7 @@ export default function CybersecurityPage() {
   };
 
   return (
-    <div className="min-h-screen py-20 px-6">
+    <StoryPageShell theme={theme} className="min-h-screen py-20 px-6">
       <div className="max-w-5xl mx-auto">
         <SectionHeading
           title="The Edge"
@@ -152,6 +155,6 @@ export default function CybersecurityPage() {
           )}
         </AnimatePresence>
       </div>
-    </div>
+    </StoryPageShell>
   );
 }

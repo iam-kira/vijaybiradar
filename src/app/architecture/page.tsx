@@ -2,11 +2,15 @@
 
 import { SectionHeading } from "@/components/shared/SectionHeading";
 import { ProjectSection } from "@/components/architecture/ProjectSection";
+import { StoryPageShell } from "@/components/shared/StoryPageShell";
+import { getStoryTheme } from "@/lib/storyThemes";
 import { projects } from "@/data/projects";
 
 export default function ArchitecturePage() {
+  const theme = getStoryTheme("architecture");
+
   return (
-    <div className="min-h-screen px-6 py-20">
+    <StoryPageShell theme={theme} className="min-h-screen px-6 py-20">
       <div className="mx-auto max-w-7xl">
         <SectionHeading
           title="The System"
@@ -27,6 +31,6 @@ export default function ArchitecturePage() {
           ))}
         </div>
       </div>
-    </div>
+    </StoryPageShell>
   );
 }

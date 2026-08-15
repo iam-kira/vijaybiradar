@@ -2,6 +2,8 @@
 
 import { SectionHeading } from "@/components/shared/SectionHeading";
 import { FavoriteGamesPanel } from "@/components/gaming-arena/FavoriteGamesPanel";
+import { StoryPageShell } from "@/components/shared/StoryPageShell";
+import { getStoryTheme } from "@/lib/storyThemes";
 import dynamic from "next/dynamic";
 import { motion } from "framer-motion";
 
@@ -19,8 +21,10 @@ const CortexQuestGame = dynamic(
 );
 
 export default function GamingArenaPage() {
+  const theme = getStoryTheme("gaming");
+
   return (
-    <div className="min-h-screen py-20 px-6">
+    <StoryPageShell theme={theme} className="min-h-screen py-20 px-6">
       <div className="max-w-6xl mx-auto">
         <SectionHeading
           title="The Arena"
@@ -55,6 +59,6 @@ export default function GamingArenaPage() {
           </div>
         </div>
       </div>
-    </div>
+    </StoryPageShell>
   );
 }

@@ -2,6 +2,8 @@
 
 import { SectionHeading } from "@/components/shared/SectionHeading";
 import { AnimatedCounter } from "@/components/shared/AnimatedCounter";
+import { StoryPageShell } from "@/components/shared/StoryPageShell";
+import { getStoryTheme } from "@/lib/storyThemes";
 import { StatusPanel } from "@/components/command-center/StatusPanel";
 import { DataFlowLines } from "@/components/command-center/DataFlowLines";
 
@@ -15,8 +17,10 @@ const METRICS = [
 ];
 
 export default function CommandCenterPage() {
+  const theme = getStoryTheme("command");
+
   return (
-    <div className="min-h-screen py-20 px-6">
+    <StoryPageShell theme={theme} className="min-h-screen py-20 px-6">
       <div className="max-w-6xl mx-auto">
         <SectionHeading
           title="Engineering Command Center"
@@ -56,6 +60,6 @@ export default function CommandCenterPage() {
         {/* Data flow visualization */}
         <DataFlowLines />
       </div>
-    </div>
+    </StoryPageShell>
   );
 }

@@ -3,16 +3,19 @@
 import { useState } from "react";
 import { motion } from "framer-motion";
 import { SectionHeading } from "@/components/shared/SectionHeading";
+import { StoryPageShell } from "@/components/shared/StoryPageShell";
+import { getStoryTheme } from "@/lib/storyThemes";
 import { experience, skills, awards, education, languages, volunteering, additionalProjects } from "@/data/resume";
 
 export default function ResumePage() {
   const [expandedBullets, setExpandedBullets] = useState<number[]>([]);
+  const theme = getStoryTheme("resume");
 
   const toggleBullet = (i: number) =>
     setExpandedBullets((prev) => prev.includes(i) ? prev.filter((b) => b !== i) : [...prev, i]);
 
   return (
-    <div className="min-h-screen px-6 py-20">
+    <StoryPageShell theme={theme} className="min-h-screen px-6 py-20">
       <div className="mx-auto max-w-5xl">
         <SectionHeading
           title="The Record"
@@ -170,6 +173,6 @@ export default function ResumePage() {
           </ul>
         </section>
       </div>
-    </div>
+    </StoryPageShell>
   );
 }

@@ -14,8 +14,10 @@ const THEME_ICONS: Record<string, string> = {
 };
 
 export default function AnimeZonePage() {
+  const theme = getStoryTheme("anime");
+
   return (
-    <div className="min-h-screen py-20 px-6">
+    <StoryPageShell theme={theme} className="min-h-screen py-20 px-6">
       <div className="max-w-6xl mx-auto">
         <SectionHeading
           title="Anime Zone"
@@ -99,6 +101,6 @@ export default function AnimeZonePage() {
           </div>
         </div>
       </div>
-    </div>
+    </StoryPageShell>
   );
 }

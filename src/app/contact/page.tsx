@@ -3,11 +3,14 @@
 import { useState } from "react";
 import { motion } from "framer-motion";
 import { SectionHeading } from "@/components/shared/SectionHeading";
+import { StoryPageShell } from "@/components/shared/StoryPageShell";
+import { getStoryTheme } from "@/lib/storyThemes";
 import { useSound } from "@/hooks/useSound";
 
 export default function ContactPage() {
   const [form, setForm] = useState({ name: "", email: "", message: "" });
   const [status, setStatus] = useState<"idle" | "sending" | "sent" | "error">("idle");
+  const theme = getStoryTheme("contact");
   const { playSfx, mode } = useSound();
 
   const handleFocus = () => {
@@ -40,7 +43,7 @@ export default function ContactPage() {
   };
 
   return (
-    <div className="min-h-screen px-6 py-20">
+    <StoryPageShell theme={theme} className="min-h-screen px-6 py-20">
       <div className="mx-auto max-w-2xl">
         <SectionHeading
           title="The Call"
@@ -167,6 +170,6 @@ export default function ContactPage() {
           )}
         </motion.form>
       </div>
-    </div>
+    </StoryPageShell>
   );
 }

@@ -1,12 +1,16 @@
 "use client";
 
 import { SectionHeading } from "@/components/shared/SectionHeading";
+import { StoryPageShell } from "@/components/shared/StoryPageShell";
+import { getStoryTheme } from "@/lib/storyThemes";
 import { motion } from "framer-motion";
 import { quotes } from "@/data/quotes";
 
 export default function ReadingRoomPage() {
+  const theme = getStoryTheme("reading");
+
   return (
-    <div className="min-h-screen py-20 px-6">
+    <StoryPageShell theme={theme} className="min-h-screen py-20 px-6">
       <div className="max-w-4xl mx-auto">
         <SectionHeading
           title="The Mind"
@@ -64,6 +68,6 @@ export default function ReadingRoomPage() {
           </div>
         </div>
       </div>
-    </div>
+    </StoryPageShell>
   );
 }

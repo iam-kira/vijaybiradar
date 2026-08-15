@@ -19,22 +19,6 @@ export interface GalleryItem {
   height?: number;
 }
 
-// [YOU FILL] — add your actual images here
-// Place image files in public/images/gallery/{category}/
-// Example entry:
-// {
-//   id: "conf-2025-01",
-//   src: "/vijaybiradar/images/gallery/professional/team-2025.jpg",
-//   caption: "Team photo at the 2025 innovation summit",
-//   category: "professional",
-//   year: 2025,
-// }
-
-export const galleryItems: GalleryItem[] = [
-  // [YOU FILL]
-];
-
-export const galleryYears = [2024, 2025, 2026];
 export const galleryCategories: GalleryCategory[] = [
   "professional",
   "workshops",
@@ -46,3 +30,16 @@ export const galleryCategories: GalleryCategory[] = [
   "nature",
   "personal",
 ];
+
+export const galleryYears = [2024, 2025, 2026];
+
+export async function getGalleryItems(): Promise<GalleryItem[]> {
+  try {
+    const res = await fetch("/images/gallery-manifest.json", { cache: "no-store" });
+    if (!res.ok) return [];
+    const data = await res.json();
+    return Array.isArray(data?.files) ? data.files as GalleryItem[] : [];
+  } catch {
+    return [];
+  }
+}

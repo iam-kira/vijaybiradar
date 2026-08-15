@@ -2,11 +2,15 @@
 
 import { SectionHeading } from "@/components/shared/SectionHeading";
 import { TrophyCard } from "@/components/victories/TrophyCard";
+import { StoryPageShell } from "@/components/shared/StoryPageShell";
+import { getStoryTheme } from "@/lib/storyThemes";
 import { achievements } from "@/data/achievements";
 
 export default function VictoriesPage() {
+  const theme = getStoryTheme("victories");
+
   return (
-    <div className="min-h-screen px-6 py-20">
+    <StoryPageShell theme={theme} className="min-h-screen px-6 py-20">
       <div className="mx-auto max-w-6xl">
         <SectionHeading
           title="Hall of Fame"
@@ -49,6 +53,6 @@ export default function VictoriesPage() {
           ))}
         </div>
       </div>
-    </div>
+    </StoryPageShell>
   );
 }

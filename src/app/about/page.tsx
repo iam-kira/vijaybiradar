@@ -2,6 +2,8 @@
 
 import { SectionHeading } from "@/components/shared/SectionHeading";
 import { MeaningSection } from "@/components/identity/MeaningSection";
+import { StoryPageShell } from "@/components/shared/StoryPageShell";
+import { getStoryTheme } from "@/lib/storyThemes";
 
 const MISSION_PILLARS = [
   { label: "Architect", value: "Designing enterprise systems that create order from complexity." },
@@ -11,8 +13,10 @@ const MISSION_PILLARS = [
 ];
 
 export default function AboutPage() {
+  const theme = getStoryTheme("about");
+
   return (
-    <div className="min-h-screen px-6 py-20">
+    <StoryPageShell theme={theme} className="min-h-screen px-6 py-20">
       <div className="mx-auto max-w-6xl">
         <SectionHeading
           title="The Mission"
@@ -54,6 +58,6 @@ export default function AboutPage() {
 
         <MeaningSection />
       </div>
-    </div>
+    </StoryPageShell>
   );
 }

@@ -7,6 +7,8 @@ import { CinematicIntro } from "@/components/intro/CinematicIntro";
 import { HeroText } from "@/components/home/HeroText";
 import { CTAButtons } from "@/components/home/CTAButtons";
 import { FloatingWords } from "@/components/home/FloatingWords";
+import { StoryPageShell } from "@/components/shared/StoryPageShell";
+import { getStoryTheme } from "@/lib/storyThemes";
 
 const ParticleBackground = dynamic(
   () => import("@/components/home/ParticleBackground").then((m) => m.ParticleBackground),
@@ -28,6 +30,7 @@ const WALLPAPER_STORIES = [
 export default function HomePage() {
   const [showIntro, setShowIntro] = useState(false);
   const [mounted, setMounted] = useState(false);
+  const theme = getStoryTheme("home");
 
   useEffect(() => {
     setMounted(true);
@@ -42,7 +45,7 @@ export default function HomePage() {
   }
 
   return (
-    <div className="relative min-h-screen overflow-hidden bg-[#070707] text-white">
+    <StoryPageShell theme={theme} className="relative min-h-screen overflow-hidden text-white">
       <div className="absolute inset-0 bg-cover bg-center opacity-35 grayscale" style={{ backgroundImage: 'url("/images/wallpaper/Conqure.jpg")' }} />
       <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,transparent_0%,rgba(4,7,12,0.12)_28%,rgba(4,7,12,0.82)_100%)]" />
       <div className="cinematic-shell" aria-hidden="true" />
@@ -153,6 +156,6 @@ export default function HomePage() {
           ))}
         </div>
       </section>
-    </div>
+    </StoryPageShell>
   );
 }
