@@ -2,6 +2,8 @@
 
 import { motion } from "framer-motion";
 import { SectionHeading } from "@/components/shared/SectionHeading";
+import { StoryPageShell } from "@/components/shared/StoryPageShell";
+import { getStoryTheme } from "@/lib/storyThemes";
 import { animeList, animeThemes } from "@/data/anime";
 
 const THEME_ICONS: Record<string, string> = {
