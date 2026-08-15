@@ -10,8 +10,8 @@ import { FloatingWords } from "@/components/home/FloatingWords";
 import { StoryPageShell } from "@/components/shared/StoryPageShell";
 import { getStoryTheme } from "@/lib/storyThemes";
 
-const ParticleBackground = dynamic(
-  () => import("@/components/home/ParticleBackground").then((m) => m.ParticleBackground),
+const CinematicParticleBackground = dynamic(
+  () => import("@/components/home/CinematicParticleBackground").then((m) => m.CinematicParticleBackground),
   { ssr: false }
 );
 
@@ -45,12 +45,13 @@ export default function HomePage() {
   }
 
   return (
-    <StoryPageShell theme={theme} className="relative min-h-screen overflow-hidden text-white">
-      <div className="absolute inset-0 bg-cover bg-center opacity-35 grayscale" style={{ backgroundImage: 'url("/images/wallpaper/Conqure.jpg")' }} />
-      <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,transparent_0%,rgba(4,7,12,0.12)_28%,rgba(4,7,12,0.82)_100%)]" />
-      <div className="cinematic-shell" aria-hidden="true" />
-      <ParticleBackground />
-      <FloatingWords />
+    <div style={{ minHeight: "300vh" }}>
+      <StoryPageShell theme={theme} className="relative overflow-hidden text-white">
+        <div className="fixed inset-0 bg-cover bg-center opacity-35 grayscale" style={{ backgroundImage: 'url("/images/wallpaper/Conqure.jpg")' }} />
+        <div className="fixed inset-0 bg-[radial-gradient(circle_at_center,transparent_0%,rgba(4,7,12,0.12)_28%,rgba(4,7,12,0.82)_100%)]" />
+        <div className="cinematic-shell" aria-hidden="true" />
+        <CinematicParticleBackground />
+        <FloatingWords />
 
       <main className="relative z-10 mx-auto max-w-7xl px-6 pb-20 pt-28 md:px-10 lg:pt-32">
         <div className="grid items-center gap-12 lg:grid-cols-[1.1fr_0.9fr]">
@@ -156,6 +157,7 @@ export default function HomePage() {
           ))}
         </div>
       </section>
-    </StoryPageShell>
+      </StoryPageShell>
+    </div>
   );
 }

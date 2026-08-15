@@ -7,9 +7,9 @@ const WORDS = [
   { text: "AI", color: "#8b5cf6" },
   { text: "Security", color: "#ef4444" },
   { text: "Architecture", color: "#22d3ee" },
-  { text: "Victory", color: "#f59e0b" },
-  { text: "Discipline", color: "#22c55e" },
-  { text: "Curiosity", color: "#a78bfa" },
+  { text: "Platform", color: "#22c55e" },
+  { text: "Builder", color: "#f59e0b" },
+  { text: "Engineer", color: "#a78bfa" },
 ];
 
 export function FloatingWords() {

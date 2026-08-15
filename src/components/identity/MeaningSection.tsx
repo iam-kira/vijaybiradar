@@ -28,18 +28,19 @@ export function MeaningSection() {
         transition={{ duration: 0.7 }}
       >
         <p>
-          <span className="text-accent-gold font-display font-semibold text-xl">Vijay</span> is
-          synonymous with <em className="text-text-primary">victory</em>,{" "}
-          <em className="text-text-primary">success</em>, and{" "}
-          <em className="text-text-primary">conqueror</em>.
+          <span className="text-accent-gold font-display font-semibold text-xl">Vijay Biradar</span> is
+          an <em className="text-text-primary">Enterprise Data Engineer</em> and{" "}
+          <em className="text-text-primary">AI Platform Builder</em> focused on solving
+          complex systems challenges at scale.
         </p>
         <p>
-          For Vijay, victory is not only about winning. It is about learning continuously,
-          solving complex problems, building useful platforms, and growing with discipline.
-          It is about entering a difficult system and leaving it with clarity, trust, and force.
+          Vijay thrives on turning chaos into momentum. By day, he designs enterprise platforms
+          that bring clarity to complexity. By intent, he builds the future behind the scenes—
+          architecting resilient systems, mentoring teams, and creating innovation through discipline
+          and continuous learning.
         </p>
         <p className="text-accent-blue font-mono text-sm tracking-widest border-l-2 border-accent-blue pl-4">
-          Veni. Vidi. Vici. — I came. I saw. I conquered.
+          Building enterprise platforms. Creating systems that matter. Living the story.
         </p>
       </motion.div>
 

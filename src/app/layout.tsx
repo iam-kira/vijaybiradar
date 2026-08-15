@@ -11,9 +11,9 @@ import { SoundControlWidget } from "@/components/layout/SoundControlWidget";
 
 export const metadata: Metadata = {
   metadataBase: new URL("https://iam-kira.github.io"),
-  title: "Vijay Biradar — Conqueror | Enterprise Data Engineer & AI Platform Builder",
+  title: "Vijay Biradar — Enterprise Data Engineer & AI Platform Builder",
   description:
-    "Veni. Vidi. Vici. Building platforms, solving problems, living stories. Enterprise Data Engineer at Daimler Truck Innovation Center India.",
+    "Building enterprise platforms, solving complex problems with data, and creating innovative systems. Enterprise Data Engineer at Daimler Truck Innovation Center India.",
   openGraph: {
     title: "Vijay Biradar",
     description: "Enterprise Data Engineer · AI Platform Builder · Cybersecurity SPOC",

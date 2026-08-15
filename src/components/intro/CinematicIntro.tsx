@@ -7,11 +7,7 @@ import { EnterButton } from "./EnterButton";
 const INTRO_WALLPAPER = "/images/wallpaper/Conqure.jpg";
 
 const SEQUENCE = [
-  { text: "VIJAY", class: "text-6xl md:text-8xl font-display font-bold text-glow-blue text-white tracking-widest", delay: 1200 },
-  { text: "Victory.", class: "text-2xl md:text-3xl font-display text-accent-blue", delay: 3000 },
-  { text: "Success.", class: "text-2xl md:text-3xl font-display text-accent-purple", delay: 3800 },
-  { text: "Conqueror.", class: "text-2xl md:text-3xl font-display text-accent-cyan", delay: 4600 },
-  { text: "Veni. Vidi. Vici.", class: "text-xl md:text-2xl font-mono text-accent-gold italic", delay: 5800 },
+  { text: "VIJAY BIRADAR", class: "text-5xl md:text-7xl font-display font-bold text-glow-blue text-white tracking-widest", delay: 1200 },
 ];
 
 const ROLES = [
@@ -39,13 +35,9 @@ export function CinematicIntro({ onComplete }: { onComplete: () => void }) {
 
   useEffect(() => {
     // Phase sequence
-    addTimer(() => setPhase(0), SEQUENCE[0].delay);         // VIJAY
-    addTimer(() => setPhase(1), SEQUENCE[1].delay);         // Victory.
-    addTimer(() => setPhase(2), SEQUENCE[2].delay);         // Success.
-    addTimer(() => setPhase(3), SEQUENCE[3].delay);         // Conqueror.
-    addTimer(() => setPhase(4), SEQUENCE[4].delay);         // Veni. Vidi. Vici.
-    addTimer(() => setShowRoles(true), 7200);               // Role list
-    addTimer(() => setShowButton(true), 11500);             // Enter button
+    addTimer(() => setPhase(0), SEQUENCE[0].delay);         // VIJAY BIRADAR
+    addTimer(() => setShowRoles(true), 4000);               // Role list (faster reveal)
+    addTimer(() => setShowButton(true), 8500);              // Enter button (faster)
 
     // Role cycling
     let ri = 0;
@@ -100,36 +92,7 @@ export function CinematicIntro({ onComplete }: { onComplete: () => void }) {
             className={`${SEQUENCE[0].class} transition-all duration-1000 animate-[fadeIn_1s_ease-in]`}
             style={{ animation: "fadeIn 1s ease-in forwards" }}
           >
-            VIJAY
-          </div>
-        )}
-
-        {/* Meaning lines */}
-        <div className="flex gap-4 justify-center flex-wrap">
-          {phase >= 1 && (
-            <span className={`${SEQUENCE[1].class} animate-[fadeIn_0.8s_ease-in]`} style={{ animation: "fadeIn 0.8s ease-in forwards" }}>
-              Victory.
-            </span>
-          )}
-          {phase >= 2 && (
-            <span className={`${SEQUENCE[2].class} animate-[fadeIn_0.8s_ease-in]`} style={{ animation: "fadeIn 0.8s ease-in forwards" }}>
-              Success.
-            </span>
-          )}
-          {phase >= 3 && (
-            <span className={`${SEQUENCE[3].class} animate-[fadeIn_0.8s_ease-in]`} style={{ animation: "fadeIn 0.8s ease-in forwards" }}>
-              Conqueror.
-            </span>
-          )}
-        </div>
-
-        {/* Veni Vidi Vici */}
-        {phase >= 4 && (
-          <div
-            className={`${SEQUENCE[4].class} animate-pulse mt-2`}
-            style={{ animation: "fadeIn 1s ease-in forwards, pulse-glow 3s ease-in-out infinite" }}
-          >
-            Veni. Vidi. Vici.
+            {SEQUENCE[0].text}
           </div>
         )}
 

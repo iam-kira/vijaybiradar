@@ -5,10 +5,12 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { motion, AnimatePresence } from "framer-motion";
 import { NAV_LINKS } from "@/lib/constants";
+import { useNavbarVisibility } from "@/hooks/useNavbarVisibility";
 
 export function Navbar() {
   const [menuOpen, setMenuOpen] = useState(false);
   const pathname = usePathname();
+  const { isVisible } = useNavbarVisibility();
 
   const isActive = (href: string) => {
     const base = "/vijaybiradar";
@@ -19,7 +21,15 @@ export function Navbar() {
   };
 
   return (
-    <nav className="fixed left-0 right-0 top-2 z-[1000] px-3 md:px-4">
+    <AnimatePresence mode="wait">
+      {isVisible && (
+        <motion.nav
+          className="fixed left-0 right-0 top-2 z-[1000] px-3 md:px-4"
+          initial={{ opacity: 0, y: -10 }}
+          animate={{ opacity: 1, y: 0 }}
+          exit={{ opacity: 0, y: -10 }}
+          transition={{ duration: 0.4 }}
+        >
       <div className="mx-auto max-w-7xl">
         <div className="flex items-center justify-between rounded-[18px] border border-white/10 bg-black/35 px-3 py-2.5 backdrop-blur-xl shadow-[0_12px_32px_rgba(15,23,42,0.28)] md:px-4 md:py-3">
           {/* Logo */}
@@ -107,6 +117,8 @@ export function Navbar() {
           )}
         </AnimatePresence>
       </div>
-    </nav>
+        </motion.nav>
+      )}
+    </AnimatePresence>
   );
 }

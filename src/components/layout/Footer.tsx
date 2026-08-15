@@ -21,7 +21,7 @@ export function Footer() {
             <p className="font-display text-xl font-bold text-transparent bg-gradient-to-r from-accent-blue to-accent-purple bg-clip-text">Vijay Biradar</p>
             <p className="mt-1 text-sm text-text-secondary">Enterprise Data Engineer</p>
             <p className="mt-0.5 text-sm text-text-secondary">AI Platform Builder</p>
-            <p className="mt-2 font-mono text-xs tracking-widest text-accent-gold">Veni. Vidi. Vici.</p>
+            <p className="mt-2 font-mono text-xs tracking-widest text-accent-gold">Building the Future</p>
           </motion.div>
 
           {/* Links */}
