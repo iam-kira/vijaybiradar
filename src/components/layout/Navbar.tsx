@@ -19,13 +19,13 @@ export function Navbar() {
   };
 
   return (
-    <nav className="fixed top-2 left-0 right-0 z-[1000] px-4">
-      <div className="max-w-7xl mx-auto">
-        <div className="flex items-center justify-between rounded-2xl border border-white/10 bg-gradient-to-r from-bg-primary/60 via-bg-primary/40 to-bg-primary/60 px-4 py-3 backdrop-blur-xl shadow-[0_8px_32px_rgba(59,130,246,0.08)]">
+    <nav className="fixed left-0 right-0 top-2 z-[1000] px-3 md:px-4">
+      <div className="mx-auto max-w-7xl">
+        <div className="flex items-center justify-between rounded-[18px] border border-white/10 bg-black/35 px-3 py-2.5 backdrop-blur-xl shadow-[0_12px_32px_rgba(15,23,42,0.28)] md:px-4 md:py-3">
           {/* Logo */}
           <Link
             href="/"
-            className="text-lg font-display font-bold bg-gradient-to-r from-accent-blue to-accent-purple bg-clip-text text-transparent hover:opacity-80 transition-opacity"
+            className="text-lg font-display font-bold bg-gradient-to-r from-accent-blue to-accent-purple bg-clip-text text-transparent transition-opacity hover:opacity-80"
           >
             VB
           </Link>
@@ -63,17 +63,17 @@ export function Navbar() {
 
           {/* Command palette hint + mobile toggle */}
           <div className="flex items-center gap-2">
-            <kbd className="hidden md:flex items-center gap-1 text-xs text-text-muted border border-white/20 rounded px-2 py-1">
+            <kbd className="hidden md:flex items-center gap-1 rounded border border-white/20 px-2 py-1 text-xs text-text-muted">
               <span>⌘</span>K
             </kbd>
             <button
-              className="lg:hidden p-2 text-text-secondary hover:text-text-primary transition-colors"
+              className="rounded-full border border-white/10 bg-white/5 p-2 text-text-secondary transition-colors hover:text-text-primary lg:hidden"
               onClick={() => setMenuOpen((v) => !v)}
               aria-label="Toggle menu"
             >
-              <span className="block w-5 h-0.5 bg-current mb-1" />
-              <span className="block w-5 h-0.5 bg-current mb-1" />
-              <span className="block w-5 h-0.5 bg-current" />
+              <span className="mb-1 block h-0.5 w-5 bg-current" />
+              <span className="mb-1 block h-0.5 w-5 bg-current" />
+              <span className="block h-0.5 w-5 bg-current" />
             </button>
           </div>
         </div>
@@ -82,7 +82,7 @@ export function Navbar() {
         <AnimatePresence>
           {menuOpen && (
             <motion.div
-              className="lg:hidden mt-1 rounded-xl border border-white/10 bg-bg-card/95 backdrop-blur-md overflow-hidden"
+              className="mt-2 overflow-hidden rounded-[18px] border border-white/10 bg-black/55 backdrop-blur-md lg:hidden"
               initial={{ opacity: 0, height: 0 }}
               animate={{ opacity: 1, height: "auto" }}
               exit={{ opacity: 0, height: 0 }}
@@ -92,7 +92,7 @@ export function Navbar() {
                   <Link
                     key={link.href}
                     href={link.href}
-                    className={`px-3 py-2 rounded-lg text-sm transition-colors ${
+                    className={`rounded-lg px-3 py-2 text-sm transition-colors ${
                       isActive(link.href)
                         ? "bg-accent-glow/20 text-accent-blue"
                         : "text-text-secondary hover:text-text-primary hover:bg-white/5"

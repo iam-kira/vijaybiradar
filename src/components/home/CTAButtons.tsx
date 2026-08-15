@@ -13,24 +13,25 @@ const BUTTONS = [
 export function CTAButtons() {
   return (
     <motion.div
-      className="relative z-10 mt-8 flex flex-wrap justify-center gap-3"
+      className="relative z-10 mt-8 flex flex-wrap items-center justify-start gap-3"
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
-      transition={{ delay: 1.4, duration: 0.6 }}
+      transition={{ delay: 1.3, duration: 0.7, ease: "easeOut" }}
     >
       {BUTTONS.map(({ label, href, variant, external }) => {
-        const base = "px-5 py-2.75 rounded-full text-sm font-semibold transition-all duration-200 tracking-[0.08em] uppercase";
+        const base = "group inline-flex items-center justify-center rounded-full px-5 py-3 text-[11px] font-semibold uppercase tracking-[0.18em] transition-all duration-300";
         const styles = {
-          primary: `${base} bg-gradient-to-r from-accent-blue to-accent-purple text-white shadow-[0_0_25px_rgba(59,130,246,0.35)] hover:scale-[1.02] hover:shadow-[0_0_30px_rgba(139,92,246,0.45)]`,
-          secondary: `${base} border border-accent-gold/40 bg-accent-gold/10 text-accent-gold hover:bg-accent-gold/20 hover:scale-[1.02]`,
-          ghost: `${base} text-text-secondary hover:text-text-primary hover:bg-white/5`,
-          outline: `${base} border border-accent-blue/35 text-accent-blue hover:border-accent-blue hover:bg-accent-blue/10`,
+          primary: `${base} bg-gradient-to-r from-accent-blue via-accent-purple to-accent-gold text-white shadow-[0_0_35px_rgba(59,130,246,0.38)] hover:-translate-y-0.5 hover:shadow-[0_0_42px_rgba(139,92,246,0.5)]`,
+          secondary: `${base} border border-accent-gold/40 bg-accent-gold/10 text-accent-gold hover:-translate-y-0.5 hover:bg-accent-gold/15`,
+          ghost: `${base} text-text-secondary hover:-translate-y-0.5 hover:bg-white/5 hover:text-white`,
+          outline: `${base} border border-accent-blue/40 bg-white/3 text-accent-blue hover:-translate-y-0.5 hover:border-accent-blue hover:bg-accent-blue/10`,
         }[variant];
 
         if (external) {
           return (
             <a key={label} href={href} target="_blank" rel="noopener noreferrer" className={styles}>
-              {label} ↓
+              {label}
+              <span className="ml-2 text-base transition-transform duration-300 group-hover:translate-x-0.5">↓</span>
             </a>
           );
         }

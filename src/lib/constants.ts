@@ -2,18 +2,18 @@ export const SITE_URL = "https://iam-kira.github.io/vijaybiradar";
 export const BASE_PATH = "/vijaybiradar";
 
 export const SOUND_FILES = {
-  introAmbient: "https://samplelib.com/lib/preview/mp3/sample-9s.mp3",
-  whoosh: "https://samplelib.com/lib/preview/mp3/sample-6s.mp3",
-  achievementUnlock: "https://samplelib.com/lib/preview/mp3/sample-3s.mp3",
-  nodeClick: "https://samplelib.com/lib/preview/mp3/sample-3s.mp3",
-  securityAlert: "https://samplelib.com/lib/preview/mp3/sample-6s.mp3",
-  violinNote: "https://samplelib.com/lib/preview/mp3/sample-3s.mp3",
-  engineStart: "https://samplelib.com/lib/preview/mp3/sample-6s.mp3",
-  keyboardType: "https://samplelib.com/lib/preview/mp3/sample-3s.mp3",
-  defenderHit: "https://samplelib.com/lib/preview/mp3/sample-3s.mp3",
-  defenderFail: "https://samplelib.com/lib/preview/mp3/sample-6s.mp3",
-  hunterFound: "https://samplelib.com/lib/preview/mp3/sample-3s.mp3",
-  cortexCollect: "https://samplelib.com/lib/preview/mp3/sample-3s.mp3",
+  introAmbient: "/audio/background/Dark%20Symphony%20for%20a%20Genius%20Villain%20%20The%20Art%20of%20Revenge%20-%20Villainous%20Symphony.mp3",
+  whoosh: "/audio/mixkit-cinematic-suspense-swell-786.wav",
+  achievementUnlock: "/audio/mixkit-trumpet-fanfare-2293.wav",
+  nodeClick: "/audio/mixkit-cinematic-action-suspense-688.wav",
+  securityAlert: "/audio/mixkit-eerie-trailer-horn-transition-2291.wav",
+  violinNote: "/audio/violin-note.wav",
+  engineStart: "/audio/mixkit-futuristic-space-war-percussion-2787.wav",
+  keyboardType: "/audio/mixkit-cinematic-mystery-heartbeat-transition-492.wav",
+  defenderHit: "/audio/minigame/defender-hit.wav",
+  defenderFail: "/audio/minigame/defender-fail.wav",
+  hunterFound: "/audio/minigame/hunter-found.wav",
+  cortexCollect: "/audio/minigame/cortex-collect.wav",
 } as const;
 
 export type SoundName = keyof typeof SOUND_FILES;

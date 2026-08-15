@@ -4,6 +4,8 @@ import { useEffect, useRef, useState } from "react";
 import { useSound } from "@/hooks/useSound";
 import { EnterButton } from "./EnterButton";
 
+const INTRO_WALLPAPER = "/images/wallpaper/Conqure.jpg";
+
 const SEQUENCE = [
   { text: "VIJAY", class: "text-6xl md:text-8xl font-display font-bold text-glow-blue text-white tracking-widest", delay: 1200 },
   { text: "Victory.", class: "text-2xl md:text-3xl font-display text-accent-blue", delay: 3000 },
@@ -59,6 +61,7 @@ export function CinematicIntro({ onComplete }: { onComplete: () => void }) {
   const handleEnter = () => {
     unlock();
     playAmbient();
+    playSfx("achievementUnlock");
     playSfx("whoosh");
     sessionStorage.setItem("vjb-intro-seen", "1");
     onComplete();
@@ -74,7 +77,14 @@ export function CinematicIntro({ onComplete }: { onComplete: () => void }) {
   if (skipped) return null;
 
   return (
-    <div className="fixed inset-0 z-[9999] bg-black flex flex-col items-center justify-center overflow-hidden">
+    <div
+      className="fixed inset-0 z-[9999] flex flex-col items-center justify-center overflow-hidden bg-black"
+      style={{
+        backgroundImage: `linear-gradient(rgba(0,0,0,0.5), rgba(0,0,0,0.7)), url("${INTRO_WALLPAPER}")`,
+        backgroundSize: "cover",
+        backgroundPosition: "center",
+      }}
+    >
       {/* Skip button */}
       <button
         onClick={handleSkip}
