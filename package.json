@@ -24,7 +24,8 @@
     "react-dom": "^18",
     "react-leaflet": "^4.2.1",
     "reactflow": "^11.11.4",
-    "three": "^0.169.0"
+    "three": "^0.169.0",
+    "zustand": "^5.0.15"
   },
   "devDependencies": {
     "@types/node": "^20",
@@ -33,6 +34,7 @@
     "eslint": "^8",
     "eslint-config-next": "14.2.35",
     "postcss": "^8",
+    "sharp": "^0.35.3",
     "tailwindcss": "^3.4.1",
     "typescript": "^5"
   }

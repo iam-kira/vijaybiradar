@@ -4,6 +4,13 @@ import { SectionHeading } from "@/components/shared/SectionHeading";
 import { MeaningSection } from "@/components/identity/MeaningSection";
 import { StoryPageShell } from "@/components/shared/StoryPageShell";
 import { getStoryTheme } from "@/lib/storyThemes";
+import { LivingPainting } from "@/components/shared/living-painting/LivingPainting";
+
+const MARCUS_AURELIUS_CAPTIONS = [
+  { text: "“You have power over your mind — not outside events. Realize this, and you will find strength.”", at: 0.1 },
+  { text: "“The impediment to action advances action. What stands in the way becomes the way.”", at: 0.45 },
+  { text: "“Waste no more time arguing about what a good man should be. Be one.”", at: 0.8 },
+];
 
 const MISSION_PILLARS = [
   { label: "Architect", value: "Designing enterprise systems that create order from complexity." },
@@ -23,6 +30,15 @@ export default function AboutPage() {
           title="Meditations"
           subtitle="Understanding systems became a passion. Solving them became a profession."
           accent="purple"
+        />
+
+        <LivingPainting
+          image="/images/paintings/delacroix-marcus-aurelius.jpg"
+          alt="Eugène Delacroix, Last Words of the Emperor Marcus Aurelius (1844)"
+          captions={MARCUS_AURELIUS_CAPTIONS}
+          mode="push-in"
+          heightVh={160}
+          className="mb-16"
         />
 
         <div className="mb-16 grid gap-6 lg:grid-cols-[1.2fr_0.8fr]">
