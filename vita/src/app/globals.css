@@ -1,0 +1,131 @@
+@import 'tailwindcss';
+
+/* Tailwind v4 keys `dark:` off prefers-color-scheme by default; this site drives it
+   from a .dark class on <html> so the toggle can override the system setting. */
+@custom-variant dark (&:where(.dark, .dark *));
+
+/* --background must match PALETTES[theme].backdrop in src/data/scenes.ts, or the page
+   and the canvas disagree for one frame on load and on every theme switch. */
+:root {
+  --background: #0a0705;
+  --foreground: #f4ece0;
+  --gold: #d4af37;
+  --gold-dark: #b8960f;
+  --vignette: rgba(8, 5, 2, 0.62);
+  --wash: rgba(212, 175, 55, 0.05);
+  --caption-shadow: 0 2px 20px rgba(0, 0, 0, 0.9);
+}
+
+html:not(.dark) {
+  --background: #efe5d2;
+  --foreground: #2a2118;
+  --vignette: rgba(92, 68, 38, 0.34);
+  --wash: rgba(255, 236, 190, 0.16);
+  --caption-shadow: 0 2px 18px rgba(255, 246, 226, 0.95);
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+html,
+body {
+  width: 100%;
+  font-family: var(--font-geist-sans), sans-serif;
+  background: var(--background);
+  color: var(--foreground);
+  transition: background-color 0.4s ease;
+  /* Scenes are full-bleed imagery; a horizontal scrollbar would only ever be a bug. */
+  overflow-x: hidden;
+}
+
+::-webkit-scrollbar {
+  width: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--gold);
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--gold-dark);
+}
+
+::selection {
+  background: var(--gold);
+  color: #000;
+}
+
+:focus-visible {
+  outline: 2px solid var(--gold);
+  outline-offset: 3px;
+}
+
+/* ── Painterly finish ──────────────────────────────────────────────────────────
+   Three cheap layers over everything: a canvas weave, a warm wash, and a vignette.
+   Both reference sites reach for noise at this point; canvas tooth is the version
+   that matches an oil painting rather than a photograph. */
+
+.finish {
+  position: fixed;
+  inset: 0;
+  z-index: 20;
+  pointer-events: none;
+}
+
+/* Weave: a warp and a weft one pixel wide, plus fractal grain for tooth. */
+.finish::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background-image:
+    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='3'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E"),
+    repeating-linear-gradient(0deg, rgba(255, 255, 255, 0.05) 0 1px, transparent 1px 3px),
+    repeating-linear-gradient(90deg, rgba(0, 0, 0, 0.05) 0 1px, transparent 1px 3px);
+  opacity: 0.28;
+  mix-blend-mode: overlay;
+}
+
+/* Warm wash at the centre, dark corners. Plain alpha, so no blend-mode surprises. */
+.finish::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background:
+    radial-gradient(ellipse at 50% 42%, var(--wash) 0%, transparent 58%),
+    radial-gradient(ellipse at 50% 45%, transparent 28%, var(--vignette) 100%);
+}
+
+@keyframes scrollPulse {
+  0%,
+  100% {
+    opacity: 0.45;
+    transform: translateY(0);
+  }
+  50% {
+    opacity: 1;
+    transform: translateY(6px);
+  }
+}
+
+.scroll-indicator {
+  animation: scrollPulse 2.5s cubic-bezier(0.22, 0.61, 0.36, 1) infinite;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
