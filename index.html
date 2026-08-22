@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Vijay Biradar — Curious Learner</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600;700&family=Mrs+Saint+Delafield&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600;700&family=Mrs+Saint+Delafield&family=Outfit:wght@800;900&family=Jost:wght@900&display=swap" rel="stylesheet">
 <style>
   :root{
     --ink:#080808;
@@ -23,7 +23,9 @@
     --extrude:#242422;
     --extrude-cast:rgba(0,0,0,0.55);
   }
+  html[data-theme="dark"]{ color-scheme:dark; }
   html[data-theme="light"]{
+    color-scheme:light;
     --ink:#f4f4f2;
     --ink-2:#e8e8e5;
     --paper:#0a0a0a;
@@ -69,9 +71,15 @@
   }
   .pre-veni{
     display:flex;flex-wrap:wrap;justify-content:center;
-    gap:clamp(12px,3.2vw,46px);
-    font-size:clamp(32px,8.4vw,116px);font-weight:700;
-    letter-spacing:-0.02em;line-height:1;
+    gap:clamp(10px,2.6vw,38px);
+    /* heavy geometric display face — the reference board's letterforms */
+    /* Matched to the reference board by letterform: the M's middle vertex
+       stops above the baseline and the O is near-circular — a Futura-lineage
+       geometric, not Poppins/Montserrat (whose M reaches the baseline).
+       Swap the first name for 'Jost' if you want it a shade narrower. */
+    font-family:'Outfit', 'Jost', 'Space Grotesk', sans-serif;
+    font-size:clamp(34px,9.2vw,132px);font-weight:900;
+    letter-spacing:-0.045em;line-height:0.92;text-transform:uppercase;
     transform-style:preserve-3d;
   }
   .pre-veni span{
@@ -117,11 +125,14 @@
   #chrome{
     position:fixed;top:0;left:0;right:0;z-index:100;
     display:flex;justify-content:space-between;align-items:center;
-    padding:28px 48px;
+    padding:16px 48px;
   }
   .brand{font-family:'IBM Plex Mono', monospace;font-size:13px;letter-spacing:0.15em;}
   /* music sits bottom-right on its own; the torch stays top-right in #chrome */
   #music-dock{position:fixed;right:48px;bottom:34px;z-index:150;}
+  /* The torch lives outside #chrome: at 45px tall it was setting the header
+     height and pushing everything below it down. */
+  #torch-dock{position:fixed;right:48px;top:14px;z-index:150;}
 
   /* ---- Music toggle (ported from Skiper UI skiper25) ---- */
   #music-toggle{
@@ -197,7 +208,7 @@
   }
   html[data-theme="light"] #theme-toggle .flame,
   html[data-theme="light"] #theme-toggle .spark{opacity:0;animation:none;}
-  html[data-theme="light"] #theme-toggle .ember{opacity:0.55;}
+  html[data-theme="light"] #theme-toggle .ember{opacity:0.5;}
   html[data-theme="light"] #theme-toggle .sm1{animation:smokeA 3.4s ease-out infinite;}
   html[data-theme="light"] #theme-toggle .sm2{animation:smokeB 4.1s ease-out .9s infinite;}
   html[data-theme="light"] #theme-toggle .sm3{animation:smokeA 3.8s ease-out 1.8s infinite;}
@@ -275,12 +286,12 @@
     min-height:100svh;border-bottom:none;
     /* clears the fixed #chrome — without it the index rule slides up under
        the brand whenever hero content is taller than the viewport */
-    padding-top:clamp(64px,7.5vh,88px);
+    padding-top:clamp(44px,5vh,54px);
     padding-bottom:clamp(72px,9vh,120px);
-    justify-content:center;
-    /* "safe" keeps the top edge reachable when content overflows; plain
-       "center" overflows upward and tucks it under the fixed chrome */
-    justify-content:safe center;
+    /* Hero content is taller than the viewport once the portrait is in, so
+       centring overflows upward and slides under the fixed chrome — 'safe'
+       did not reliably prevent it. Anchor to the top and let padding place it. */
+    justify-content:flex-start;
   }
   #hero .hero-index{
     display:flex;justify-content:space-between;align-items:baseline;
@@ -418,11 +429,22 @@
     position:fixed;top:0;left:0;z-index:9999;pointer-events:none;
     mix-blend-mode:difference;will-change:transform;
   }
-  #cursor .blob,#cursor .dot{
+  /* The fluid layer sits above the page and below the dot. difference means
+     |backdrop - source|: black fluid leaves the page untouched, and a bright
+     smear inverts to dark on a light backdrop and light on a dark one. One
+     layer, correct in both themes, correct over the photographs too. */
+  #fluid{
+    position:fixed;inset:0;width:100%;height:100%;
+    z-index:9998;pointer-events:none;
+    mix-blend-mode:difference;background:#000;
+    opacity:0;transition:opacity .6s ease;
+  }
+  #fluid.is-live{opacity:1;}
+  @media (hover:none),(prefers-reduced-motion:reduce){ #fluid{display:none;} }
+  #cursor .dot{
     position:absolute;top:0;left:0;border-radius:50%;background:#fff;
     transform:translate(-50%,-50%);
   }
-  #cursor .blob{width:34px;height:34px;opacity:0.85;}
   #cursor .dot{width:5px;height:5px;}
   body.has-cursor,body.has-cursor *{cursor:none !important;}
   @media (hover:none),(prefers-reduced-motion:reduce){ #cursor{display:none;} }
@@ -534,12 +556,6 @@
   }
   .sig-caption{font-size:10px;letter-spacing:0.2em;color:var(--paper-dim);}
 
-  /* contact block */
-  .signature-block{margin-top:clamp(64px,10vh,110px);max-width:560px;}
-  .signature-block .sig-rule{height:1px;background:var(--line);margin-bottom:22px;}
-  .signature-block .sig-img{max-width:460px;}
-  .signature-block .sig-text{font-size:clamp(64px,9vw,116px);}
-  .signature-block .sig-caption{margin-top:14px;}
 
   /* ---- Contact ---- */
   #contact{align-items:flex-start;}
@@ -560,7 +576,7 @@
     position:absolute;width:1px;height:1px;padding:0;margin:-1px;
     overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap;border:0;
   }
-  footer{margin-top:80px;font-family:'IBM Plex Mono', monospace;font-size:11px;color:var(--paper-dim);}
+  footer{margin-top:80px;line-height:1.8;max-width:62ch;font-family:'IBM Plex Mono', monospace;font-size:11px;color:var(--paper-dim);}
 
   /* Diagrams scroll rather than shrink. At 375px a 720-unit viewBox renders
      its 8px labels at ~4px — technically present, practically unreadable. */
@@ -568,7 +584,8 @@
 
   @media (max-width:760px){
     section{padding:110px 24px;}
-    #chrome{padding:20px 24px;}
+    #chrome{padding:14px 24px;}
+    #torch-dock{right:24px;top:10px;}
     #preloader{padding:24px;}
     #music-dock{right:24px;bottom:24px;}
     .stat-grid{grid-template-columns:repeat(2,1fr);}
@@ -579,7 +596,7 @@
     .arch-wrap{margin-top:26px;}
     .arch{min-width:580px;margin-top:0;}
 
-    #hero{padding-top:clamp(58px,8vh,76px);}
+    #hero{padding-top:clamp(38px,5vh,46px);}
     #hero .hero-index{
       flex-direction:column;align-items:flex-start;gap:8px;
       font-size:10px;letter-spacing:0.14em;
@@ -587,18 +604,31 @@
     .hero-foot{margin-top:34px;}
 
     .exp-head,.edu-head{flex-direction:column;align-items:flex-start;}
-    .signature-block{max-width:100%;}
   }
 
   /* very narrow phones — keep the large contact type from overflowing */
   @media (max-width:420px){
     section{padding:96px 18px;}
-    #chrome{padding:16px 18px;}
+    #chrome{padding:12px 18px;}
+    #torch-dock{right:18px;top:8px;}
     #music-dock{right:18px;bottom:18px;}
     .stat-grid{grid-template-columns:1fr;}
-    .signature-block .sig-text{font-size:clamp(42px,14vw,62px);}
   }
 </style>
+<script>
+  /* Theme resolves to the system preference on load and is written as an
+     explicit data-theme, so every themed selector can key off the attribute
+     alone. Inline and before <body> so there is no flash of the wrong theme.
+     An explicit choice is remembered and wins over the system. */
+  (function(){
+    var root = document.documentElement;
+    var saved = null;
+    try { saved = localStorage.getItem('theme'); } catch(e){}
+    var system = matchMedia('(prefers-color-scheme: light)').matches ? 'light' : 'dark';
+    root.setAttribute('data-theme', saved || system);
+    root.dataset.themeSource = saved ? 'user' : 'system';
+  })();
+</script>
 </head>
 <body class="loading">
 
@@ -619,7 +649,9 @@
 <canvas id="ambient-canvas"></canvas>
 <div id="scroll-progress"><div class="bar"></div></div>
 
-<div id="cursor" aria-hidden="true"><span class="blob"></span><span class="dot"></span></div>
+<canvas id="fluid" aria-hidden="true"></canvas>
+
+<div id="cursor" aria-hidden="true"><span class="dot"></span></div>
 
 <div id="music-dock">
   <button id="music-toggle" aria-label="Play ambient music" aria-pressed="false">
@@ -629,6 +661,9 @@
 
 <div id="chrome">
   <div class="brand mono">VIJAY BIRADAR</div>
+</div>
+
+<div id="torch-dock">
     <button id="theme-toggle" aria-label="Toggle light and dark mode">
       <svg viewBox="0 0 32 48" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
         <path class="torch-foot" d="M12.2 45.9 Q16 44.7 19.8 45.9 L19.8 47 Q16 47.9 12.2 47 Z"/>
@@ -715,7 +750,7 @@
       <li>Built a <strong>self-healing pipeline framework</strong> that classifies failures, retries and validates output automatically — recovering 3–5 failed executions a day with nobody touching them.</li>
       <li>Turned reactive firefighting into <strong>proactive observability</strong>: automated ETL health checks, alerting and dashboards, ~75% less manual monitoring.</li>
       <li>Led the <strong>SAP S/4HANA migration</strong> data workstream — zero pipeline failures, zero business disruption. The kind of quiet win nobody notices unless it goes wrong.</li>
-      <li>Designed <strong>WCM Cost Deployment</strong> on a medallion architecture with MCP integration for AI-assisted business analytics.</li>
+      <li>Designed <strong>Cost Deployment</strong> on a medallion architecture with MCP integration for AI-assisted business analytics.</li>
       <li>Became the informal <strong>first responder for production security</strong>, and introduced AI-assisted code review for secrets, dependency and compliance gaps.</li>
       <li>Took AI adoption from a 1-day workshop to a 3-day program, personally training <strong>80+ stakeholders</strong> — managers, architects, product owners and tech leads.</li>
       <li><strong>Mentored two engineers and an intern</strong> into independent contributors — the work I measure success by more than any dashboard.</li>
@@ -789,7 +824,7 @@
       <div class="card-idx mono">04 / 08</div>
       <div class="tag mono">DATA ARCHITECTURE · DAIMLER TRUCK</div>
       <div>
-        <h3>WCM Cost Deployment</h3>
+        <h3>Cost Deployment</h3>
         <p>A medallion architecture — bronze, silver, gold — with MCP integration so business analytics can be asked in plain language instead of SQL.</p>
         <div class="arch-wrap" data-arch="wcm"></div>
       </div>
@@ -873,7 +908,7 @@
   <div class="beyond-main">
     <figure class="photo-strip">
     <img class="photo" src="assets/img/train.jpg" alt="Waiting for the S31 at Karlsruhe Hauptbahnhof" loading="eager">
-    <figcaption class="mono">KARLSRUHE HBF — PLATFORM 5</figcaption>
+    <figcaption class="mono">KARLSRUHE HBF</figcaption>
   </figure>
     <p style="font-size:18px;color:var(--paper-dim);line-height:1.7;">The instinct to fix what's broken before it's flagged didn't start at Daimler. Since <strong style="color:var(--paper)">2017</strong>, I've led a family-founded NGO's community programs — vaccination drives, health camps — reaching <strong style="color:var(--paper)">100+ people a year</strong>, and rebuilt its coordination from scratch to cut overhead by roughly <strong style="color:var(--paper)">80%</strong>. Same pattern: find the friction, remove it, move on. A <strong style="color:var(--paper)">black belt in Goju-Ryu</strong> taught me the other half — that showing up consistently, for years, matters more than any single breakthrough. I'm currently terrible at violin, which is its own useful lesson in patience.</p>
   </div>
@@ -910,7 +945,17 @@
     <div class="hobby">
       <div class="h-label mono">MARTIAL ARTS</div>
       <h4>Goju-Ryu Karate</h4>
-      <p>Black belt. Years of showing up to the same dojo floor.</p>
+      <p>Black belt and championship titles. Years of showing up to the same dojo floor, long before any of them.</p>
+    </div>
+    <div class="hobby">
+      <div class="h-label mono">CAPTAINCY</div>
+      <h4>Football</h4>
+      <p>Led the team. Learned there that authority is given by the people you lead, never by the armband.</p>
+    </div>
+    <div class="hobby">
+      <div class="h-label mono">TRAVEL</div>
+      <h4>Traveller</h4>
+      <p>New places, mostly for the part where nothing is familiar yet.</p>
     </div>
     <div class="hobby">
       <div class="h-label mono">COMMUNITY</div>
@@ -932,31 +977,38 @@
   </div>
   <p class="contact-note mono" aria-live="polite">Hover for the handle. Discord copies on click.</p>
 
-  <!-- Signature. Drop your real signature at assets/img/signature.jpg (or .svg) —
-       transparent background, dark ink — and it replaces the script-font
-       placeholder automatically. If the file is absent the img removes itself. -->
-  <div class="signature-block">
-    <div class="sig-rule"></div>
-    <div class="sig-mark">
-      <img class="sig-img" src="assets/img/signature.jpg" alt="Vijay Biradar signature">
-      <span class="sig-text">Vijay Biradar</span>
-    </div>
-    <div class="sig-caption mono">VIJAY BIRADAR — CURIOUS LEARNER</div>
-  </div>
 
-    <footer>BENGALURU, INDIA — © 2026</footer>
+    <footer>
+    BENGALURU, INDIA — © 2026 VIJAY BIRADAR<br>
+    ALL RIGHTS RESERVED. NO PART OF THIS SITE — TEXT, CODE, IMAGERY OR SIGNATURE —
+    MAY BE COPIED, REPRODUCED OR REUSED WITHOUT WRITTEN PERMISSION.
+  </footer>
 </section>
 
 <script>
 /* Theme toggle — standalone, runs immediately, never depends on Three.js loading */
 (function(){
   const btn = document.getElementById('theme-toggle');
-  const html = document.documentElement;
+  const root = document.documentElement;
+
+  function apply(theme, source){
+    root.setAttribute('data-theme', theme);
+    root.dataset.themeSource = source;
+    btn.setAttribute('aria-label', theme === 'light' ? 'Switch to dark mode' : 'Switch to light mode');
+    window.dispatchEvent(new CustomEvent('theme-changed', {detail:{light: theme === 'light'}}));
+  }
+  apply(root.getAttribute('data-theme') || 'dark', root.dataset.themeSource || 'system');
+
   btn.addEventListener('click', function(){
-    const isLight = html.getAttribute('data-theme') === 'light';
-    if (isLight) { html.removeAttribute('data-theme'); }
-    else { html.setAttribute('data-theme','light'); }
-    window.dispatchEvent(new CustomEvent('theme-changed', { detail: { light: !isLight } }));
+    const next = root.getAttribute('data-theme') === 'light' ? 'dark' : 'light';
+    try { localStorage.setItem('theme', next); } catch(e){}
+    apply(next, 'user');
+  });
+
+  // keep following the OS until the visitor has actually chosen
+  matchMedia('(prefers-color-scheme: light)').addEventListener('change', e => {
+    if (root.dataset.themeSource === 'user') return;
+    apply(e.matches ? 'light' : 'dark', 'system');
   });
 })();
 
@@ -1467,16 +1519,319 @@ document.querySelectorAll('.exp-block').forEach(el=>{
   gsap.from(el, {y:30, opacity:0, duration:1, ease:'power2.out', scrollTrigger:{trigger:el, start:'top 85%'}});
   gsap.from(el.querySelectorAll('.exp-list li'), {x:-14, opacity:0, duration:0.6, stagger:0.06, ease:'power2.out', scrollTrigger:{trigger:el, start:'top 75%'}});
 });
-/* contact signature writes itself in on scroll (the hero one is driven by
-   the hero timeline instead, so it lands with the rest of the intro) */
-gsap.to('.signature-block .sig-mark', {
-  clipPath:'inset(0 0% 0 0)', duration:1.6, ease:'power2.inOut',
-  scrollTrigger:{trigger:'.signature-block', start:'top 80%'}
-});
 document.querySelectorAll('.hobby').forEach((el,i)=>{
   gsap.from(el, {y:20, opacity:0, duration:0.7, delay:i*0.08, ease:'power2.out', scrollTrigger:{trigger:el, start:'top 90%'}});
 });
 gsap.from('#hero .hero-index', {opacity:0, y:-12, duration:0.9, delay:0.2, ease:'power2.out'});
+
+/* ---- GPU fluid trail -------------------------------------------------
+   Navier-Stokes on ping-ponged framebuffers (Pavel Dobryakov's WebGL-fluid
+   algorithm), driven by pointer DELTA rather than position — velocity is what
+   makes it drag rather than follow. Runs on the three.js instance already
+   loaded for the ambient layer. Sim grid is deliberately tiny: smoke is
+   low-frequency, so a 64x64 solve upscaled costs almost nothing.            */
+(function(){
+  const canvas = document.getElementById('fluid');
+  if (!canvas) return;
+  if (!matchMedia('(hover:hover)').matches) return;
+  if (matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+
+  const SIM = 64, DYE = 256;
+  const CONFIG = {
+    densityDissipation: 0.965,   // dye fades ~3.5% a frame
+    velocityDissipation: 0.93,   // motion dies faster, so the smear settles then fades
+    pressureIterations: 3,
+    curlStrength: 22,
+    splatRadius: 0.00085,
+    splatForce: 3800
+  };
+
+  let renderer;
+  try {
+    renderer = new THREE.WebGLRenderer({canvas, alpha:false, antialias:false, depth:false, stencil:false});
+  } catch(e){ return; }
+  renderer.setPixelRatio(1);
+  renderer.autoClear = false;
+  /* A renderer initialised while the viewport reports 0 (hidden tab, some
+     mobile chrome, an iframe not yet laid out) leaves a 0x0 backing store and
+     every framebuffer incomplete — permanently, if size is only set once.
+     Re-fit each frame; it is a two-integer compare when nothing changed. */
+  let vw = 0, vh = 0;
+  let ready = false;
+  function fit(){
+    const w = innerWidth|0, h = innerHeight|0;
+    if (w < 2 || h < 2) return;        // viewport not laid out yet
+    if (w === vw && h === vh) return;
+    vw = w; vh = h; ready = true;
+    renderer.setSize(w, h, false);
+  }
+  fit();
+
+  const cam = new THREE.OrthographicCamera(-1, 1, 1, -1, 0, 1);
+  const quad = new THREE.Mesh(new THREE.PlaneGeometry(2, 2));
+  const scene = new THREE.Scene();
+  scene.add(quad);
+
+  const VERT = `
+    varying vec2 vUv; varying vec2 vL; varying vec2 vR; varying vec2 vT; varying vec2 vB;
+    uniform vec2 texelSize;
+    void main(){
+      vUv = uv;
+      vL = vUv - vec2(texelSize.x, 0.0);
+      vR = vUv + vec2(texelSize.x, 0.0);
+      vT = vUv + vec2(0.0, texelSize.y);
+      vB = vUv - vec2(0.0, texelSize.y);
+      gl_Position = vec4(position.xy, 0.0, 1.0);
+    }`;
+
+  const mat = (frag, uniforms) => new THREE.ShaderMaterial({
+    vertexShader: VERT, fragmentShader: frag,
+    uniforms: Object.assign({texelSize:{value:new THREE.Vector2()}}, uniforms),
+    depthTest:false, depthWrite:false
+  });
+
+  const M = {
+    splat: mat(`
+      varying vec2 vUv; uniform sampler2D uTarget; uniform float aspectRatio;
+      uniform vec3 color; uniform vec2 point; uniform float radius;
+      void main(){
+        vec2 pt = vUv - point; pt.x *= aspectRatio;
+        vec3 sp = exp(-dot(pt,pt)/radius) * color;
+        gl_FragColor = vec4(texture2D(uTarget, vUv).xyz + sp, 1.0);
+      }`, {uTarget:{value:null}, aspectRatio:{value:1}, color:{value:new THREE.Vector3()},
+           point:{value:new THREE.Vector2()}, radius:{value:0.0002}}),
+
+    advect: mat(`
+      varying vec2 vUv; uniform sampler2D uVelocity; uniform sampler2D uSource;
+      uniform float dt; uniform float dissipation;
+      // texelSize is declared in the vertex stage too — GLSL needs it in BOTH,
+      // and without it here the fragment shader silently fails to compile
+      uniform vec2 texelSize;
+      void main(){
+        vec2 coord = vUv - dt * texture2D(uVelocity, vUv).xy * texelSize;
+        gl_FragColor = dissipation * texture2D(uSource, coord);
+        gl_FragColor.a = 1.0;
+      }`, {uVelocity:{value:null}, uSource:{value:null}, dt:{value:0.016}, dissipation:{value:1}}),
+
+    divergence: mat(`
+      varying vec2 vL; varying vec2 vR; varying vec2 vT; varying vec2 vB;
+      uniform sampler2D uVelocity;
+      void main(){
+        float L = texture2D(uVelocity, vL).x;
+        float R = texture2D(uVelocity, vR).x;
+        float T = texture2D(uVelocity, vT).y;
+        float B = texture2D(uVelocity, vB).y;
+        gl_FragColor = vec4(0.5 * (R - L + T - B), 0.0, 0.0, 1.0);
+      }`, {uVelocity:{value:null}}),
+
+    curl: mat(`
+      varying vec2 vL; varying vec2 vR; varying vec2 vT; varying vec2 vB;
+      uniform sampler2D uVelocity;
+      void main(){
+        float L = texture2D(uVelocity, vL).y;
+        float R = texture2D(uVelocity, vR).y;
+        float T = texture2D(uVelocity, vT).x;
+        float B = texture2D(uVelocity, vB).x;
+        gl_FragColor = vec4(0.5 * (R - L - T + B), 0.0, 0.0, 1.0);
+      }`, {uVelocity:{value:null}}),
+
+    vorticity: mat(`
+      varying vec2 vUv; varying vec2 vL; varying vec2 vR; varying vec2 vT; varying vec2 vB;
+      uniform sampler2D uVelocity; uniform sampler2D uCurl;
+      uniform float curl; uniform float dt;
+      void main(){
+        float L = texture2D(uCurl, vL).x;
+        float R = texture2D(uCurl, vR).x;
+        float T = texture2D(uCurl, vT).x;
+        float B = texture2D(uCurl, vB).x;
+        float C = texture2D(uCurl, vUv).x;
+        vec2 force = 0.5 * vec2(abs(T) - abs(B), abs(R) - abs(L));
+        force /= length(force) + 0.0001;
+        force *= curl * C;
+        force.y *= -1.0;
+        vec2 vel = texture2D(uVelocity, vUv).xy;
+        gl_FragColor = vec4(vel + force * dt, 0.0, 1.0);
+      }`, {uVelocity:{value:null}, uCurl:{value:null}, curl:{value:20}, dt:{value:0.016}}),
+
+    pressure: mat(`
+      varying vec2 vUv; varying vec2 vL; varying vec2 vR; varying vec2 vT; varying vec2 vB;
+      uniform sampler2D uPressure; uniform sampler2D uDivergence;
+      void main(){
+        float L = texture2D(uPressure, vL).x;
+        float R = texture2D(uPressure, vR).x;
+        float T = texture2D(uPressure, vT).x;
+        float B = texture2D(uPressure, vB).x;
+        float div = texture2D(uDivergence, vUv).x;
+        gl_FragColor = vec4((L + R + B + T - div) * 0.25, 0.0, 0.0, 1.0);
+      }`, {uPressure:{value:null}, uDivergence:{value:null}}),
+
+    gradient: mat(`
+      varying vec2 vUv; varying vec2 vL; varying vec2 vR; varying vec2 vT; varying vec2 vB;
+      uniform sampler2D uPressure; uniform sampler2D uVelocity;
+      void main(){
+        float L = texture2D(uPressure, vL).x;
+        float R = texture2D(uPressure, vR).x;
+        float T = texture2D(uPressure, vT).x;
+        float B = texture2D(uPressure, vB).x;
+        vec2 vel = texture2D(uVelocity, vUv).xy;
+        vel -= vec2(R - L, T - B);
+        gl_FragColor = vec4(vel, 0.0, 1.0);
+      }`, {uPressure:{value:null}, uVelocity:{value:null}}),
+
+    clear: mat(`
+      varying vec2 vUv; uniform sampler2D uTexture; uniform float value;
+      void main(){ gl_FragColor = value * texture2D(uTexture, vUv); }`,
+      {uTexture:{value:null}, value:{value:0.8}}),
+
+    display: mat(`
+      varying vec2 vUv; uniform sampler2D uTexture;
+      void main(){ gl_FragColor = vec4(texture2D(uTexture, vUv).rgb, 1.0); }`,
+      {uTexture:{value:null}})
+  };
+
+  const target = (w, h, format, filter) => {
+    const t = new THREE.WebGLRenderTarget(w, h, {
+      type: THREE.HalfFloatType, format,
+      minFilter: filter, magFilter: filter,
+      depthBuffer: false, stencilBuffer: false,
+      wrapS: THREE.ClampToEdgeWrapping, wrapT: THREE.ClampToEdgeWrapping
+    });
+    return t;
+  };
+  /* you cannot read and write one texture in a pass — hence read/write/swap */
+  const doubleTarget = (w, h, format, filter) => {
+    let a = target(w, h, format, filter), b = target(w, h, format, filter);
+    return {
+      get read(){ return a; }, get write(){ return b; },
+      swap(){ const t = a; a = b; b = t; },
+      dispose(){ a.dispose(); b.dispose(); }
+    };
+  };
+
+  const L = THREE.LinearFilter, N = THREE.NearestFilter;
+  let dye        = doubleTarget(DYE, DYE, THREE.RGBAFormat, L);
+  let velocity   = doubleTarget(SIM, SIM, THREE.RGFormat,   L);
+  let pressure   = doubleTarget(SIM, SIM, THREE.RedFormat,  N);
+  let divergence = target(SIM, SIM, THREE.RedFormat, N);
+  let curl       = target(SIM, SIM, THREE.RedFormat, N);
+
+  const blit = (material, dest) => {
+    quad.material = material;
+    renderer.setRenderTarget(dest || null);
+    renderer.render(scene, cam);
+  };
+  const texel = (m, w, h) => m.uniforms.texelSize.value.set(1 / w, 1 / h);
+
+  const splats = [];
+  let lastX = null, lastY = null, moved = false;
+  addEventListener('mousemove', e => {
+    // size here too: this is the one event guaranteed to fire before the
+    // first splat, whatever the state of rAF or ResizeObserver
+    fit();
+    if (lastX !== null){
+      const dx = e.clientX - lastX, dy = e.clientY - lastY;
+      if (dx || dy){
+        splats.push({
+          x: e.clientX / innerWidth,
+          y: 1 - e.clientY / innerHeight,
+          dx: dx * CONFIG.splatForce / innerWidth,
+          dy: -dy * CONFIG.splatForce / innerHeight
+        });
+        moved = true;
+      }
+    }
+    lastX = e.clientX; lastY = e.clientY;
+    if (moved) canvas.classList.add('is-live');
+  }, {passive:true});
+
+  function applySplat(sp){
+    const aspect = innerWidth / innerHeight;
+    texel(M.splat, SIM, SIM);
+    M.splat.uniforms.uTarget.value = velocity.read.texture;
+    M.splat.uniforms.aspectRatio.value = aspect;
+    M.splat.uniforms.point.value.set(sp.x, sp.y);
+    M.splat.uniforms.radius.value = CONFIG.splatRadius;
+    M.splat.uniforms.color.value.set(sp.dx, sp.dy, 0);
+    blit(M.splat, velocity.write); velocity.swap();
+
+    texel(M.splat, DYE, DYE);
+    M.splat.uniforms.uTarget.value = dye.read.texture;
+    // neutral dye: difference blend derives the contrast, so no hue is needed
+    M.splat.uniforms.color.value.set(0.26, 0.28, 0.31);
+    blit(M.splat, dye.write); dye.swap();
+  }
+
+  function step(dt){
+    while (splats.length) applySplat(splats.shift());
+
+    texel(M.curl, SIM, SIM);
+    M.curl.uniforms.uVelocity.value = velocity.read.texture;
+    blit(M.curl, curl);
+
+    texel(M.vorticity, SIM, SIM);
+    M.vorticity.uniforms.uVelocity.value = velocity.read.texture;
+    M.vorticity.uniforms.uCurl.value = curl.texture;
+    M.vorticity.uniforms.curl.value = CONFIG.curlStrength;
+    M.vorticity.uniforms.dt.value = dt;
+    blit(M.vorticity, velocity.write); velocity.swap();
+
+    texel(M.divergence, SIM, SIM);
+    M.divergence.uniforms.uVelocity.value = velocity.read.texture;
+    blit(M.divergence, divergence);
+
+    texel(M.clear, SIM, SIM);
+    M.clear.uniforms.uTexture.value = pressure.read.texture;
+    M.clear.uniforms.value.value = 0.8;
+    blit(M.clear, pressure.write); pressure.swap();
+
+    texel(M.pressure, SIM, SIM);
+    M.pressure.uniforms.uDivergence.value = divergence.texture;
+    for (let i = 0; i < CONFIG.pressureIterations; i++){
+      M.pressure.uniforms.uPressure.value = pressure.read.texture;
+      blit(M.pressure, pressure.write); pressure.swap();
+    }
+
+    texel(M.gradient, SIM, SIM);
+    M.gradient.uniforms.uPressure.value = pressure.read.texture;
+    M.gradient.uniforms.uVelocity.value = velocity.read.texture;
+    blit(M.gradient, velocity.write); velocity.swap();
+
+    // advection IS the drag: sample from where this pixel came from
+    texel(M.advect, SIM, SIM);
+    M.advect.uniforms.dt.value = dt;
+    M.advect.uniforms.uVelocity.value = velocity.read.texture;
+    M.advect.uniforms.uSource.value = velocity.read.texture;
+    M.advect.uniforms.dissipation.value = CONFIG.velocityDissipation;
+    blit(M.advect, velocity.write); velocity.swap();
+
+    texel(M.advect, DYE, DYE);
+    M.advect.uniforms.uVelocity.value = velocity.read.texture;
+    M.advect.uniforms.uSource.value = dye.read.texture;
+    M.advect.uniforms.dissipation.value = CONFIG.densityDissipation;
+    blit(M.advect, dye.write); dye.swap();
+
+    M.display.uniforms.uTexture.value = dye.read.texture;
+    blit(M.display, null);
+  }
+
+  let last = performance.now();
+  gsap.ticker.add(() => {
+    const now = performance.now();
+    const dt = Math.min((now - last) / 1000, 0.016);
+    last = now;
+    fit();
+    if (!ready || !moved) return;
+    step(dt);
+  });
+
+  addEventListener('resize', fit, {passive:true});
+  /* Sizing is a layout fact, so observe layout rather than depending on an
+     animation frame — rAF is throttled in background tabs, and a renderer
+     that came up at 0x0 would otherwise stay degenerate until a resize. */
+  if (typeof ResizeObserver === 'function'){
+    new ResizeObserver(fit).observe(document.documentElement);
+  }
+})();
 
 /* Liquid cursor. The blob trails the pointer on a spring and stretches
    along its own velocity vector — that lag plus deformation is what reads as
@@ -1489,42 +1844,29 @@ gsap.from('#hero .hero-index', {opacity:0, y:-12, duration:0.9, delay:0.2, ease:
   if (matchMedia('(prefers-reduced-motion: reduce)').matches) return;
   document.body.classList.add('has-cursor');
 
-  const blob = el.querySelector('.blob');
   const dot  = el.querySelector('.dot');
   let mx = innerWidth/2, my = innerHeight/2;   // target
-  let bx = mx, by = my;                        // blob position
-  let px = mx, py = my;                        // previous, for velocity
 
-  gsap.set([blob, dot], {xPercent:0, yPercent:0});
+  // CSS centres the dot with translate(-50%,-50%); GSAP's x/y rewrite the
+  // whole transform, so the centring has to be restated here or the dot
+  // renders with its top-left on the pointer.
+  gsap.set(dot, {xPercent:-50, yPercent:-50});
   const dotX = gsap.quickSetter(dot, 'x', 'px');
   const dotY = gsap.quickSetter(dot, 'y', 'px');
 
   addEventListener('mousemove', e => { mx = e.clientX; my = e.clientY; }, {passive:true});
 
   gsap.ticker.add(() => {
-    // spring toward the pointer
-    bx += (mx - bx) * 0.18;
-    by += (my - by) * 0.18;
-    const vx = bx - px, vy = by - py;
-    px = bx; py = by;
-
-    const speed = Math.min(Math.hypot(vx, vy), 90);
-    const stretch = 1 + speed / 110;          // elongate along travel
-    const squash  = 1 - speed / 260;          // and thin across it
-    const angle   = Math.atan2(vy, vx) * 180 / Math.PI;
-
-    blob.style.transform =
-      'translate(' + bx + 'px,' + by + 'px) translate(-50%,-50%) rotate(' + angle +
-      'deg) scale(' + stretch.toFixed(3) + ',' + squash.toFixed(3) + ')';
     dotX(mx); dotY(my);
   });
 
-  /* grow over anything clickable so the cursor states the affordance */
-  const grow = () => gsap.to(el, {scale:1.9, opacity:0.55, duration:0.3, ease:'power2.out', overwrite:'auto'});
-  const shrink = () => gsap.to(el, {scale:1, opacity:1, duration:0.3, ease:'power2.out', overwrite:'auto'});
-  document.querySelectorAll('a, button, .card, g.n, [data-arch]').forEach(t => {
-    t.addEventListener('mouseenter', grow);
-    t.addEventListener('mouseleave', shrink);
+  /* The old grow/shrink scaled #cursor itself — which now holds only the
+     precision dot, so hovering made it lurch. Scale the dot alone, and let
+     the fluid layer carry the flourish. */
+  const dotScale = gsap.quickTo(dot, 'scale', {duration:0.25, ease:'power2.out'});
+  document.querySelectorAll('a, button, .card, .hobby, .award, [data-arch] g.n').forEach(t => {
+    t.addEventListener('mouseenter', () => dotScale(2.6));
+    t.addEventListener('mouseleave', () => dotScale(1));
   });
 })();
 
@@ -1536,14 +1878,14 @@ gsap.from('#hero .hero-index', {opacity:0, y:-12, duration:0.9, delay:0.2, ease:
   if (!h1) return;
   if (!matchMedia('(hover:hover)').matches) return;          // pointer devices only
   if (matchMedia('(prefers-reduced-motion: reduce)').matches) return;
-  gsap.set(h1, {transformPerspective:1200});
+  gsap.set(h1, {transformPerspective:1200, rotateX:0, rotateY:0});
   const rx = gsap.quickTo(h1, 'rotateX', {duration:0.7, ease:'power3.out'});
   const ry = gsap.quickTo(h1, 'rotateY', {duration:0.7, ease:'power3.out'});
 
   const fig = document.querySelector('.hero-portrait');
   let frx, fry;
   if (fig){
-    gsap.set(fig, {transformPerspective:1400});
+    gsap.set(fig, {transformPerspective:1400, rotateX:0, rotateY:0});
     frx = gsap.quickTo(fig, 'rotateX', {duration:0.9, ease:'power3.out'});
     fry = gsap.quickTo(fig, 'rotateY', {duration:0.9, ease:'power3.out'});
   }
@@ -1745,7 +2087,7 @@ cards.forEach((card, i) => {
 const canvas = document.getElementById('ambient-canvas');
 const renderer = new THREE.WebGLRenderer({canvas, alpha:true, antialias:true});
 renderer.setPixelRatio(Math.min(window.devicePixelRatio,2));
-renderer.setSize(window.innerWidth, window.innerHeight);
+renderer.setSize(Math.max(1, window.innerWidth), Math.max(1, window.innerHeight));
 const scene3d = new THREE.Scene();
 const camera = new THREE.PerspectiveCamera(60, window.innerWidth/window.innerHeight, 0.1, 100);
 camera.position.z = 12;
@@ -1755,7 +2097,7 @@ keyLight.position.set(4, 5, 6);
 scene3d.add(keyLight);
 scene3d.add(new THREE.AmbientLight(0xffffff, 0.3));
 
-const COUNT = 220;
+const COUNT = 340;
 const positions = new Float32Array(COUNT*3);
 const speeds = new Float32Array(COUNT);
 for(let i=0;i<COUNT;i++){
@@ -1770,40 +2112,11 @@ const mat = new THREE.PointsMaterial({color:new THREE.Color('#f4f4f2'), size:0.0
 const points = new THREE.Points(geo, mat);
 scene3d.add(points);
 
-/* Environment lighting for reflections — simple in-scene light rig, no external HDRI dependency */
-const envScene = new THREE.Scene();
-const envLight1 = new THREE.Mesh(new THREE.PlaneGeometry(20,20), new THREE.MeshBasicMaterial({color:0xffffff}));
-envLight1.position.set(0,0,-15);
-envScene.add(envLight1);
-const pmrem = new THREE.PMREMGenerator(renderer);
-const envRT = pmrem.fromScene(envScene, 0.04);
-scene3d.environment = envRT.texture;
 
-/* Centerpiece: faceted glass crystal, igloo/ice-inspired, real refraction + reflection */
-const crystalGeo = new THREE.IcosahedronGeometry(3.4, 0);
-let crystalMat = new THREE.MeshPhysicalMaterial({
-  color: new THREE.Color('#ffffff'),
-  metalness: 0,
-  roughness: 0.06,
-  transmission: 1,
-  thickness: 2.2,
-  ior: 1.5,
-  clearcoat: 1,
-  clearcoatRoughness: 0.1,
-  envMapIntensity: 1.4
-});
-const crystal = new THREE.Mesh(crystalGeo, crystalMat);
-crystal.position.set(0, 0, -2);
-scene3d.add(crystal);
-
-/* faint wireframe shell around it for structure */
-const cage = new THREE.Mesh(new THREE.IcosahedronGeometry(4.4,0), new THREE.MeshBasicMaterial({color:new THREE.Color('#f4f4f2'), wireframe:true, transparent:true, opacity:0.06}));
-crystal.add(cage);
-
-function updateCrystalColor(isLight){
-  crystalMat.color.set(isLight ? '#0a0a0a' : '#ffffff');
-}
-window.addEventListener('theme-changed', (e) => updateCrystalColor(e.detail.light));
+/* The glass centrepiece is gone: with a portrait in the hero it was a second
+   subject competing with you, and it is the most generic object in the
+   3D-portfolio vocabulary. The particle field stays as atmosphere and now
+   drifts with the pointer, so the background reacts without asserting. */
 
 let mouseX=0, mouseY=0;
 window.addEventListener('mousemove', e=>{ mouseX=(e.clientX/window.innerWidth-0.5)*2; mouseY=(e.clientY/window.innerHeight-0.5)*2; });
@@ -1819,9 +2132,7 @@ function animate(){
   camera.position.x += (mouseX*0.8 - camera.position.x)*0.02;
   camera.position.y += (-mouseY*0.5 - camera.position.y)*0.02;
   points.rotation.y = scrollY*0.00005;
-  crystal.rotation.y = t*0.15 + scrollY*0.0004;
-  crystal.rotation.x = Math.sin(t*0.2)*0.15;
-  crystal.position.y = Math.sin(t*0.4)*0.25;
+  points.rotation.z = Math.sin(t*0.05)*0.06;
   renderer.render(scene3d, camera);
   requestAnimationFrame(animate);
 }
@@ -1829,7 +2140,7 @@ animate();
 window.addEventListener('resize', ()=>{
   camera.aspect = window.innerWidth/window.innerHeight;
   camera.updateProjectionMatrix();
-  renderer.setSize(window.innerWidth, window.innerHeight);
+  renderer.setSize(Math.max(1, window.innerWidth), Math.max(1, window.innerHeight));
 });
 </script>
 </body>

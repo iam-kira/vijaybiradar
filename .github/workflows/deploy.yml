@@ -1,8 +1,13 @@
 name: Deploy to GitHub Pages
 
+# The site is a single static index.html plus assets — there is no Node
+# project here, so there is nothing to install and nothing to build. The
+# previous version of this file ran `npm ci && npm run build` and published
+# ./out, which fails on the first step: no package.json, no lockfile, no out/.
+
 on:
   push:
-    branches: [main]
+    branches: [main, monochrome]
   workflow_dispatch:
 
 permissions:
@@ -21,25 +26,24 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v5
 
-      - name: Setup Node.js
-        uses: actions/setup-node@v5
-        with:
-          node-version: "24"
-          cache: "npm"
-
-      - name: Install dependencies
-        run: npm ci
-
-      - name: Build
-        run: npm run build
+      - name: Assemble site
+        run: |
+          mkdir -p _site
+          cp index.html _site/
+          cp -r assets _site/
+          # Pages runs Jekyll unless told otherwise, which silently drops
+          # files and folders beginning with an underscore.
+          touch _site/.nojekyll
+          echo "--- publishing ---"
+          find _site -type f -printf '%10s  %p\n' | sort -k2
 
       - name: Setup Pages
-        uses: actions/configure-pages@v4
+        uses: actions/configure-pages@v5
 
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
         with:
-          path: ./out
+          path: ./_site
 
   deploy:
     environment:
