@@ -1,4 +1,4 @@
-# vijaybiradar
+# [Vijay Biradar](https://iam-kira.github.io/vijaybiradar/)   
 
 Personal site for Vijay Biradar — Data & AI. One static HTML file, no build step.
 
