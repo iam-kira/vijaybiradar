@@ -247,7 +247,16 @@
      The bow is drawn longer than the violin because that is how a bow is: it
      overruns the body at both ends. No scale at rest, or the parallel pose
      shrinks it back below the instrument's height. */
-  #music-toggle .bow{
+  /* Two groups, and they must stay separated.
+
+     .bow-pose is where the bow is HELD — parallel at rest, across the strings
+     when playing — and the stylesheet owns it. .bow is the STROKE, and script
+     owns it. They cannot share an element: GSAP bakes a rotation origin into
+     a user-space matrix, and transform-box:fill-box on the same element then
+     re-anchors that matrix, applying the origin a second time. The bow drifted
+     4 units left the instant script took over. Only .bow-pose carries the
+     fill-box origin; .bow deliberately carries none. */
+  #music-toggle .bow-pose{
     transform-box:fill-box;transform-origin:50% 50%;
     /* translate BEFORE rotate: after a 90deg rotation translateY moves
        along the bow's own axis, which would lay it down the centre of the
@@ -263,14 +272,14 @@
      .is-playing on specificity, and it only works out today because a running
      animation beats a normal declaration — which stops being true the moment
      reduced-motion switches the animation off. Say it directly instead. */
-  #music-toggle:not(.is-dead):not(.is-playing):hover .bow,
-  #music-toggle:not(.is-dead):not(.is-playing):focus-visible .bow{
+  #music-toggle:not(.is-dead):not(.is-playing):hover .bow-pose,
+  #music-toggle:not(.is-dead):not(.is-playing):focus-visible .bow-pose{
     transform:rotate(-7deg);
   }
   /* Just the pose. The stroke itself is generated per phrase in script — a
      CSS animation here would win the cascade against those inline transforms
      and pin the bow to a fixed saw. */
-  #music-toggle.is-playing .bow{transform:rotate(-7deg);}
+  #music-toggle.is-playing .bow-pose{transform:rotate(-7deg);}
 
   #music-toggle .v-neck{stroke-width:1.4;}
   #music-toggle .v-peg{stroke-width:1.2;}
@@ -1113,10 +1122,12 @@
       <!-- Shifted 2.5 to match .v-shift. The bow is not inside that group, so
            without this it crosses the strings 2.5 units left of the instrument
            and the contact point sits off the centre line. -->
-      <g class="bow">
-        <path class="b-stick" d="M-3.5 34 H48.5"/>
-        <path class="b-hair" d="M-2 35.6 H47"/>
-        <path class="b-frog" d="M-3.5 32.6 V36.4"/>
+      <g class="bow-pose">
+        <g class="bow">
+          <path class="b-stick" d="M-3.5 34 H48.5"/>
+          <path class="b-hair" d="M-2 35.6 H47"/>
+          <path class="b-frog" d="M-3.5 32.6 V36.4"/>
+        </g>
       </g>
     </svg>
   </button>
@@ -1806,8 +1817,8 @@
       dir = -dir;
       phraseTl.to(bow, {
         x: dir * reach,
-        // the wrist turns a little with each pull, never the same amount
-        rotation: -7 + dir * rnd(1.2, 2.8),
+        // a wrist turn on top of the held pose, never the same amount twice
+        rotation: dir * rnd(1.2, 2.8),
         duration: beat,
         ease: fast ? 'sine.inOut' : 'power1.inOut'
       });
@@ -1823,7 +1834,8 @@
     gsap.killTweensOf(bow);
     gsap.killTweensOf(phrase);        // cancels a rest waiting to fire
     /* hand the bow back to CSS, which returns it to the parallel rest pose */
-    gsap.set(bow, {clearProps:'transform'});
+    gsap.set(bow, {clearProps:'all'});
+    bow.removeAttribute('transform');   // GSAP writes the SVG attribute too
     flatten();
     btn.setAttribute('aria-pressed','false');
     btn.setAttribute('aria-label','Play ambient music');
@@ -1835,7 +1847,10 @@
       /* Reduced motion keeps the bow on the strings without sawing — the pose
          still says "playing", which is the part that carries information. */
       if (!matchMedia('(prefers-reduced-motion: reduce)').matches){
-        gsap.set(bow, {x: 0, rotation: -7});   // known baseline to tween from
+        /* Zero, not -7: the -7 that lays the bow across the strings lives on
+           .bow-pose in the stylesheet now. Script only adds the stroke on top
+           of that, so its resting state is no offset at all. */
+        gsap.set(bow, {x: 0, rotation: 0});
         phrase();
       }
       btn.setAttribute('aria-pressed','true');
@@ -2379,6 +2394,28 @@ function particleIntro(img){
        just flew through. And the inward pull starts BEFORE the outward motion
        has finished — the phases overlap, so there is never a frame where
        nothing is moving. */
+    /* Declared before the particles, not after. These are const, so a speck
+       reading LAG while it is still in its temporal dead zone throws — and the
+       throw happens inside the seeding map, so the intro dies before a single
+       particle exists and the screen simply stays empty. */
+    const DUR = 4000, HOLD = 800;
+    /* The outward rush runs to OUT_END; the pull inward starts at TURN, which
+       is earlier. That overlap is the turn — for those few frames a speck is
+       still drifting out while already being drawn towards its place, which is
+       what a direction change looks like when nothing stops to do it.
+
+       Every speck must have turned by OUT_END, when the outward push stops
+       growing — one that has not is a speck sitting perfectly still. Hence
+       TURN + LAG < OUT_END, worth re-checking if any of these move. */
+    const TURN = 0.24, OUT_END = 0.34, LAG = 0.09;
+
+    /* How far the dust is allowed to travel, as a fraction of the long edge.
+       Measured against the real frame: 0.30 leaves two thirds of it inside the
+       frame at the furthest point. 0.5 holds only a fifth, and the old 1.55
+       held none at all — which is exactly why the mark used to read as a
+       separate effect from the rush. */
+    const REACH = 0.30;
+
     const P = pts.map(t => {
       const a = Math.random() * Math.PI * 2;
       return {
@@ -2408,22 +2445,6 @@ function particleIntro(img){
 
     const ink = getComputedStyle(document.documentElement)
                   .getPropertyValue('--paper').trim() || '#f4f4f2';
-    const DUR = 4000, HOLD = 800;
-    /* The outward rush runs to OUT_END; the pull inward starts at TURN, which
-       is earlier. That overlap is the turn — for those few frames a speck is
-       still drifting out while already being drawn towards its place, which is
-       what a direction change looks like when nothing stops to do it. */
-    /* Every speck must have turned by OUT_END, when the outward push stops
-       growing — one that has not is a speck sitting perfectly still. Hence
-       TURN + LAG < OUT_END, and it is worth re-checking if any of these move. */
-    const TURN = 0.24, OUT_END = 0.34, LAG = 0.09;
-
-    /* How far the dust is allowed to travel, as a fraction of the long edge.
-       Measured against the real frame: 0.30 leaves two thirds of the dust
-       inside it at the moment of the stop, having covered about a third of a
-       screen. 0.5 holds only a fifth, and the old 1.55 held none at all —
-       which is exactly why the mark used to read as a separate effect. */
-    const REACH = 0.30;
     const t0 = performance.now();
     let done = false;
 
