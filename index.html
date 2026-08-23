@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Vijay Biradar — Curious Learner</title>
+<title>Vijay Biradar</title>
 <link rel="icon" type="image/svg+xml" href="assets/img/favicon.svg">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -2386,6 +2386,13 @@ function particleIntro(img){
         a,
         r0: 8 + Math.random() * 70,
         z: 0.55 + Math.random() * 1.05,
+        /* Each speck turns at its own moment. Reverse them in unison and the
+           whole cloud's velocity passes through zero together — measured as a
+           94% collapse in mean speed, which reads as a hesitation however
+           short it is. Spread over LAG the field always has some of it still
+           flying out while the rest is already coming back, so the turn never
+           empties of motion. */
+        lag: Math.random() * LAG,
         rad: 0.7 + Math.random() * 0.8,
         px: 0, py: 0, seeded: false
       };
@@ -2406,7 +2413,10 @@ function particleIntro(img){
        is earlier. That overlap is the turn — for those few frames a speck is
        still drifting out while already being drawn towards its place, which is
        what a direction change looks like when nothing stops to do it. */
-    const TURN = 0.27, OUT_END = 0.34;
+    /* Every speck must have turned by OUT_END, when the outward push stops
+       growing — one that has not is a speck sitting perfectly still. Hence
+       TURN + LAG < OUT_END, and it is worth re-checking if any of these move. */
+    const TURN = 0.24, OUT_END = 0.34, LAG = 0.09;
 
     /* How far the dust is allowed to travel, as a fraction of the long edge.
        Measured against the real frame: 0.30 leaves two thirds of the dust
@@ -2429,13 +2439,25 @@ function particleIntro(img){
       /* THROW: dust streams outward as the object is hurled away.
          HANG:  flow freezes. Nothing moves. The screen almost empties.
          RETURN + FORM: the dust it left behind resolves into the mark. */
-      const thrown = Math.min(1, T / OUT_END);
-      /* Smoothstep: no velocity at either end, peak in the middle. It gets up
-         to speed and eases off, rather than the old power curve that was still
-         accelerating when the beat cut. */
-      const glide = thrown * thrown * (3 - 2 * thrown);
+      /* The outward rush: eases in, then decays towards its limit. It never
+         brakes and it is never clamped, because both of those put a zero in
+         the velocity and the turn has to happen through moving dust.
+
+         Two earlier attempts, both measured and both wrong. Smoothstep
+         decelerates to a standstill exactly where the inward pull starts from
+         one — mean speed collapsed 94% at the join. Holding a constant
+         velocity and then clamping at OUT_END traded that for a cliff, full
+         speed to a fifth of it between two frames. An exponential approach has
+         neither: still moving at OUT_END, still slowing after it, no edge. */
+      const RAMP = 0.35;                          // spent getting up to speed
+      const SAT  = 2.6;                           // how hard it settles
+      const tt = T / OUT_END;                     // deliberately unclamped
+      const ramped = tt < RAMP ? (tt * tt) / (2 * RAMP) : tt - RAMP / 2;
+      const u = ramped / (1 - RAMP / 2);          // u === 1 at OUT_END
+      const glide = (1 - Math.exp(-SAT * u)) / (1 - Math.exp(-SAT));
       const flow = glide * spread * REACH;
 
+      // the field's average, for the mark's scale and the dust's fade
       const app  = T <= TURN ? 0 : (T - TURN) / (1 - TURN);
       /* Smoothstep here too, not the old cubic-out. Cubic-out leaves at full
          speed from a standing start, so the moment the pull began the dust
@@ -2473,8 +2495,13 @@ function particleIntro(img){
         const gx = cx + (p.tx - cx) * sigScale;
         const gy = cy + (p.ty - cy) * sigScale;
 
-        const x = sx + (gx - sx) * ease;
-        const y = sy + (gy - sy) * ease;
+        // this speck's own turn, offset from the field's by its lag
+        const start = TURN + p.lag;
+        const pa = T <= start ? 0 : (T - start) / (1 - start);
+        const pe = pa * pa * (3 - 2 * pa);
+
+        const x = sx + (gx - sx) * pe;
+        const y = sy + (gy - sy) * pe;
         if (!p.seeded){ p.px = x; p.py = y; p.seeded = true; }
 
         const vx = x - p.px, vy = y - p.py;
