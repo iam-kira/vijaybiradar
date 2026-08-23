@@ -4,6 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Vijay Biradar — Curious Learner</title>
+<link rel="icon" type="image/svg+xml" href="assets/img/favicon.svg">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600;700&family=Mrs+Saint+Delafield&family=Outfit:wght@800;900&family=Jost:wght@900&display=swap" rel="stylesheet">
@@ -39,7 +40,14 @@
   html{transition:background-color .5s ease;}
   body{transition:background-color .5s ease, color .5s ease;}
   *{margin:0;padding:0;box-sizing:border-box;}
-  html{scroll-behavior:smooth;}
+  /* clip on the ROOT, not just body. Body's overflow only propagates to the
+     viewport when the root's is visible, and that propagation does not happen
+     for 'clip' — so a body-only rule left the page genuinely scrollable
+     sideways. #manifesto scrubs from scale(1.06) to 1 on entry, and a
+     full-width section at 1.06 hangs 3% of the viewport off each edge.
+     'clip' rather than 'hidden' for the same reason as below: hidden would
+     make this a scroll container and kill position:sticky. */
+  html{scroll-behavior:smooth;overflow-x:clip;}
   body{
     background:var(--ink);
     color:var(--paper);
@@ -118,9 +126,7 @@
     display:flex;align-items:center;justify-content:center;
   }
   #sig-intro[hidden]{display:none;}
-  #sig-canvas{display:block;width:100%;height:100%;position:relative;z-index:2;}
-  /* the object sits behind the dust, so the particles read as its wake */
-  #sig-3d{position:absolute;inset:0;width:100%;height:100%;z-index:1;}
+  #sig-canvas{display:block;width:100%;height:100%;}
   #sig-intro .sig-fallback{
     max-width:62vw;height:auto;
     /* source is dark ink on paper — invert it to sit on the dark ground */
@@ -171,17 +177,51 @@
   #torch-dock{position:fixed;right:48px;top:16px;z-index:150;}
 
   /* ---- Music toggle (ported from Skiper UI skiper25) ---- */
+  /* Bare, like the torch. The pill was the only chrome left on either
+     control and it made the violin look like a button with a picture in it. */
   #music-toggle{
-    display:flex;align-items:center;justify-content:center;gap:3px;
-    height:40px;padding:0 14px;
-    background:var(--ink-2);border:1px solid var(--line);border-radius:999px;
+    display:flex;align-items:center;justify-content:center;
+    background:none;border:none;padding:0;
     cursor:pointer;position:relative;z-index:150;
-    transition:padding .5s cubic-bezier(.34,1.56,.64,1), border-color .3s ease;
+    -webkit-tap-highlight-color:transparent;
+    transition:transform .35s cubic-bezier(.34,1.56,.64,1), opacity .3s ease;
+    opacity:0.82;
   }
-  #music-toggle:hover,#music-toggle:active{padding:0 22px;border-color:var(--paper-dim);}
+  #music-toggle:hover,#music-toggle:focus-visible{transform:translateY(-2px) scale(1.06);opacity:1;}
   #music-toggle.is-dead{opacity:0.32;cursor:not-allowed;}
-  #music-toggle.is-dead:hover,#music-toggle.is-dead:active{padding:0 14px;border-color:var(--line);}
-  #music-toggle .violin{width:26px;height:42px;overflow:visible;}
+  #music-toggle.is-dead:hover{transform:none;opacity:0.32;}
+  #music-toggle .violin{width:28.6px;height:46.2px;overflow:visible;}
+
+  /* ---- Playing: notes rising off the scroll. They only exist while the
+     audio runs — a violin emitting notes in silence is just decoration.
+
+     var(--paper) rather than a fixed colour: it is the text token, so the
+     symbols come out white on the dark theme and black on the light one
+     without a second rule. Absolutely positioned so they cannot change the
+     button's size — it takes its box from the violin alone, and a growing
+     button would shift itself under the cursor mid-hover. */
+  #music-toggle .notes{
+    position:absolute;pointer-events:none;
+    opacity:0;transition:opacity .4s ease;
+  }
+  #music-toggle.is-playing .notes{opacity:1;}
+  #music-toggle .notes{left:52%;top:-4px;width:0;height:0;}
+  #music-toggle .notes i{
+    position:absolute;font-style:normal;line-height:1;
+    font-size:10px;color:var(--paper);opacity:0;
+  }
+  #music-toggle.is-playing .notes i{
+    animation:note-rise 2.7s ease-out infinite;
+  }
+  #music-toggle .notes i:nth-child(1){animation-delay:0s;}
+  #music-toggle .notes i:nth-child(2){animation-delay:.9s;}
+  #music-toggle .notes i:nth-child(3){animation-delay:1.8s;}
+  @keyframes note-rise{
+    0%  {transform:translate(-3px,0) rotate(-10deg) scale(0.65);opacity:0;}
+    18% {opacity:0.95;}
+    70% {opacity:0.45;}
+    100%{transform:translate(11px,-32px) rotate(16deg) scale(1);opacity:0;}
+  }
   /* the instrument sits right of centre; the bow rests clear of it */
   #music-toggle .v-shift{transform:translateX(2.5px);}
   /* Stentor Student II colouring: warm spruce top, darker maple neck and
@@ -200,15 +240,29 @@
   #music-toggle .b-stick{stroke:var(--v-dark);stroke-width:1.5;stroke-linecap:round;fill:none;}
   #music-toggle .b-hair{stroke:var(--v-hair);stroke-width:0.8;opacity:0.85;fill:none;}
   #music-toggle .b-frog{stroke:var(--v-dark);stroke-width:2.2;stroke-linecap:round;fill:none;}
-  /* At rest the bow lies alongside the instrument. Playing swings it across
-     the strings and draws it back and forth. */
+  /* At rest the bow stands parallel to the instrument. Hovering brings it to
+     the strings; taking the cursor away lays it back down — unless it is
+     playing, in which case it stays and saws.
+
+     The bow is drawn longer than the violin because that is how a bow is: it
+     overruns the body at both ends. No scale at rest, or the parallel pose
+     shrinks it back below the instrument's height. */
   #music-toggle .bow{
     transform-box:fill-box;transform-origin:50% 50%;
     /* translate BEFORE rotate: after a 90deg rotation translateY moves
        along the bow's own axis, which would lay it down the centre of the
-       instrument instead of alongside it. */
-    transform:translateX(17px) rotate(90deg) scale(0.8);
+       instrument instead of alongside it. The -7.5 lifts the vertical pose so
+       it straddles the violin evenly rather than hanging off the bottom. */
+    transform:translate(17px,-7.5px) rotate(90deg);
     transition:transform .55s cubic-bezier(.2,.8,.2,1);
+  }
+  /* Excluded while playing on purpose. The hover selector outranks
+     .is-playing on specificity, and it only works out today because a running
+     animation beats a normal declaration — which stops being true the moment
+     reduced-motion switches the animation off. Say it directly instead. */
+  #music-toggle:not(.is-dead):not(.is-playing):hover .bow,
+  #music-toggle:not(.is-dead):not(.is-playing):focus-visible .bow{
+    transform:rotate(-7deg);
   }
   #music-toggle.is-playing .bow{
     transform:rotate(-7deg);
@@ -225,7 +279,12 @@
   #music-toggle .v-str{stroke-width:0.7;opacity:0.55;}
   /* the strings sing while it plays */
   #music-toggle.is-playing .v-str{animation:vstring .55s ease-in-out infinite alternate;}
-  @media (prefers-reduced-motion:reduce){ #music-toggle.is-playing .bow{animation:none;} }
+  @media (prefers-reduced-motion:reduce){
+    #music-toggle.is-playing .bow{animation:none;}
+    /* the notes are pure motion — with the motion gone there is nothing left
+       worth showing, so they stay hidden rather than sitting in a frozen pose */
+    #music-toggle.is-playing .notes{opacity:0;}
+  }
   #music-toggle.is-playing .v-str:nth-of-type(2){animation-delay:.18s;}
   @keyframes vstring{from{opacity:0.35;}to{opacity:1;}}
 
@@ -374,7 +433,7 @@
   }
   @media (prefers-reduced-motion: reduce){
     #theme-toggle .flame,#theme-toggle .spark,#theme-toggle .flare,#theme-toggle .smoke-p,#theme-toggle .smoke-l{animation:none;}
-    .scroll-cue .l{animation:none;}
+    .scroll-cue .wave i{animation:none;opacity:0.5;}
     #music-toggle.is-playing .v-str{animation:none;}
   }
 
@@ -426,15 +485,49 @@
      tilt. --extrude is the "side wall" of each letter, so it must read as
      recessed in dark mode and as solid mass in light mode. */
   #hero h1{
-    font-size:clamp(42px,7.4vw,112px);
+    font-size:clamp(42px,6.9vw,104px);
     perspective:1200px;transform-style:preserve-3d;will-change:transform;
   }
-  #hero h1 .w{
+  /* ---- Rolling headline ----
+     Ported from Skiper UI's TextRoll (skiper58) — two stacked copies of every
+     character, the top rolling out as the bottom rolls in, staggered from the
+     middle of each word outward.
+
+     The extrusion moves onto the character copies rather than the word: the
+     mask that makes the roll possible would otherwise clip a shadow painted
+     by the parent. The mask is given room below the baseline so the cast
+     shadow still has somewhere to fall. */
+  /* Splitting the headline into one inline-block per character handed the
+     browser a break opportunity between every letter, so "responsibility"
+     could wrap as "responsibilit / y". The word span has to forbid it. */
+  #hero h1 .w{white-space:nowrap;}
+  #hero h1 .ch{
+    display:inline-block;position:relative;overflow:hidden;
+    vertical-align:top;line-height:1;
+    padding:0.06em 0.14em 0.22em 0;
+    margin:-0.06em -0.14em -0.22em 0;
+  }
+  #hero h1 .ch-a,#hero h1 .ch::after{
+    display:block;will-change:transform;
     text-shadow:
       1px 1px 0 var(--extrude), 2px 2px 0 var(--extrude),
       3px 3px 0 var(--extrude), 4px 4px 0 var(--extrude),
       5px 5px 0 var(--extrude), 6px 6px 0 var(--extrude),
       7px 7px 0 var(--extrude), 10px 10px 22px var(--extrude-cast);
+  }
+  /* The incoming glyph is a pseudo-element, not a second DOM node. A real
+     duplicate would land in textContent, so screen readers would announce
+     "II ttaakkee", copy-paste would double every letter, and crawlers would
+     index it twice. ::after content is in none of those. */
+  #hero h1 .ch{--r:0;}
+  #hero h1 .ch-a{transform:translateY(calc(var(--r) * -100%));}
+  #hero h1 .ch::after{
+    content:attr(data-c);
+    position:absolute;inset:0;padding:inherit;
+    transform:translateY(calc((1 - var(--r)) * 100%));
+  }
+  @media (prefers-reduced-motion:reduce){
+    #hero h1 .ch::after{display:none;}
   }
   #hero .role{
     font-family:'IBM Plex Mono', monospace;font-size:clamp(14px,1.6vw,18px);
@@ -466,7 +559,31 @@
     font-family:'IBM Plex Mono', monospace;font-size:11px;letter-spacing:0.15em;color:var(--paper-dim);
     display:flex;align-items:center;gap:10px;flex:none;
   }
-  .scroll-cue .l{width:28px;height:1px;background:var(--paper-dim);animation:pulse 2s ease-in-out infinite;}
+  /* Five dots with a wave running through them: each lifts and brightens a
+     beat after the one before, so the crest travels along the row.
+
+     Delays are a fifth of the cycle apart, which is what keeps exactly one
+     crest in the row at a time — space them evenly across the full cycle and
+     the wave reads as a single travelling pulse rather than a flicker. The
+     dots never fully fade, so at rest the row still reads as a row. */
+  .scroll-cue .wave{
+    display:inline-flex;align-items:center;gap:3.5px;
+    height:12px;flex:none;
+  }
+  .scroll-cue .wave i{
+    width:3.5px;height:3.5px;border-radius:50%;
+    background:var(--paper-dim);opacity:0.35;
+    animation:wave-bob 1.25s ease-in-out infinite;
+  }
+  .scroll-cue .wave i:nth-child(1){animation-delay:0s;}
+  .scroll-cue .wave i:nth-child(2){animation-delay:.125s;}
+  .scroll-cue .wave i:nth-child(3){animation-delay:.25s;}
+  .scroll-cue .wave i:nth-child(4){animation-delay:.375s;}
+  .scroll-cue .wave i:nth-child(5){animation-delay:.5s;}
+  @keyframes wave-bob{
+    0%,60%,100%{transform:translateY(0);opacity:0.35;}
+    30%        {transform:translateY(-4.5px);opacity:1;}
+  }
   @keyframes pulse{0%,100%{opacity:0.3}50%{opacity:1}}
 
   /* ---- Manifesto pull-quote ---- */
@@ -495,7 +612,9 @@
   }
   /* Rest on the landing cell so the true number is what shows when no
      animation runs. The roll is played as a `from`, never a `to`. */
-  .odo-col{display:block;will-change:transform;transform:translateY(-90.909%);}
+  /* No resting transform: the landing digit is the first cell, so the column
+     is correct at translateY(0) and there is no offset to get wrong. */
+  .odo-col{display:block;will-change:transform;}
   .odo-col span{display:block;height:1em;line-height:1;font-variant-numeric:tabular-nums;}
   .odo-fixed{display:inline-block;line-height:1;}
 
@@ -600,8 +719,12 @@
   @media (min-width:900px){
     /* :has() so a removed portrait collapses the grid instead of leaving
        a 306px hole where the second column used to be */
-    .hero-main:has(.hero-portrait){grid-template-columns:minmax(0,1.4fr) minmax(0,0.6fr);gap:clamp(36px,5vw,76px);}
-    .hero-portrait .photo{max-height:62vh;}
+    /* Split as far toward the portrait as the type allows: the text column
+       still has to hold "responsibility" on one line at the top of the
+       clamp, and nowrap means anything narrower overflows instead of
+       wrapping. */
+    .hero-main:has(.hero-portrait){grid-template-columns:minmax(0,1.32fr) minmax(0,0.68fr);gap:clamp(32px,4vw,64px);}
+    .hero-portrait .photo{max-height:72vh;}
   }
   @media (max-width:899px){
     .hero-portrait .photo{aspect-ratio:4/3;max-height:42vh;}
@@ -874,7 +997,6 @@
     position:absolute;width:1px;height:1px;padding:0;margin:-1px;
     overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap;border:0;
   }
-  footer .credit{opacity:0.62;}
   footer{margin-top:80px;line-height:1.8;max-width:62ch;font-family:'IBM Plex Mono', monospace;font-size:11px;color:var(--paper-dim);}
 
   /* Diagrams scroll rather than shrink. At 375px a 720-unit viewBox renders
@@ -943,7 +1065,7 @@
   <div class="pre-track"><div class="pre-fill"></div></div>
 </div>
 
-<div id="sig-intro" hidden><canvas id="sig-3d"></canvas><canvas id="sig-canvas"></canvas></div>
+<div id="sig-intro" hidden><canvas id="sig-canvas"></canvas></div>
 
 <canvas id="ambient-canvas"></canvas>
 <div id="grain" aria-hidden="true"></div>
@@ -955,6 +1077,7 @@
 
 <div id="music-dock">
   <button id="music-toggle" aria-label="Play ambient music" aria-pressed="false">
+    <span class="notes" aria-hidden="true"><i>&#9834;</i><i>&#9835;</i><i>&#9834;</i></span>
     <svg class="violin" viewBox="0 0 40 64" aria-hidden="true">
       <defs>
         <linearGradient id="varnish" x1="0" y1="0" x2="1" y2="0.35">
@@ -983,9 +1106,9 @@
       <path class="v-neck" d="M18.2 44 H21.8 L21 50.6 H19 Z"/>
         </g>
       <g class="bow">
-        <path class="b-stick" d="M4 34 H36"/>
-        <path class="b-hair" d="M5.5 35.6 H34.5"/>
-        <path class="b-frog" d="M4 32.6 V36.4"/>
+        <path class="b-stick" d="M-6 34 H46"/>
+        <path class="b-hair" d="M-4.5 35.6 H44.5"/>
+        <path class="b-frog" d="M-6 32.6 V36.4"/>
       </g>
     </svg>
   </button>
@@ -1059,7 +1182,7 @@
   <!-- The hero reads as a signed statement: the claim, then the hand behind it.
        Cue and signature share one row so they can never overlap. -->
   <div class="hero-foot">
-    <div class="scroll-cue"><div class="l"></div>SCROLL</div>
+    <div class="scroll-cue"><span class="wave" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i></span>SCROLL</div>
   </div>
   </div>
 </section>
@@ -1595,9 +1718,7 @@
     <footer>
     BENGALURU, INDIA — © 2026 VIJAY BIRADAR<br>
     ALL RIGHTS RESERVED. NO PART OF THIS SITE, INCLUDING TEXT, CODE, IMAGERY AND SIGNATURE,
-    MAY BE COPIED, REPRODUCED OR REUSED WITHOUT WRITTEN PERMISSION.<br>
-    <span class="credit">MJÖLNIR IS THE PROPERTY OF MARVEL. THE MODEL APPEARS HERE BY WAY OF
-    ACKNOWLEDGEMENT, NOT OWNERSHIP, AND NO AFFILIATION IS CLAIMED OR IMPLIED.</span>
+    MAY BE COPIED, REPRODUCED OR REUSED WITHOUT WRITTEN PERMISSION.
   </footer>
 </section>
 
@@ -1681,7 +1802,24 @@
   }
 
   btn.addEventListener('click', () => {
-    if (timer) { stop(); } else { audio.volume = 0.55; start(); }
+    if (timer) { stop(); pausedByUs = false; } else { audio.volume = 0.55; start(); }
+  });
+
+  /* Music must not keep playing into a tab nobody is looking at. The Page
+     Visibility API is the right signal: it fires on tab switch, on minimise,
+     and on mobile screen-off. Resume only if WE paused it, so a track the
+     visitor deliberately stopped stays stopped. */
+  let pausedByUs = false;
+  document.addEventListener('visibilitychange', () => {
+    if (document.hidden){
+      if (timer){ pausedByUs = true; stop(); }
+      const horn = document.getElementById('intro-horn');
+      if (horn && !horn.paused) horn.pause();
+    } else if (pausedByUs){
+      pausedByUs = false;
+      audio.volume = 0.55;
+      start();
+    }
   });
   audio.addEventListener('pause', () => { if (timer) stop(); });
 
@@ -1812,8 +1950,7 @@
 <script type="importmap">
 { "imports": {
     "three": "https://unpkg.com/three@0.160.0/build/three.module.js",
-    "animejs": "https://cdn.jsdelivr.net/npm/animejs@4.5.0/+esm",
-    "three/addons/": "https://unpkg.com/three@0.160.0/examples/jsm/"
+    "animejs": "https://cdn.jsdelivr.net/npm/animejs@4.5.0/+esm"
   } }
 </script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
@@ -1852,18 +1989,120 @@ function splitWords(root){
 
 const heroWords = splitWords(document.querySelector('#hero h1'));
 
-/* Park the hero in its start state now — no flash as the overlay lifts. */
-gsap.set(heroWords, {yPercent:70, opacity:0, filter:'blur(10px)'});
+/* ---- Rolling headline (ported from Skiper UI skiper58 "TextRoll") -------
+   The React original stacks two motion.spans per character and drives them
+   from framer-motion variants on whileHover. Two changes here.
+
+   First, the incoming glyph is a ::after pseudo-element carrying data-c, so
+   only one copy of the text exists in the DOM — a real duplicate would land in
+   textContent and screen readers would announce "II ttaakkee". GSAP animates a
+   single custom property per character and both layers read from it.
+
+   Second, the roll is the headline's ENTRANCE, not a hover reward. Hover is a
+   discovery problem on the first thing a visitor sees, and most of them never
+   find it; the effect is worth more as the reveal. Hover still re-rolls it for
+   anyone who does go looking.
+
+   Characters are parked below their masks and roll up into place, staggered
+   from the centre of each word outward — that centre-out order is what makes
+   it read as a wave rather than a sweep.                                   */
+const heroMasks = [], heroDelays = [], heroHoverDelays = [];
+if (!matchMedia('(prefers-reduced-motion: reduce)').matches){
+  const WORD_STEP = 0.10, CENTRE_STEP = 0.035;
+  heroWords.forEach((word, w) => {
+    const chars = [...word.textContent];
+    word.textContent = '';
+    chars.forEach((c, i) => {
+      const mask = document.createElement('span');
+      mask.className = 'ch';
+      mask.dataset.c = c;                 // the incoming copy, via ::after
+      const a = document.createElement('span');
+      a.className = 'ch-a';
+      a.textContent = c;                  // the only copy in the document
+      mask.appendChild(a);
+      word.appendChild(mask);
+      heroMasks.push(mask);
+      // entrance cascades word by word; hover fires the whole line at once,
+      // so it keeps only the centre-out part
+      const centre = CENTRE_STEP * Math.abs(i - (chars.length - 1) / 2);
+      heroDelays.push(w * WORD_STEP + centre);
+      heroHoverDelays.push(centre);
+    });
+  });
+}
+const rollingHero = heroMasks.length > 0;
+
+/* Park the hero in its start state now — no flash as the overlay lifts.
+   -1.3 rather than -1: the mask carries bottom padding so the cast shadow has
+   somewhere to fall, and a glyph parked at exactly one height still shows a
+   sliver inside it. */
+if (rollingHero) gsap.set(heroMasks, {'--r': -1.3});
+else gsap.set(heroWords, {yPercent:70, opacity:0, filter:'blur(10px)'});
 gsap.set('#hero .role, .scroll-cue', {opacity:0, y:18});
 
 const heroTl = gsap.timeline({paused:true})
-  .to(heroWords, {yPercent:0, opacity:1, filter:'blur(0px)', duration:1.15, ease:'expo.out', stagger:0.055})
+  .to(rollingHero ? heroMasks : heroWords,
+      rollingHero
+        ? {'--r':0, duration:0.85, ease:'power3.out',
+           stagger:(i) => heroDelays[i]}
+        : {yPercent:0, opacity:1, filter:'blur(0px)', duration:1.15,
+           ease:'expo.out', stagger:0.055})
   .to('#hero .role', {opacity:1, y:0, duration:0.9, ease:'power3.out'}, '-=0.75')
   .fromTo('.hero-portrait',
     {clipPath:'inset(100% 0 0 0)', rotateY:-16, rotateX:6, z:-220, opacity:0},
     {clipPath:'inset(0% 0 0 0)', rotateY:0, rotateX:0, z:0, opacity:1,
      duration:1.5, ease:'power3.out'}, '-=1.05')
   .to('.scroll-cue', {opacity:1, y:0, duration:0.6, ease:'power2.out'}, '-=0.5');
+
+/* The headline keeps rolling on its own after the entrance — the effect is
+   the point of the line, and tying it to hover meant most visitors never saw
+   it. Hover still rolls it on demand.
+
+   An endless roll is possible because --r:1 and --r:0 are the same picture:
+   at 1 the ::after copy sits where .ch-a sat at 0, and both carry the same
+   glyph. So the reset between rolls is invisible, and every cycle can go the
+   same way instead of rocking back and forth. */
+const HERO_ROLL_EVERY = 5;      // seconds between automatic rolls
+
+if (rollingHero){
+  const h1 = document.querySelector('#hero h1');
+  let hovering = false, inView = true;
+
+  const rollOnce = () => heroMasks.forEach((m, i) => {
+    gsap.fromTo(m, {'--r': 0},
+      {'--r': 1, duration: 0.42, ease: 'power2.inOut', delay: heroHoverDelays[i],
+       overwrite: 'auto', onComplete(){ gsap.set(m, {'--r': 0}); }});
+  });
+
+  /* gsap.delayedCall rather than setInterval: it runs off the same ticker as
+     everything else, so it stops with the tab instead of queueing up rolls
+     nobody is there to see. Skipped while the hero is scrolled away or the
+     cursor is holding the line — resuming, not stacking. */
+  const tick = () => {
+    if (!hovering && inView) rollOnce();
+    gsap.delayedCall(HERO_ROLL_EVERY, tick);
+  };
+  heroTl.eventCallback('onComplete', () => gsap.delayedCall(HERO_ROLL_EVERY, tick));
+
+  ScrollTrigger.create({trigger:'#hero', start:'top bottom', end:'bottom top',
+                        onToggle: self => { inView = self.isActive; }});
+
+  /* Pointer devices only: there is no hovering on a touchscreen, and binding
+     it there would fire on every tap. */
+  if (matchMedia('(hover:hover)').matches){
+    let rolled = false;
+    const roll = to => {
+      if (rolled === to) return;
+      rolled = to;
+      heroMasks.forEach((m, i) => {
+        gsap.to(m, {'--r': to ? 1 : 0, duration: 0.42, ease: 'power2.inOut',
+                    delay: heroHoverDelays[i], overwrite: 'auto'});
+      });
+    };
+    h1.addEventListener('mouseenter', () => { hovering = true;  roll(true); });
+    h1.addEventListener('mouseleave', () => { hovering = false; roll(false); });
+  }
+}
 
 /* Preloader: count to 100, fill the rule, wipe up, hand off to the hero. */
 window.scrollTo(0,0);
@@ -2103,11 +2342,10 @@ function particleIntro(img){
 
     const ink = getComputedStyle(document.documentElement)
                   .getPropertyValue('--paper').trim() || '#f4f4f2';
-    /* Four beats rather than two. The hang is the point: a moment of nothing
-       between the throw and the return, which is what makes the return read
-       as a return rather than a continuation. */
-    const DUR = 4400, HOLD = 700;
-    const THROW_END = 0.28, HANG_END = 0.40, RETURN_END = 0.72;
+    /* Three beats: the dust is hurled outward, hangs in the dark, then
+       gathers itself into the mark. */
+    const DUR = 4000, HOLD = 800;
+    const THROW_END = 0.30, HANG_END = 0.42;
     const t0 = performance.now();
     let done = false;
 
@@ -2130,9 +2368,6 @@ function particleIntro(img){
       const ease = 1 - Math.pow(1 - app, 3);
       const sigScale = 0.08 + 0.92 * ease;
 
-      // hand the beat to the model layer, which lives in the module script
-      window.__introClock = {t: T, active: true,
-                             THROW_END, HANG_END, RETURN_END};
 
       // background dust, streaming past and fading as we slow
       for (const st of S){
@@ -2183,7 +2418,6 @@ function particleIntro(img){
 
       if (!done && ease > 0.995 && el > DUR + HOLD){
         done = true;
-        window.__introClock = {t: 1, active: false};
         gsap.to(sigIntro, {opacity:0, duration:0.7, ease:'power2.inOut',
           onComplete(){ resolve(true); }});
       }
@@ -2238,8 +2472,6 @@ async function runIntro(){
 </script>
 <script type="module">
 import * as THREE from 'three';
-import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
-import { DRACOLoader } from 'three/addons/loaders/DRACOLoader.js';
 
 /* scroll progress */
 gsap.to('#scroll-progress .bar', {
@@ -2271,26 +2503,43 @@ gsap.to(manifestoWords, {
   scrollTrigger:{trigger:'#manifesto', start:'top 75%', end:'bottom 75%', scrub:true}
 });
 
+const ODO_CYCLES  = 4;                // passes through 0-9 before landing
+const ODO_CELLS   = ODO_CYCLES * 10;  // cells travelled
+const ODO_DUR     = 3.36;             // middle of the spread below
+
+/* Every column starts at the same instant and stops on its own clock: the
+   duration is drawn per column, so the row resolves the way a bank of reels
+   does rather than sweeping left to right. The spread is multiplied against
+   ODO_DUR, so 0.62-1.38 puts the first stop near 2.1s and the last near 4.6s.
+   Widen it for a more scattered finish, narrow it toward 1 to bring them in
+   together. */
+const ODO_SPREAD_MIN = 0.62, ODO_SPREAD_MAX = 1.38;
+
 /* Stats count up when they arrive. The prefix/suffix (~, +, %) is kept
    outside the animated span so only the digits change. */
+/* All four figures start together and stop at their own moments. Every number
+   in the row hangs off the GRID's trigger, not its own: on a narrow screen the
+   row wraps, and per-cell triggers would start the second half seconds after
+   the first, which is the one thing a simultaneous start cannot survive. */
+const statGrid = document.querySelector('.stat-grid');
 document.querySelectorAll('.stat-grid .cell').forEach((el,i)=>{
   gsap.from(el, {y:20, opacity:0, duration:0.7, delay:i*0.06, ease:'power2.out', scrollTrigger:{trigger:el, start:'top 90%'}});
-
-  rollNumber(el.querySelector('.num'), i * 0.08);
+  rollNumber(el.querySelector('.num'), statGrid);
 });
 
 /* the community figures roll the same way — one selector, not a second
    implementation, so they can never drift apart */
+const commStats = document.querySelector('.community-stats');
 document.querySelectorAll('.community-stats .cstat').forEach((el,i)=>{
   gsap.from(el, {y:20, opacity:0, duration:0.7, delay:i*0.06, ease:'power2.out', scrollTrigger:{trigger:el, start:'top 92%'}});
-  rollNumber(el.querySelector('.num'), i * 0.08);
+  rollNumber(el.querySelector('.num'), commStats);
 });
 
 /* Odometer roll. Each digit becomes a column of 0-9 with the target digit
    repeated at the end, so animating to the last cell rolls the whole way
    round once and lands on the right number. Non-digits (~, +, %) sit outside
    the columns and never move. */
-function rollNumber(num, delay){
+function rollNumber(num, trigger){
   if (!num) return;
   const text = num.textContent.trim();
   if (!/\d/.test(text)) return;
@@ -2303,14 +2552,30 @@ function rollNumber(num, delay){
       wrap.className = 'odo';
       const col = document.createElement('span');
       col.className = 'odo-col';
-      for (let d = 0; d <= 9; d++){
-        const cell = document.createElement('span');
-        cell.textContent = d;
-        col.appendChild(cell);
-      }
-      const landing = document.createElement('span');   // 11th cell = target
+      /* The answer goes FIRST and the column rests at zero.
+
+         The obvious layout — wheel first, answer last, column parked at
+         -(n-1)/n — looks equivalent and is not. GSAP resolves that percentage
+         to pixels once, when the tween is built, and the digits are built
+         before the webfont lands: it measures 16px fallback cells, writes
+         translateY(-640px), and keeps it after the real face makes the cells
+         38px. The wheel then settles 900px short of the answer, on whatever
+         digit happens to be passing.
+
+         Resting at zero has nothing to measure, so nothing can be measured
+         wrong. The wheel hangs below in descending order and the roll brings
+         it back up; only the START offset depends on metrics now, and being a
+         little off there is invisible. */
+      const landing = document.createElement('span');
       landing.textContent = ch;
       col.appendChild(landing);
+      for (let c = 0; c < ODO_CYCLES; c++){
+        for (let d = 9; d >= 0; d--){
+          const cell = document.createElement('span');
+          cell.textContent = d;
+          col.appendChild(cell);
+        }
+      }
       wrap.appendChild(col);
       frag.appendChild(wrap);
       cols.push(col);
@@ -2323,19 +2588,40 @@ function rollNumber(num, delay){
   }
   if (!cols.length) return;
 
-  /* Only swap the DOM in once the animation is actually going to run. If
-     ScrollTrigger never fires, the plain text stays and nobody reads a
-     column of digits frozen at zero. */
-  gsap.timeline({
-    scrollTrigger:{trigger:num, start:'top 92%'},
-    onStart(){ num.textContent = ''; num.appendChild(frag); }
-  }).from(cols, {
-    yPercent: 0,                      // roll up from zero into place
-    duration: 2.4,
-    ease: 'power3.inOut',
-    stagger: 0.15,
-    delay: delay
-  }, 0);
+  /* Swap the plain text for digit columns at the moment this number's turn
+     comes up — not when the timeline starts.
+
+     immediateRender:false is what makes that possible. A from tween normally
+     writes its start value the instant it is created, so a number waiting six
+     seconds for its turn would spend those six seconds parked at the far end
+     of its wheel, showing a digit that is not the answer. Deferred, the cell
+     reads as ordinary text until it rolls.
+
+     And if ScrollTrigger never fires at all, the swap never happens and the
+     plain text simply stays. */
+  const tl = gsap.timeline({scrollTrigger:{trigger: trigger || num, start:'top 92%'}});
+  tl.call(() => { num.textContent = ''; num.appendChild(frag); });
+
+  /* One tween per column, all pinned to position 0.
+
+     Not one tween across all the columns: a tween has a single duration, so a
+     function-based one gets collapsed to the longest draw and every column in
+     the number ends up stopping on the same tick. Giving each column its own
+     tween is what actually makes it a bank of reels — thirteen of them across
+     the row, each spinning from the same instant and stopping on its own. */
+  cols.forEach(col => {
+    tl.from(col, {
+      // lift the far end of the wheel into the window; the tween returns to
+      // the element's own resting transform, which is zero
+      yPercent: -100 * ODO_CELLS / (ODO_CELLS + 1),
+      duration: ODO_DUR *
+        (ODO_SPREAD_MIN + Math.random() * (ODO_SPREAD_MAX - ODO_SPREAD_MIN)),
+      /* power3 spends most of its time parked at the two ends, which makes the
+         digits blur past in the middle. power2 keeps the roll readable. */
+      ease: 'power2.inOut',
+      immediateRender: false
+    }, 0);
+  });
 }
 document.querySelectorAll('.exp-block').forEach(el=>{
   gsap.from(el, {y:30, opacity:0, duration:1, ease:'power2.out', scrollTrigger:{trigger:el, start:'top 85%'}});
@@ -2345,174 +2631,6 @@ document.querySelectorAll('.hobby').forEach((el,i)=>{
   gsap.from(el, {y:20, opacity:0, duration:0.7, delay:i*0.08, ease:'power2.out', scrollTrigger:{trigger:el, start:'top 90%'}});
 });
 gsap.from('#hero .hero-index', {opacity:0, y:-12, duration:0.9, delay:0.2, ease:'power2.out'});
-
-/* ---- The thrown object -------------------------------------------------
-   Loads assets/models/mjolnir.glb and flies it through the entrance:
-
-     THROW   hurled away from camera, tumbling, shrinking into the dark
-     HANG    held still and tiny — the beat that makes the return a return
-     RETURN  called back, rushing at the camera, growing
-     PASS    it overshoots past the lens and is gone, leaving the dust behind
-
-   Entirely optional. No file, no WebGL, or a failed parse and the entrance
-   plays exactly as it does today — the particles never depended on it.     */
-(function(){
-  const canvas = document.getElementById('sig-3d');
-  if (!canvas) return;
-  if (matchMedia('(prefers-reduced-motion: reduce)').matches) return;
-
-  let renderer;
-  try {
-    renderer = new THREE.WebGLRenderer({canvas, alpha:true, antialias:true});
-  } catch(e){ return; }
-  renderer.setPixelRatio(Math.min(devicePixelRatio, 2));
-  renderer.setClearAlpha(0);
-
-  const scene = new THREE.Scene();
-  const camera = new THREE.PerspectiveCamera(48, 1, 0.1, 400);
-  camera.position.set(0, 0, 26);
-
-  /* Lit rather than flat: a hammer with no specular reads as a cardboard
-     cutout. Kept cool and colourless so it sits in the monochrome. */
-  scene.add(new THREE.AmbientLight(0xffffff, 0.55));
-  const key = new THREE.DirectionalLight(0xffffff, 2.4);
-  key.position.set(4, 6, 8); scene.add(key);
-  const rim = new THREE.DirectionalLight(0xffffff, 1.5);
-  rim.position.set(-6, -2, -6); scene.add(rim);
-
-  const pivot = new THREE.Group();      // carries position
-  const spin  = new THREE.Group();      // carries tumble
-  pivot.add(spin); scene.add(pivot);
-  pivot.visible = false;
-
-  let ready = false;
-  /* HEAD_FIRST is the model-local axis that should lead. It is derived from
-     the mesh rather than assumed: the longest side of the bounding box is the
-     handle's run, and whichever half of that run holds more geometry is the
-     head. Flip HEAD_SIGN if it ever comes out backwards. */
-  const HEAD_SIGN = 1;
-  const headAxis = new THREE.Vector3(0, -1, 0);
-
-  /* The mesh is Draco-compressed, so GLTFLoader needs a decoder handed to it.
-     Without this it throws 'No DRACOLoader instance provided', the load fails,
-     and the object silently never appears. */
-  const dracoLoader = new DRACOLoader();
-  dracoLoader.setDecoderPath('https://unpkg.com/three@0.160.0/examples/jsm/libs/draco/');
-  const gltfLoader = new GLTFLoader();
-  gltfLoader.setDRACOLoader(dracoLoader);
-
-  gltfLoader.load('assets/models/mjolnir-final.glb', gltf => {
-    const model = gltf.scene;
-
-    const box = new THREE.Box3().setFromObject(model);
-    const size = box.getSize(new THREE.Vector3());
-    const centre = box.getCenter(new THREE.Vector3());
-    model.position.sub(centre);
-    const target = 7.5;
-    model.scale.setScalar(target / Math.max(size.x, size.y, size.z || 1));
-
-    // longest axis = the length of the hammer
-    const axes = [['x', size.x], ['y', size.y], ['z', size.z]];
-    axes.sort((a, b) => b[1] - a[1]);
-    const longest = axes[0][0];
-
-    // weigh each half of that axis by vertex count: the head is the dense end
-    let negCount = 0, posCount = 0;
-    model.traverse(o => {
-      if (!o.isMesh || !o.geometry || !o.geometry.attributes.position) return;
-      const pos = o.geometry.attributes.position;
-      const idx = longest === 'x' ? 0 : longest === 'y' ? 1 : 2;
-      for (let i = 0; i < pos.count; i += 7){          // sampled, not exhaustive
-        const v = pos.array[i * 3 + idx];
-        if (v < 0) negCount++; else posCount++;
-      }
-    });
-    const sign = (posCount > negCount ? 1 : -1) * HEAD_SIGN;
-    headAxis.set(longest === 'x' ? sign : 0, longest === 'y' ? sign : 0, longest === 'z' ? sign : 0);
-
-    spin.add(model);
-    ready = true;
-  }, undefined, err => {
-    ready = false;
-    console.warn('Intro model failed to load; the entrance runs without it.', err);
-  });
-
-  let vw = 0, vh = 0;
-  function fit(){
-    const w = innerWidth | 0, h = innerHeight | 0;
-    if (w < 2 || h < 2 || (w === vw && h === vh)) return;
-    vw = w; vh = h;
-    camera.aspect = w / h;
-    camera.updateProjectionMatrix();
-    renderer.setSize(w, h, false);
-  }
-  fit();
-  if (typeof ResizeObserver === 'function') new ResizeObserver(fit).observe(document.documentElement);
-  addEventListener('resize', fit, {passive:true});
-
-  const lerp = (a, b, t) => a + (b - a) * t;
-  const easeIn  = t => t * t * t;
-  const easeOut = t => 1 - Math.pow(1 - t, 3);
-
-  const prevPos = new THREE.Vector3(0, 0, 14);
-  const velocity = new THREE.Vector3();
-  const aim = new THREE.Quaternion();
-  const up = new THREE.Vector3(0, 1, 0);
-  const m = new THREE.Matrix4();
-
-  gsap.ticker.add(() => {
-    const clock = window.__introClock;
-    if (!ready || !clock || !clock.active){
-      if (pivot.visible){ pivot.visible = false; renderer.clear(); }
-      return;
-    }
-    fit();
-    pivot.visible = true;
-
-    const {t, THROW_END, HANG_END, RETURN_END} = clock;
-    let z, scale;
-
-    if (t < THROW_END){
-      const u = easeIn(t / THROW_END);
-      z = lerp(14, -150, u);
-      scale = lerp(1.35, 0.1, u);
-    } else if (t < HANG_END){
-      z = -150; scale = 0.1;
-    } else if (t < RETURN_END){
-      const u = easeOut((t - HANG_END) / (RETURN_END - HANG_END));
-      z = lerp(-150, 34, u);
-      scale = lerp(0.1, 2.2, u);
-    } else {
-      pivot.visible = false;
-      renderer.clear();
-      return;
-    }
-
-    pivot.position.set(0, 0, z);
-    pivot.scale.setScalar(scale);
-
-    /* A thrown hammer does not tumble end over end — the head carries almost
-       all the mass, so it leads and the handle streams behind it. Point the
-       head down the velocity vector and let the body catch up on a spring;
-       the lag IS the handle whipping round. */
-    velocity.set(0, 0, z).sub(prevPos);
-    prevPos.set(0, 0, z);
-
-    if (velocity.lengthSq() > 1e-6){
-      const dir = velocity.clone().normalize();
-      // build a rotation that carries headAxis onto dir
-      const q = new THREE.Quaternion().setFromUnitVectors(headAxis, dir);
-      // spring toward it: slower during the hang, snappier on the return
-      const grip = t < HANG_END ? 0.06 : 0.14;
-      spin.quaternion.slerp(q, grip);
-    }
-
-    // a slow roll about its own length, so it spins without ever tumbling
-    spin.rotateOnAxis(headAxis, t < HANG_END ? 0.10 : 0.05);
-
-    renderer.render(scene, camera);
-  });
-})();
 
 /* ---- GPU fluid trail -------------------------------------------------
    Navier-Stokes on ping-ponged framebuffers (Pavel Dobryakov's WebGL-fluid
