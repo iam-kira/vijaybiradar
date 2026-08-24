@@ -200,10 +200,15 @@ arrowheads on every diagram after the first.
 
 ## Known issues
 
-- **The ambient track is ~16 MB** and autoplays after the intro. Every visitor
-  downloads it. Re-encode before it matters:
+- **The ambient track is ~16 MB, and it autoplays** once the intro finishes.
+  The size is length, not quality: it is already 96 kbps mono, so re-encoding
+  at the same bitrate saves nothing. It is 22.8 minutes long. Servers hand it
+  over in ranges (`206 Partial Content`) and the element is `preload="metadata"`,
+  so a visitor downloads roughly what they listen to rather than all 16 MB —
+  but a 30-second visit still starts an unrequested download and unrequested
+  sound. If that matters, trim the loop rather than re-encode it:
   ```bash
-  ffmpeg -i input.mp3 -b:a 96k -ac 1 assets/audio/background/ambient.mp3
+  ffmpeg -i ambient.mp3 -t 240 -c copy ambient-trimmed.mp3   # 4 min, ~2.7 MB
   ```
 - Browsers block audible autoplay until the visitor interacts. A one-shot
   listener on `pointerdown/keydown/wheel/touchstart` starts the track on the
