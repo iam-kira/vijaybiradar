@@ -1762,8 +1762,10 @@
 })();
 
 /* Music toggle — vanilla port of Skiper UI skiper25.
-   Click-to-play only; nothing autoplays. Button removes itself if the
-   audio file is missing so a 404 never leaves a dead control in the nav. */
+   The track starts itself when the intro finishes, fading in rather than
+   cutting to volume. If the browser refuses audible autoplay, the first
+   gesture arms it instead. The button goes grey rather than vanishing when
+   the file is missing, so a 404 never leaves a dead control in the nav. */
 (function(){
   const btn = document.getElementById('music-toggle');
   const audio = document.getElementById('ambient-audio');

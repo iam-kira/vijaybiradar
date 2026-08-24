@@ -200,15 +200,22 @@ arrowheads on every diagram after the first.
 
 ## Known issues
 
-- **The ambient track is ~52 MB** and autoplays after the intro. Every visitor
+- **The ambient track is ~16 MB** and autoplays after the intro. Every visitor
   downloads it. Re-encode before it matters:
   ```bash
   ffmpeg -i input.mp3 -b:a 96k -ac 1 assets/audio/background/ambient.mp3
   ```
-- Its filename contains **two consecutive spaces**, hence the `%20%20` in the
-  `src`. Works, but fragile across hosts — worth renaming.
 - Browsers block audible autoplay until the visitor interacts. A one-shot
   listener on `pointerdown/keydown/wheel/touchstart` starts the track on the
   first gesture when autoplay is refused.
 - `anime.js` is mapped in the importmap but unused; GSAP does everything.
   Remove the mapping or use it.
+
+## Licence
+
+[MIT](LICENSE) — do what you like with the code.
+
+The licence covers the code. It does not cover the personal content it renders:
+the name, the photographs, the handwritten signature in `assets/img/`, the CV
+text, or the Julius Caesar/Marvel-adjacent references. Fork the machinery, not
+the identity.
