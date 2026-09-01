@@ -606,8 +606,8 @@
   .sec-title{font-size:clamp(30px,4.5vw,54px);margin-bottom:44px;perspective:700px;}
 
   /* ---- About ---- */
-  #about p{font-size:clamp(17px,1.6vw,22px);line-height:1.7;color:var(--paper-dim);max-width:62ch;}
-  #about p strong{color:var(--paper);font-weight:600;}
+  #about p,#aura>p{font-size:clamp(17px,1.6vw,22px);line-height:1.7;color:var(--paper-dim);max-width:62ch;}
+  #about p strong,#aura>p strong{color:var(--paper);font-weight:600;}
   .stat-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:1px;background:var(--line);margin-top:56px;border:1px solid var(--line);}
   .stat-grid .cell{background:var(--ink);padding:26px 22px;}
   .stat-grid .num{font-size:clamp(26px,3vw,38px);font-weight:700;}
@@ -645,6 +645,38 @@
   .skill-group .g-label{font-family:'IBM Plex Mono', monospace;font-size:11px;color:var(--paper-dim);letter-spacing:0.1em;margin-bottom:14px;}
   .chip-row{display:flex;flex-wrap:wrap;gap:8px;}
   .chip{font-family:'IBM Plex Mono', monospace;font-size:12px;border:1px solid var(--line);padding:6px 12px;color:var(--paper);}
+  /* Links wearing chip clothes. There is no text-link style anywhere in this
+     stylesheet, and inventing one for two links is more surface than it earns. */
+  a.chip{text-decoration:none;transition:border-color .25s ease, background-color .25s ease;}
+  a.chip:hover,a.chip:focus-visible{border-color:var(--paper);background:var(--ink-2);}
+  #aura>p+p{margin-top:18px;}
+  #aura .chip-row{margin-top:30px;}
+
+  /* ---- Code sample ----
+     The only code block on the site. Monochrome on purpose: the body sits at
+     paper-dim and only the vocabulary comes up to full paper, so the made-up
+     keywords are the one thing the eye catches. No highlighter — the spans are
+     written into the markup.
+
+     overflow-x here rather than on an ancestor: html and body are
+     overflow-x:clip, so a long line has to scroll inside this box or it is
+     silently lost. Never switch either of those to hidden — it kills the
+     sticky project cards. */
+  .code{
+    font-family:'IBM Plex Mono', monospace;
+    font-size:13px;line-height:1.75;
+    color:var(--paper-dim);
+    background:var(--ink-2);border:1px solid var(--line);
+    padding:22px 24px;margin-top:34px;
+    overflow-x:auto;-webkit-overflow-scrolling:touch;
+    tab-size:4;
+  }
+  /* it is a scroll container, so it has to be reachable by keyboard */
+  .code:focus-visible{outline:1px solid var(--paper);outline-offset:2px;}
+  .code .k{color:var(--paper);}
+  @media (prefers-reduced-motion:reduce){
+    a.chip{transition:none;}
+  }
 
   /* ---- Projects: sticky scroll-stack ---- */
   #projects{justify-content:flex-start;}
@@ -1191,7 +1223,7 @@
   <div class="hero-main">
     <div class="hero-copy">
     <h1>I take the<br>responsibility<br>nobody assigned.</h1>
-    <div class="role mono">Vijay Biradar. I build the platforms other teams build on. Bengaluru, India.</div>
+    <div class="role mono">Vijay Biradar. I build data platforms. The rest was my own idea. Bengaluru, India.</div>
         </div>
     <figure class="hero-portrait">
       <img class="photo" src="assets/img/model.jpg" alt="Vijay Biradar" loading="eager">
@@ -1210,8 +1242,43 @@
   <p class="manifesto-text">Most engineers wait to be told. I go looking for the failure nobody has flagged yet. The monitoring gap, the manual recovery, the fragile handoff. I own it before it becomes an incident. <span class="hi">Leadership isn't a title somebody hands you. It's the work you pick up first.</span></p>
 </section>
 
+<section id="aura" data-title="aura">
+  <div class="eyebrow"><span class="n">01</span> AURA</div>
+  <h2 class="sec-title">I wrote a<br>programming language.</h2>
+  <p>Nobody commissioned this. It is the same habit as the NGO I have run since 2017, the years it took to reach a black belt in Goju-Ryu, the violin I am still bad at: pick up something hard and stay with it until it is finished. <strong>aura</strong> is Python, written from scratch, about <strong>3,900 lines in one file</strong>, and it depends on nothing. Lexer, parser, interpreter, in that order, readable top to bottom.</p>
+  <p>One rule shaped everything else: <strong>errors are returned, never raised</strong>. Every stage hands back a value and an error together, each carrying its position in the source &mdash; which is why a failure can print the offending line with a caret under the character that caused it. Around <strong>450 tests</strong> hold that line, including a fuzz corpus asserting nothing ever escapes as a Python traceback. The documentation snippets are executed as tests. The editor grammar is diffed against the real keyword list, so the highlighting cannot drift away from the language.</p>
+  <p>It runs FizzBuzz.</p>
+  <pre class="code" tabindex="0"><code><span class="k">chore</span> label(n) <span class="k">ong</span>
+    <span class="k">fr</span> n % 15 == 0 <span class="k">ong</span>
+        <span class="k">yeet</span> "fizzbuzz"
+    <span class="k">orfr</span> n % 3 == 0 <span class="k">ong</span>
+        <span class="k">yeet</span> "fizz"
+    <span class="k">bet</span>
+    <span class="k">yeet</span> <span class="k">yapify</span>(n)
+<span class="k">bet</span>
+<span class="k">grind</span> i = 1 <span class="k">til</span> 16 <span class="k">ong</span>
+    <span class="k">cook</span>(label(i))
+<span class="k">bet</span></code></pre>
+  <!-- wrapped: renderDiagram appends its caption as a <p> sibling, and a bare
+       <p> child of #aura would inherit the 22px body rule below -->
+  <div>
+    <div class="arch-wrap" data-arch="aura"></div>
+  </div>
+  <div class="stat-grid">
+    <div class="cell"><div class="num">3,900</div><div class="label">LINES, ONE FILE</div></div>
+    <div class="cell"><div class="num">0</div><div class="label">DEPENDENCIES</div></div>
+    <div class="cell"><div class="num">450+</div><div class="label">TESTS</div></div>
+    <div class="cell"><div class="num">50</div><div class="label">BUILTINS</div></div>
+  </div>
+  <div class="chip-row">
+    <a class="chip" href="https://github.com/iam-kira/what-did-i-do" target="_blank" rel="noopener" aria-label="aura source on GitHub" title="github.com/iam-kira/what-did-i-do">Source on GitHub</a>
+    <a class="chip" href="https://pypi.org/project/auralang/" target="_blank" rel="noopener" aria-label="auralang on PyPI" title="pypi.org/project/auralang">pip install auralang</a>
+    <span class="chip">MIT &middot; v0.1.1</span>
+  </div>
+</section>
+
 <section id="about" data-title="About">
-  <div class="eyebrow"><span class="n">01</span> APPROACH</div>
+  <div class="eyebrow"><span class="n">02</span> APPROACH</div>
   <h2 class="sec-title">I build the ground<br>others stand on.</h2>
   <p>Four years inside a manufacturing data platform taught me that reliability isn't a feature you add. It's a discipline you build into everything from day one. My team runs <strong>800+ ETL pipelines</strong> and <strong>30+ data products</strong> across plants in Germany and Detroit; I own the architecture, the standards we build against, and the production support that keeps them up. But the work I'm proudest of is the stuff nobody asked for: <strong>Vortex</strong>, an engineering intelligence platform I built because the team needed governance and lineage before they knew to ask for it.</p>
   <div class="stat-grid">
@@ -1223,7 +1290,7 @@
 </section>
 
 <section id="experience" data-title="Experience">
-  <div class="eyebrow"><span class="n">02</span> PROOF</div>
+  <div class="eyebrow"><span class="n">03</span> PROOF</div>
   <h2 class="sec-title">What I actually shipped.</h2>
   <div class="exp-block">
     <div class="exp-head">
@@ -1248,7 +1315,7 @@
 </section>
 
 <section id="skills" data-title="Skills">
-  <div class="eyebrow"><span class="n">03</span> TECHNICAL SKILLS</div>
+  <div class="eyebrow"><span class="n">04</span> TECHNICAL SKILLS</div>
   <h2 class="sec-title">Stack.</h2>
   <div class="skill-groups">
     <div class="skill-group">
@@ -1271,7 +1338,7 @@
 </section>
 
 <section id="projects" data-title="Projects">
-  <div class="eyebrow"><span class="n">04</span> PROOF OF WORK</div>
+  <div class="eyebrow"><span class="n">05</span> PROOF OF WORK</div>
   <h2 class="sec-title">Proof of work.</h2>
   <div class="card-stack">
     <div class="card has-arch">
@@ -1350,7 +1417,7 @@
 </section>
 
 <section id="awards" data-title="Hall of Fame">
-  <div class="eyebrow"><span class="n">05</span> HALL OF FAME</div>
+  <div class="eyebrow"><span class="n">06</span> HALL OF FAME</div>
   <h2 class="sec-title">Recognised for<br>the quiet work.</h2>
   <div class="award-grid">
     <div class="award">
@@ -1372,7 +1439,7 @@
 </section>
 
 <section id="education" data-title="Education">
-  <div class="eyebrow"><span class="n">06</span> EDUCATION</div>
+  <div class="eyebrow"><span class="n">07</span> EDUCATION</div>
   <h2 class="sec-title">Where it started.</h2>
   <div class="edu-block">
     <div class="edu-head">
@@ -1384,7 +1451,7 @@
 </section>
 
 <section id="beyond" data-title="Beyond">
-  <div class="eyebrow"><span class="n">07</span> OFF THE CLOCK</div>
+  <div class="eyebrow"><span class="n">08</span> OFF THE CLOCK</div>
   <h2 class="sec-title">Same discipline,<br>different arenas.</h2>
   <div class="beyond-main">
     <figure class="photo-strip">
@@ -1699,7 +1766,7 @@
 </section>
 
 <section id="community" data-title="Community">
-  <div class="eyebrow"><span class="n">08</span> COMMUNITY</div>
+  <div class="eyebrow"><span class="n">09</span> COMMUNITY</div>
   <h2 class="sec-title">Leadership that<br>pays nothing.</h2>
   <div class="community-main">
     <div class="community-body">
@@ -1715,7 +1782,7 @@
 </section>
 
 <section id="contact" data-title="Contact">
-  <div class="eyebrow"><span class="n">09</span> CONTACT</div>
+  <div class="eyebrow"><span class="n">10</span> CONTACT</div>
   <h2 class="sec-title">Let's build<br>what's next.</h2>
   <div class="contact-icons">
     <a href="mailto:vijaybiradar8273@gmail.com" aria-label="Email Vijay Biradar" title="vijaybiradar8273@gmail.com"><svg class="ico ico-fill" viewBox="0 0 24 24" aria-hidden="true"><path d="M2 6.6a2.6 2.6 0 0 1 4.16-2.08L12 8.94l5.84-4.42A2.6 2.6 0 0 1 22 6.6V18a1.6 1.6 0 0 1-1.6 1.6h-2.65V9.9L12 14.3 6.25 9.9v9.7H3.6A1.6 1.6 0 0 1 2 18Z"/></svg></a>
@@ -2640,24 +2707,25 @@ const ODO_DUR     = 3.36;             // middle of the spread below
 const ODO_SPREAD_MIN = 0.62, ODO_SPREAD_MAX = 1.38;
 
 /* Stats count up when they arrive. The prefix/suffix (~, +, %) is kept
-   outside the animated span so only the digits change. */
-/* All four figures start together and stop at their own moments. Every number
-   in the row hangs off the GRID's trigger, not its own: on a narrow screen the
-   row wraps, and per-cell triggers would start the second half seconds after
-   the first, which is the one thing a simultaneous start cannot survive. */
-const statGrid = document.querySelector('.stat-grid');
-document.querySelectorAll('.stat-grid .cell').forEach((el,i)=>{
-  gsap.from(el, {y:20, opacity:0, duration:0.7, delay:i*0.06, ease:'power2.out', scrollTrigger:{trigger:el, start:'top 90%'}});
-  rollNumber(el.querySelector('.num'), statGrid);
-});
+   outside the animated span so only the digits change.
 
-/* the community figures roll the same way — one selector, not a second
-   implementation, so they can never drift apart */
-const commStats = document.querySelector('.community-stats');
-document.querySelectorAll('.community-stats .cstat').forEach((el,i)=>{
-  gsap.from(el, {y:20, opacity:0, duration:0.7, delay:i*0.06, ease:'power2.out', scrollTrigger:{trigger:el, start:'top 92%'}});
-  rollNumber(el.querySelector('.num'), commStats);
-});
+   One grid, one trigger — and the trigger is the grid the cell actually lives
+   in. querySelector returns only the FIRST match in the document, so once a
+   second .stat-grid appeared above the original, every figure on the page hung
+   off whichever grid came first and rolled at entirely the wrong scroll
+   position. .community-stats had the same latent bug and was safe only because
+   there is one of them. */
+function rollGrid(grid, cellSel, start){
+  grid.querySelectorAll(cellSel).forEach((el,i)=>{
+    gsap.from(el, {y:20, opacity:0, duration:0.7, delay:i*0.06, ease:'power2.out',
+                   scrollTrigger:{trigger:el, start}});
+    rollNumber(el.querySelector('.num'), grid);
+  });
+}
+document.querySelectorAll('.stat-grid').forEach(g => rollGrid(g, '.cell', 'top 90%'));
+/* the community figures roll the same way — one implementation, not a second
+   one, so they can never drift apart */
+document.querySelectorAll('.community-stats').forEach(g => rollGrid(g, '.cstat', 'top 92%'));
 
 /* Odometer roll. Each digit becomes a column of 0-9 with the target digit
    repeated at the end, so animating to the last cell rolls the whole way
@@ -3141,6 +3209,17 @@ document.querySelectorAll('.skill-group').forEach((el,i)=>{
    record and one renderer turns it into SVG. Adding a diagram means adding a
    DIAGRAMS entry and a data-arch slot — never new drawing code. */
 const DIAGRAMS = {
+  aura: {
+    top: 'PYTHON · WRITTEN FROM SCRATCH · ZERO DEPENDENCIES',
+    bottom: 'EVERY STAGE RETURNS (VALUE, ERROR) — NOTHING IS EVER RAISED',
+    nodes: [
+      {t:'SOURCE',      s:'.AURA FILE',        d:"A source file, read once. Everything after it is a transform of that text, which is why the whole thing fits in one readable pass."},
+      {t:'LEXER',       s:'TOKENS + POSITION', d:"Characters become tokens, and every token keeps the line and column it came from. Carrying position from here is what makes an error printable later."},
+      {t:'PARSER',      s:'AST + POSITION',    d:"Tokens become a tree. A malformed program returns a parse error with its position rather than throwing, so the caller decides what to do about it."},
+      {t:'INTERPRETER', s:'SCOPES · CLOSURES', d:"Real lexical scope with genuine closures, value semantics, and ghosted as an actual type rather than a missing one."},
+      {t:'RESULT',      s:'(VALUE, ERROR)',    d:"Both come back together, always. A failure prints the offending line with a caret under the character that caused it, because the position was never dropped."}
+    ]
+  },
   vortex: {
     top: 'ENTERPRISE ENGINEERING INTELLIGENCE · BUILT FROM SCRATCH',
     bottom: 'ANSWERS ASKED IN PLAIN LANGUAGE, NOT SQL',
