@@ -967,6 +967,59 @@
     .obj,.obj-3d{transition:none;}
   }
 
+  /* ---- The writing shelf -------------------------------------------------
+     Fourth row of the bookcase: his own nazms. Hover and focus still run
+     through the shared .shelf-detail line like every other row — that code is
+     untouched. Click adds the full poem, in .nazm-panel, which is the last
+     grid item of .shelf-unit at grid-column 1/-1 and so opens in its own row
+     below all four shelves. Never inside .rack: see the note at the shelf
+     IIFE about nothing expanding and pushing the row around. */
+  .shelf-epigraph{
+    white-space:pre-line;
+    font-size:10.5px;line-height:1.8;letter-spacing:0.02em;
+    color:var(--paper-dim);
+    border-left:1px solid var(--line);padding-left:12px;margin-bottom:20px;
+  }
+  .nazm-panel{
+    grid-column:1/-1;
+    margin-top:10px;border-top:1px solid var(--line);padding-top:28px;
+  }
+  /* Load-bearing. An author display: declaration beats the UA sheet's
+     [hidden]{display:none}, so without this both poems render permanently
+     open on load. Same reason #sig-intro[hidden] exists further up. */
+  .nazm-panel[hidden],.nazm[hidden]{display:none;}
+  .nazm{display:grid;grid-template-columns:minmax(0,1fr);gap:16px;}
+  @media (min-width:900px){
+    .nazm{grid-template-columns:minmax(0,220px) minmax(0,1fr);gap:40px;align-items:start;}
+  }
+  .nazm-title{font-size:21px;font-weight:600;letter-spacing:-0.01em;}
+  .nazm-by{font-size:9px;letter-spacing:0.24em;color:var(--paper-dim);margin-top:8px;}
+  .nazm-body{display:flex;flex-direction:column;gap:20px;}
+  /* Verse: the newlines in the markup ARE the line breaks. pre-line keeps his
+     text byte-identical with nothing wedged between the words, and still wraps
+     a long line on a narrow screen. One <p> per stanza, so a blank line is a
+     paragraph break to a screen reader rather than just empty space. */
+  .nazm-body p{
+    white-space:pre-line;
+    font-size:16px;line-height:1.85;color:var(--paper);max-width:48ch;
+  }
+  .nazm-close{
+    grid-column:1/-1;justify-self:start;margin-top:22px;
+    font-size:9.5px;letter-spacing:0.2em;
+    background:none;border:1px solid var(--line);color:var(--paper-dim);
+    padding:8px 13px;cursor:pointer;
+    transition:border-color .25s ease,color .25s ease;
+  }
+  .nazm-close:hover,.nazm-close:focus-visible{border-color:var(--paper-dim);color:var(--paper);}
+  /* display:none -> display:grid restarts an animation but cannot run a
+     transition, so the reveal has to be a keyframe. */
+  @keyframes nazm-in{from{opacity:0;transform:translateY(10px);}to{opacity:1;transform:none;}}
+  .nazm{animation:nazm-in .34s cubic-bezier(.2,.8,.2,1);}
+  @media (prefers-reduced-motion:reduce){
+    .nazm{animation:none;}
+    .nazm-close{transition:none;}
+  }
+
   /* ---- Community ---- */
   .community-main{display:grid;grid-template-columns:1fr;gap:34px;}
   @media (min-width:900px){
@@ -1736,6 +1789,90 @@
         <p class="shelf-detail mono">Hover a spine.</p>
       </div>
 
+      <div class="shelf shelf-writing" data-kind="book">
+        <div class="shelf-label mono">WRITING</div>
+        <p class="shelf-epigraph mono">Un lamhon ke naam,
+        Jo kabhi mere the.
+        Aur un ehsaason ke naam,
+        Jo aaj bhi mere hain.</p>
+        <div class="rack" role="group" aria-label="Nazms by Vijay Biradar">
+          <article class="obj" role="button" tabindex="0"
+                   aria-expanded="false" aria-controls="nazm-chhupana"
+                   style="--w:34px;--h:138px;--d:22px;--tilt:0deg"
+                   data-title="Chhupana Chahta Hoon" data-meta="Vijay Biradar &middot; nazm"
+                   data-quote="Adaakari bahut dukh deti hai,<br>Main sachmuch muskurana chahta hoon." data-note="Mine. Click or press Enter to read it in full.">
+            <div class="obj-3d">
+              <span class="face f-front">
+                <span class="obj-title">Chhupana Chahta Hoon</span>
+                <span class="obj-sub">Vijay Biradar</span>
+              </span>
+              <span class="face f-side"></span>
+              <span class="face f-top"></span>
+            </div>
+          </article>
+          <article class="obj" role="button" tabindex="0"
+                   aria-expanded="false" aria-controls="nazm-izhaar"
+                   style="--w:37px;--h:140px;--d:22px;--tilt:0deg;--jog:5px"
+                   data-title="Izhaar" data-meta="Vijay Biradar &middot; nazm"
+                   data-quote="Dil to pehle hi tera tha,<br>Aaj bas naam bhi mita diya hai." data-note="Mine. Click or press Enter to read it in full.">
+            <div class="obj-3d">
+              <span class="face f-front">
+                <span class="obj-title">Izhaar</span>
+                <span class="obj-sub">Vijay Biradar</span>
+              </span>
+              <span class="face f-side"></span>
+              <span class="face f-top"></span>
+            </div>
+          </article>
+        </div>
+        <div class="shelf-board"><span class="board-edge"></span></div>
+        <p class="shelf-detail mono">Hover a nazm. Click to read it in full.</p>
+      </div>
+
+      <!-- The full poems. Last child of .shelf-unit at grid-column:1/-1, so it
+           opens in its own row BELOW all four shelves and outside every .rack —
+           the spines cannot be pushed. Real markup, not data-*: show() writes
+           data-note straight into innerHTML, and verse is document content. -->
+      <div class="nazm-panel" id="nazm-panel" hidden>
+        <article class="nazm" id="nazm-chhupana" role="region" tabindex="-1"
+                 aria-labelledby="nazm-chhupana-t" hidden>
+          <header class="nazm-head">
+            <h5 class="nazm-title" id="nazm-chhupana-t">Chhupana Chahta Hoon</h5>
+            <div class="nazm-by mono">VIJAY BIRADAR</div>
+          </header>
+          <div class="nazm-body">
+            <p>Tumhe ye batana chahta hoon ki,
+            Main tumse kya chhupana chahta hoon.</p>
+            <p>Kabhi mujhse bhi koi jhooth bolo,
+            Main haan mein haan milana chahta hoon.</p>
+            <p>Adaakari bahut dukh deti hai,
+            Main sachmuch muskurana chahta hoon.</p>
+            <p>Jo baat kabhi lafzon mein na aa saki,
+            Wahi khamoshi tumhe sunana chahta hoon.</p>
+          </div>
+        </article>
+        <article class="nazm" id="nazm-izhaar" role="region" tabindex="-1"
+                 aria-labelledby="nazm-izhaar-t" hidden>
+          <header class="nazm-head">
+            <h5 class="nazm-title" id="nazm-izhaar-t">Izhaar</h5>
+            <div class="nazm-by mono">VIJAY BIRADAR</div>
+          </header>
+          <div class="nazm-body">
+            <p>Har lamha tera hi naam liya hai,
+            Har dafa tera hi saath diya hai.</p>
+            <p>Na jaane maine ye kaisa gunaah kiya hai,
+            Maine beintehaa tujhse mohabbat ki hai.</p>
+            <p>Ishq ka izhaar tune aafat sa diya hai,
+            Kabool tujhse aur inkaar tune mujhse kiya hai.</p>
+            <p>Ab shikayat bhi kis se karun,
+            Faisla bhi tune hi suna diya hai.</p>
+            <p>Dil to pehle hi tera tha,
+            Aaj bas naam bhi mita diya hai.</p>
+          </div>
+        </article>
+        <button class="nazm-close mono" type="button">CLOSE</button>
+      </div>
+
     </div>
     <div class="hobby">
       <div class="h-label mono">RIDING</div>
@@ -2019,6 +2156,69 @@
     });
     shelf.addEventListener('mouseleave', clear);
   });
+})();
+
+/* Writing shelf only: a nazm spine also opens the full poem. Strictly additive
+   to the IIFE above — that one still owns hover, focus and the shared detail
+   line for all four rows including this one, and is not touched.
+
+   The poem text is markup in #nazm-panel rather than a data-* attribute:
+   show() interpolates data-note into innerHTML raw, and verse is document
+   content, not an attribute value. */
+(function(){
+  const panel  = document.getElementById('nazm-panel');
+  const spines = [...document.querySelectorAll('.shelf-writing .obj[aria-controls]')];
+  if (!panel || !spines.length) return;
+  const poems = [...panel.querySelectorAll('.nazm')];
+
+  /* Opening changes document height, and the ScrollTriggers downstream have
+     their start positions cached — same reason the photo-drop handler above
+     refreshes. No pinned triggers exist (the card stack is CSS sticky), so a
+     refresh cannot jump the scroll position. */
+  const refresh = () => { if (window.ScrollTrigger) ScrollTrigger.refresh(); };
+
+  const close = () => {
+    spines.forEach(s => s.setAttribute('aria-expanded', 'false'));
+    poems.forEach(p => { p.hidden = true; });
+    panel.hidden = true;
+  };
+
+  const toggle = spine => {
+    const poem = document.getElementById(spine.getAttribute('aria-controls'));
+    if (!poem) return;
+    const wasOpen = spine.getAttribute('aria-expanded') === 'true';
+    close();                          // one open at a time
+    if (!wasOpen){
+      spine.setAttribute('aria-expanded', 'true');
+      panel.hidden = false;
+      poem.hidden  = false;
+      refresh();
+      /* role="region" + tabindex="-1" on the poem: announced on arrival, and
+         reachable without tabbing past every other spine first. */
+      poem.focus();
+      return;
+    }
+    refresh();
+  };
+
+  const shut = () => {
+    const open = spines.find(s => s.getAttribute('aria-expanded') === 'true');
+    close();
+    refresh();
+    if (open) open.focus();           // focus goes back where it came from
+  };
+
+  spines.forEach(s => {
+    s.addEventListener('click', () => toggle(s));
+    /* role="button" on a non-button element gets no synthetic click from
+       Enter or Space, so the keyboard needs its own path. */
+    s.addEventListener('keydown', e => {
+      if (e.key === 'Enter' || e.key === ' '){ e.preventDefault(); toggle(s); }
+    });
+  });
+
+  panel.querySelector('.nazm-close').addEventListener('click', shut);
+  panel.addEventListener('keydown', e => { if (e.key === 'Escape') shut(); });
 })();
 
 /* Copy-to-clipboard for the Discord handle. navigator.clipboard requires a
